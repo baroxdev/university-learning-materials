@@ -1,0 +1,47 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package filters;
+
+import config.AppConfig;
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ *
+ * @author quocb
+ */
+public class AuthFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        String requestPath = req.getServletPath();
+        HttpSession session = req.getSession();
+        Boolean isLoggedIn = session != null && session.getAttribute(AppConfig.AUTH_USER) != null;
+        System.out.println("request path " + requestPath);
+        if (AppConfig.EXCLUDE_ROUTES.indexOf(requestPath) == -1) {
+            if (!isLoggedIn) {
+                res.sendRedirect(req.getContextPath() + "/login");
+                return;
+            }
+        } else {
+            if (isLoggedIn) {
+                res.sendRedirect(req.getContextPath() + "/");
+                return;
+            }
+        }
+
+        chain.doFilter(request, response);
+    }
+
+}
