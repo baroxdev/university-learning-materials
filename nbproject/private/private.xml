@@ -3,9 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Work/self/UniversityULM/web/index.jsp</file>
-            <file>file:/D:/Work/self/UniversityULM/web/pages/login_step_1.jsp</file>
-            <file>file:/D:/Work/self/UniversityULM/src/java/actions/auth/LoginAction.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/controllers/NewServlet.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/controllers/Test.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/actions/auth/LoginAction.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/actions/auth/LogoutAction.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/web/components/common/head.jspf</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/web/index.jsp</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/controllers/AuthController.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/web/home/index.jsp</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/web/pages/login_step_1.jsp</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/actions/auth/UpdatePasswordAction.java</file>
+            <file>file:/D:/Github/FLM_Project/university-learning-materials/src/java/config/AppConfig.java</file>
         </group>
     </open-files>
 </project-private>
