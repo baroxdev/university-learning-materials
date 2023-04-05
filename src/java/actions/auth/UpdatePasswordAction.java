@@ -3,36 +3,62 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package actions.auth;
+
 import actions.IAction;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author quocb
  */
-public class UpdatePasswordAction implements IAction{
+public class UpdatePasswordAction implements IAction {
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UserController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getServletPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try ( PrintWriter out = response.getWriter()) {
+
         }
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        response.setContentType("application/json");
+        response.setContentType("application/json");
+        String username = request.getParameter("userId");
+        String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirm-password");
+
+        try ( PrintWriter out = response.getWriter()) {
+            if (password.equals(confirmPassword)) {
+                response.setStatus(HttpServletResponse.SC_OK);
+                JSONObject successObject = new JSONObject();
+                successObject.put("success", "Password updated successfully.");
+                out.print(successObject);
+                out.flush();
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                JSONObject errorObject = new JSONObject();
+                errorObject.put("error", "Passwords do not match.");
+                out.print(errorObject);
+                out.flush();
+            }
+        } catch (Exception e) {
+            
+            // phan nay lam them, xoa cung dc
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JSONObject errorObject = new JSONObject();
+            errorObject.put("error", e.getMessage());
+            PrintWriter out = response.getWriter();
+            out.print(errorObject);
+            out.flush();
+            //
+            
+            System.out.println(e.getMessage());
+        }
     }
 }
