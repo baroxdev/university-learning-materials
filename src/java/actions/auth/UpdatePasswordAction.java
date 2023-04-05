@@ -5,6 +5,7 @@
 package actions.auth;
 
 import actions.IAction;
+import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -28,13 +29,13 @@ public class UpdatePasswordAction implements IAction {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
-        response.setContentType("application/json");
         String username = request.getParameter("userId");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
 
         try ( PrintWriter out = response.getWriter()) {
             if (password.equals(confirmPassword)) {
+                UserDao.updatePassword(password, username);
                 response.setStatus(HttpServletResponse.SC_OK);
                 JSONObject successObject = new JSONObject();
                 successObject.put("success", "Password updated successfully.");
