@@ -19,7 +19,7 @@ import utils.DBUtils;
 public class CurriculumDao {
     //lấy curriculum theo id(curriculum detail)
     public static Curriculum getCurriculumById(String id) throws Exception {
-        String query = "select * from Curriculum where id = '?'";
+        String query = "select * from Curriculum where id = ?";
         Curriculum curriculum = null;
         Connection con = DBUtils.makeConnection();
         try {
@@ -34,11 +34,12 @@ public class CurriculumDao {
                 curriculum.setDescription(rs.getString("description"));
                 curriculum.setDecisionNo(rs.getString("decisionNo"));
                 curriculum.setViName(rs.getString("viName"));
-                curriculum.setCreatedAt(rs.getDate("createdAt").toString());
-                curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
+                curriculum.setCreatedAt(rs.getString("createdAt"));
+                curriculum.setUpdatedAt(rs.getString("updatedAt"));
             }
         } catch (Exception e) {
             System.out.println("Cant get curriculum");
+            e.printStackTrace();
         }
         con.close();
         return curriculum;

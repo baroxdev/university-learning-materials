@@ -5,7 +5,6 @@
  */
 package actions.auth;
 
-import actions.IAction;
 import config.AppConfig;
 import dao.UserDao;
 import entities.User;
@@ -20,12 +19,13 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import utils.JsonUtils;
 import utils.ResponseUtils;
+import actions.Action;
 
 /**
  *
  * @author Admin
  */
-public class LoginAction implements IAction {
+public class LoginAction implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

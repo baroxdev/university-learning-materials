@@ -1,7 +1,6 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controllers;
 
@@ -17,20 +16,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import actions.Action;
+import actions.curriculumns.GetCurriculumnByID;
 
 /**
  *
- * @author Admin
+ * @author quocb
  */
-@WebServlet(name = "UserController", urlPatterns = {"/login", "/logout"})
-public class AuthController extends HttpServlet {
-
-    private Map<String, Action> actionMap = new HashMap<>();
+@WebServlet(name = "CurriculumController", urlPatterns = {"/curriculums/*"})
+public class CurriculumController extends HttpServlet {
+      private Map<String, Action> actionMap = new HashMap<>();
     public void init() {
-        actionMap.put("/login", new LoginAction());
-        actionMap.put("/logout", new LogoutAction());
+        actionMap.put("/curriculums", new GetCurriculumnByID());
     }
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,10 +46,10 @@ public class AuthController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UserController</title>");
+            out.println("<title>Servlet CurriculumController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CurriculumController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,7 +67,8 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Action action = actionMap.get(request.getServletPath());
+        System.out.println("request " + request.getServletPath());
+          Action action = actionMap.get(request.getServletPath());
         if (action != null) {
             action.doGet(request, response);
         } else {
@@ -89,8 +88,7 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("path " + request.getServletPath());
-        Action action = actionMap.get(request.getServletPath());
+         Action action = actionMap.get(request.getServletPath());
         if (action != null) {
             action.doPost(request, response);
         } else {

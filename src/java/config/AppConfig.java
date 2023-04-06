@@ -13,7 +13,16 @@ import java.util.List;
  * @author quocb
  */
 public class AppConfig {
+
+//    AUTHENTICATION
     public final static String AUTH_USER = "USER";
     public final static String AUTH_FORCE_UPDATE_PASSWORD = "FORCE_UPDATE_PASSWORD";
-    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login","/register"));
+    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register"));
+
+//    CURRICULUMNS
+    public final static String CURRICULUM_ITEM = "CURRICULUMN";
+    
+//    ERRORS
+    public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
+
 }

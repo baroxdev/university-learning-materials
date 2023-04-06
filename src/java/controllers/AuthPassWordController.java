@@ -4,7 +4,6 @@
  */
 package controllers;
 
-import actions.IAction;
 import actions.auth.LoginAction;
 import actions.auth.LogoutAction;
 import actions.auth.UpdatePasswordAction;
@@ -17,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import actions.Action;
 
 /**
  *
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Auth2", urlPatterns = {"/auth/*"})
 public class AuthPassWordController extends HttpServlet {
 
-    private Map<String, IAction> actionMap = new HashMap<>();
+    private Map<String, Action> actionMap = new HashMap<>();
 
     public void init() {
         actionMap.put("/auth/reset-password", new UpdatePasswordAction());
@@ -71,7 +71,7 @@ public class AuthPassWordController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String path = request.getServletPath() + request.getPathInfo();
-        IAction action = actionMap.get(path);
+        Action action = actionMap.get(path);
         System.out.println("path " + path);
         if (action != null) {
             action.doGet(request, response);
@@ -94,7 +94,7 @@ public class AuthPassWordController extends HttpServlet {
             throws ServletException, IOException {
         System.out.println(request.getContextPath());
         String path = request.getServletPath() + request.getPathInfo();
-        IAction action = actionMap.get(path);
+        Action action = actionMap.get(path);
         System.out.println("path " + path);
         if (action != null) {
             action.doPost(request, response);

@@ -13,8 +13,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author quocb
  */
-public interface IAction {
+public interface Action {
+
     void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
-    void doPost(HttpServletRequest request, 
+
+    void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException;
 }

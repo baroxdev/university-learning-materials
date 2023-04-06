@@ -15,7 +15,13 @@ and open the template in the editor.
 html, body {
     height: 100%;
     width: 100%;
-    background: red;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 a {
@@ -185,6 +191,10 @@ time.post-card_time {
     font-size: 12px;
     font-weight: 600;
     color: #ADB5BD;
+}
+
+.page-title {
+    font-weight: 700;
 }
 
 @media only screen and (max-width: 768px) {

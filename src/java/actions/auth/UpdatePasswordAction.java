@@ -4,7 +4,6 @@
  */
 package actions.auth;
 
-import actions.IAction;
 import config.AppConfig;
 import dao.UserDao;
 import java.io.IOException;
@@ -13,12 +12,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
+import actions.Action;
 
 /**
  *
  * @author quocb
  */
-public class UpdatePasswordAction implements IAction {
+public class UpdatePasswordAction implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
