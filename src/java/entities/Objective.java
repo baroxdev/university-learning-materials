@@ -1,26 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package entities;
 
 /**
  *
- * @author giahu
+ * @author quocb
  */
-public class PO {
+public class Objective {
+    protected int id;
+    protected String name;
+    protected String description;
+    protected String createdAt;
+    protected String updatedAt;
 
-    private int id;
-    private String name;
-    private String description;
-    private String createdAt;
-    private String updatedAt;
-
-    public PO() {
+    public Objective() {
     }
+    
 
-    public PO(int id, String name, String description, String createdAt, String updatedAt) {
+    public Objective(int id, String name, String description, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -67,4 +66,6 @@ public class PO {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
+    
+    
 }
