@@ -10,7 +10,6 @@ import exceptions.CurriculumnException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import utils.DBUtils;
 
@@ -27,7 +26,6 @@ public class CurriculumDao {
         try {
             String query = "select * from Curriculum where id = ?";
             Connection con = DBUtils.makeConnection();
-
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, id);
             ResultSet rs = pre.executeQuery();
@@ -54,25 +52,27 @@ public class CurriculumDao {
     public static List<Curriculum> readCurriculumListByCode(String code) throws Exception {
         String query = "select * from Curriculum where code like '%?%'";
         List<Curriculum> list = null;
-        Connection con = DBUtils.makeConnection();
-
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setString(1, code);
-        ResultSet rs = pre.executeQuery();
-        while (rs.next()) {
-            Curriculum curriculum = new Curriculum();
-            curriculum.setId(rs.getInt("id"));
-            curriculum.setCode(rs.getString("code"));
-            curriculum.setName(rs.getString("name"));
-            curriculum.setDescription(rs.getString("description"));
-            curriculum.setDecisionNo(rs.getString("decisionNo"));
-            curriculum.setViName(rs.getString("viName"));
-            curriculum.setCreatedAt(rs.getDate("createdAt").toString());
-            curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
-            list.add(curriculum);
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, code);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Curriculum curriculum = new Curriculum();
+                curriculum.setId(rs.getInt("id"));
+                curriculum.setCode(rs.getString("code"));
+                curriculum.setName(rs.getString("name"));
+                curriculum.setDescription(rs.getString("description"));
+                curriculum.setDecisionNo(rs.getString("decisionNo"));
+                curriculum.setViName(rs.getString("viName"));
+                curriculum.setCreatedAt(rs.getDate("createdAt").toString());
+                curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
+                list.add(curriculum);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumnException("Something went wrong in read curriculum progress.");
         }
-
-        con.close();
         return list;
     }
 
@@ -80,25 +80,27 @@ public class CurriculumDao {
     public static List<Curriculum> readCurriculumListByName(String name) throws Exception {
         String query = "select * from Curriculum where name like '%?%'";
         List<Curriculum> list = null;
-        Connection con = DBUtils.makeConnection();
-
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setString(1, name);
-        ResultSet rs = pre.executeQuery();
-        while (rs.next()) {
-            Curriculum curriculum = new Curriculum();
-            curriculum.setId(rs.getInt("id"));
-            curriculum.setCode(rs.getString("code"));
-            curriculum.setName(rs.getString("name"));
-            curriculum.setDescription(rs.getString("description"));
-            curriculum.setDecisionNo(rs.getString("decisionNo"));
-            curriculum.setViName(rs.getString("viName"));
-            curriculum.setCreatedAt(rs.getDate("createdAt").toString());
-            curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
-            list.add(curriculum);
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, name);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Curriculum curriculum = new Curriculum();
+                curriculum.setId(rs.getInt("id"));
+                curriculum.setCode(rs.getString("code"));
+                curriculum.setName(rs.getString("name"));
+                curriculum.setDescription(rs.getString("description"));
+                curriculum.setDecisionNo(rs.getString("decisionNo"));
+                curriculum.setViName(rs.getString("viName"));
+                curriculum.setCreatedAt(rs.getDate("createdAt").toString());
+                curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
+                list.add(curriculum);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumnException("Something went wrong in get curriculum progress.");
         }
-
-        con.close();
         return list;
     }
 }

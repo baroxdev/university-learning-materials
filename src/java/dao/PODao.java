@@ -5,8 +5,8 @@
  */
 package dao;
 
-import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
+import exceptions.POException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,26 +18,29 @@ import utils.DBUtils;
  * @author giahu
  */
 public class PODao {
+
     //lấy list po theo curriculumID
     public static List<ProgramObjective> readPOListByCurId(String curId) throws Exception {
         String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Objective join Curr_to_PO on id = PO_ID where curriculumID = '?'";
         List<ProgramObjective> list = null;
-        Connection con = DBUtils.makeConnection();
-
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setString(1, curId);
-        ResultSet rs = pre.executeQuery();
-        while (rs.next()) {
-            ProgramObjective po = new ProgramObjective();
-            po.setId(rs.getInt("id"));
-            po.setName(rs.getString("name"));
-            po.setDescription(rs.getString("description"));
-            po.setCreatedAt(rs.getDate("createdAt").toString());
-            po.setUpdatedAt(rs.getDate("updatedAt").toString());
-            list.add(po);
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curId);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                ProgramObjective po = new ProgramObjective();
+                po.setId(rs.getInt("id"));
+                po.setName(rs.getString("name"));
+                po.setDescription(rs.getString("description"));
+                po.setCreatedAt(rs.getDate("createdAt").toString());
+                po.setUpdatedAt(rs.getDate("updatedAt").toString());
+                list.add(po);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new POException("Something went wrong in get po progress.");
         }
-
-        con.close();
         return list;
     }
 }
