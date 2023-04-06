@@ -31,6 +31,7 @@ public class GetCurriculumnByID implements Action {
                 request.setAttribute(AppConfig.CURRICULUM_ITEM, cur);
             } catch (Exception e) {
                 // Set an attribute with key is AppConfig.ERROR_MESSAGE to show in detail.jsp
+                request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
             }
             request.getRequestDispatcher("/pages/curriculums/detail.jsp").forward(request, response);
         }
