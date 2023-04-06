@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controllers;
 
@@ -23,13 +23,13 @@ import javax.servlet.http.HttpServletResponse;
  * @author quocb
  */
 @WebServlet(name = "Auth2", urlPatterns = {"/auth/*"})
-public class NewServlet extends HttpServlet {
+public class AuthPassWordController extends HttpServlet {
 
     private Map<String, IAction> actionMap = new HashMap<>();
 
     public void init() {
         actionMap.put("/auth/reset-password", new UpdatePasswordAction());
-        actionMap.put("/auth/update-password", new LogoutAction());
+        actionMap.put("/auth/update-password", new UpdatePasswordAction());
     }
 
     /**
@@ -52,7 +52,7 @@ public class NewServlet extends HttpServlet {
             out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Auth2 at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,8 +70,9 @@ public class NewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Servlet Path + " + request.getServletPath());
-        IAction action = actionMap.get(request.getServletPath());
+        String path = request.getServletPath() + request.getPathInfo();
+        IAction action = actionMap.get(path);
+        System.out.println("path " + path);
         if (action != null) {
             action.doGet(request, response);
         } else {
@@ -91,7 +92,16 @@ public class NewServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        System.out.println(request.getContextPath());
+        String path = request.getServletPath() + request.getPathInfo();
+        IAction action = actionMap.get(path);
+        System.out.println("path " + path);
+        if (action != null) {
+            action.doPost(request, response);
+        } else {
+            // Handle error if the path is not supported
+            System.out.println("Not found action");
+        }
     }
 
     /**
