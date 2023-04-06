@@ -12,6 +12,7 @@ import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
 import entities.Curriculum;
+import exceptions.NotFoundException;
 import java.io.PrintWriter;
 
 /**
@@ -28,10 +29,16 @@ public class GetCurriculumnByID implements Action {
                 curId = curId.replace("/", "");
 
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
+                
+                if (cur == null) throw new NotFoundException("Curriculum is not found");
+                
                 request.setAttribute(AppConfig.CURRICULUM_ITEM, cur);
             } catch (Exception e) {
                 // Set an attribute with key is AppConfig.ERROR_MESSAGE to show in detail.jsp
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
+                e.printStackTrace();
+                request.getRequestDispatcher("/pages/not-found.jsp").forward(request, response);
+                return;
             }
             request.getRequestDispatcher("/pages/curriculums/detail.jsp").forward(request, response);
         }

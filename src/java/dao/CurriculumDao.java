@@ -6,6 +6,7 @@
 package dao;
 
 import entities.Curriculum;
+import exceptions.CurriculumnException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,26 +22,31 @@ public class CurriculumDao {
 
     //lấy curriculum theo id(curriculum detail)
     public static Curriculum getCurriculumById(String id) throws Exception {
-        String query = "select * from Curriculum where id = ?";
         Curriculum curriculum = null;
-        Connection con = DBUtils.makeConnection();
 
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setString(1, id);
-        ResultSet rs = pre.executeQuery();
-        while (rs.next()) {
-            curriculum = new Curriculum();
-            curriculum.setId(rs.getInt("id"));
-            curriculum.setCode(rs.getString("code"));
-            curriculum.setName(rs.getString("name"));
-            curriculum.setDescription(rs.getString("description"));
-            curriculum.setDecisionNo(rs.getString("decisionNo"));
-            curriculum.setViName(rs.getString("viName"));
-            curriculum.setCreatedAt(rs.getString("createdAt"));
-            curriculum.setUpdatedAt(rs.getString("updatedAt"));
+        try {
+            String query = "select * from Curriculum where id = ?";
+            Connection con = DBUtils.makeConnection();
+
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, id);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                curriculum = new Curriculum();
+                curriculum.setId(rs.getInt("id"));
+                curriculum.setCode(rs.getString("code"));
+                curriculum.setName(rs.getString("name"));
+                curriculum.setDescription(rs.getString("description"));
+                curriculum.setDecisionNo(rs.getString("decisionNo"));
+                curriculum.setViName(rs.getString("viName"));
+                curriculum.setCreatedAt(rs.getString("createdAt"));
+                curriculum.setUpdatedAt(rs.getString("updatedAt"));
+            }
+
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumnException("Something went wrong in get curriculum progress.");
         }
-
-        con.close();
         return curriculum;
     }
 

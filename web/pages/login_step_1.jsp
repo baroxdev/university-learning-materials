@@ -36,7 +36,7 @@
                             <a href="#">Forgot password?</a>
                         </div>
                     </div>
-                    <button class="btn-primary btn btn-block col-md-12 col-12" type="button" onClick="handleSubmit()">Continue<i
+                    <button class="btn-primary btn btn-block col-md-12 col-12 gap-2" id="btn-continue" type="button" onclick="handleSubmit()">Continue<i
                             class="fa-solid fa-arrow-right-long"></i>
                     </button>
                 </form>
@@ -52,6 +52,33 @@
             }
         });
         
+        function showLoadingOnButton() {
+            const buttonNode = document.getElementById("btn-continue");
+            buttonNode.disabled = true;
+            buttonNode.innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...`
+        }
+        
+        function resetSubmitButton() {
+            const buttonNode = document.getElementById("btn-continue");
+            buttonNode.disabled = false;
+            buttonNode.innerHTML = `
+                Continue<i class="fa-solid fa-arrow-right-long"></i>`
+        }
+        
+        function changeSubmitButtonState(state) {
+            switch (state) {
+                case "loading": {
+                    showLoadingOnButton()
+                    break;
+                }
+                default: {
+                    resetSubmitButton();
+                }
+            }
+        }
+        
         async function handleSubmit() {
             const usernameNode = document.getElementById("studentID");
             const passwordNode = document.getElementById("password");
@@ -66,7 +93,7 @@
                 params.password = passwordNode?.value
                 params.step = 2;
             }
-            
+            changeSubmitButtonState("loading");
             const res = await fetch(apiUrl, {
                 method: "POST",
                 body: JSON.stringify(params)
@@ -75,6 +102,7 @@
             const json = await res.json()
 
             if (json.step == 2) {
+                changeSubmitButtonState("reset")
                 renderPasswordInput();
             }
             

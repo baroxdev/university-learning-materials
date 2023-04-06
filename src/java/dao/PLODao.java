@@ -5,7 +5,7 @@
  */
 package dao;
 
-import entities.PLO;
+import entities.ProgramLearningObjective;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,16 +19,16 @@ import utils.DBUtils;
 public class PLODao {
 
     //lấy plo theo id (ko chắc có dùng ko :v)
-    public static PLO getPLOById(String id) throws Exception {
+    public static ProgramLearningObjective getPLOById(String id) throws Exception {
         String query = "select * from Program_Learning_Objective where id = '?'";
-        PLO plo = null;
+        ProgramLearningObjective plo = null;
         Connection con = DBUtils.makeConnection();
 
         PreparedStatement pre = con.prepareStatement(query);
         pre.setString(1, id);
         ResultSet rs = pre.executeQuery();
         while (rs.next()) {
-            plo = new PLO();
+            plo = new ProgramLearningObjective();
             plo.setId(rs.getInt("id"));
             plo.setName(rs.getString("name"));
             plo.setDescription(rs.getString("description"));
@@ -41,16 +41,16 @@ public class PLODao {
     }
 
     //lấy list plo theo curriculumID
-    public static List<PLO> readPLOList(String curId) throws Exception {
+    public static List<ProgramLearningObjective> readPLOList(String curId) throws Exception {
         String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Learning_Objective inner join CLO_to_PLO_from_Cur on id = PLO_ID where curriculumID = '?'";
-        List<PLO> list = null;
+        List<ProgramLearningObjective> list = null;
         Connection con = DBUtils.makeConnection();
 
         PreparedStatement pre = con.prepareStatement(query);
         pre.setString(1, curId);
         ResultSet rs = pre.executeQuery();
         while (rs.next()) {
-            PLO plo = new PLO();
+            ProgramLearningObjective plo = new ProgramLearningObjective();
             plo.setId(rs.getInt("id"));
             plo.setName(rs.getString("name"));
             plo.setDescription(rs.getString("description"));
