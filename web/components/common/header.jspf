@@ -1,0 +1,15 @@
+<%-- any content can be specified here e.g.: --%>
+<header>
+    <div class="d-flex align-items-center justify-content-between container h-100">
+        <a href="<%=request.getContextPath()%>"><h3>ULM</h3></a>
+        <div class="dropdown">
+            <div class="dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown" aria-expanded="false" style="margin: 0!important">
+                <img  class="rounded-circle" style="width:40px" src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp">
+                <span class="caret"></span>
+            </div>
+            <ul class="dropdown-menu  dropdown-menu-end">
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -5,6 +5,7 @@
 package filters;
 
 import config.AppConfig;
+import entities.User;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -39,6 +40,12 @@ public class AuthFilter implements Filter {
                 res.sendRedirect(req.getContextPath() + "/");
                 return;
             }
+        }
+        
+        User user = (User) req.getSession().getAttribute(AppConfig.AUTH_USER);
+        
+        if (user!= null && user.getPassword() == null) {
+              request.setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
         }
 
         chain.doFilter(request, response);

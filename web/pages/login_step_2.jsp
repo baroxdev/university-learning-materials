@@ -5,7 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <%@include file="/components/common/head.jspf" %>
+        <title>Login</title>
+    </head>
+    <body>
     <div class="container">
         <div class="row justify-content-around mt-5">
             <div class="col-md-3 col-10 my-5 un_1">
@@ -39,3 +47,4 @@
         </div>
     </div>
 </body>
+</html>

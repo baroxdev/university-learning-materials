@@ -22,7 +22,7 @@ public class LogoutAction implements IAction {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.invalidate();
-        request.getRequestDispatcher("/WEB-INF/views/login_step_1.jsp").forward(request, response);
+        response.sendRedirect("./");
     }
 
     @Override

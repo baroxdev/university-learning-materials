@@ -5,13 +5,14 @@
 package actions.auth;
 
 import actions.IAction;
+import config.AppConfig;
 import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  *
@@ -38,6 +39,7 @@ public class UpdatePasswordAction implements IAction {
                 UserDao.updatePassword(password, username);
                 response.setStatus(HttpServletResponse.SC_OK);
                 JSONObject successObject = new JSONObject();
+                 request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, false);
                 successObject.put("success", "Password updated successfully.");
                 out.print(successObject);
                 out.flush();
