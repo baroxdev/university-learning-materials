@@ -8,8 +8,10 @@
                 <span class="caret"></span>
             </div>
             <ul class="dropdown-menu  dropdown-menu-end">
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/auth/update-password">Setting</a></li>
                 <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>
             </ul>
         </div>
     </div>
+
 </header>

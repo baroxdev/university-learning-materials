@@ -6,12 +6,10 @@ package exceptions;
 
 /**
  *
- * @author quocb
+ * @author duyba
  */
-public class CurriculumnException extends Exception {
-
-    public CurriculumnException(String message) {
-        super(message);
+public class WrongPasswordException extends Exception{
+    public WrongPasswordException(String string) {
+        super(string);
     }
-
 }

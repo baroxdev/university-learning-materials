@@ -23,7 +23,7 @@ public class UpdatePasswordAction implements Action {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try ( PrintWriter out = response.getWriter()) {
-
+            request.getRequestDispatcher("/settings/update-password.jsp").forward(request, response);
         }
     }
 
@@ -31,12 +31,14 @@ public class UpdatePasswordAction implements Action {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         String username = request.getParameter("userId");
+        String currentPassword = request.getParameter("current-password");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
-
-        try ( PrintWriter out = response.getWriter()) {
+        System.out.println(currentPassword);
+        PrintWriter out = response.getWriter();
+        try {
             if (password.equals(confirmPassword)) {
-                UserDao.updatePassword(password, username);
+                UserDao.updatePassword(password, username, currentPassword);
                 response.setStatus(HttpServletResponse.SC_OK);
                 JSONObject successObject = new JSONObject();
                  request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, false);
@@ -51,16 +53,12 @@ public class UpdatePasswordAction implements Action {
                 out.flush();
             }
         } catch (Exception e) {
-            
-            // phan nay lam them, xoa cung dc
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JSONObject errorObject = new JSONObject();
             errorObject.put("error", e.getMessage());
-            PrintWriter out = response.getWriter();
             out.print(errorObject);
             out.flush();
-            //
-            
+                
             System.out.println(e.getMessage());
         }
     }
