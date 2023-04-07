@@ -6,9 +6,11 @@
 package dao;
 
 import entities.User;
+import exceptions.WrongPasswordException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.DBUtils;
@@ -48,19 +50,36 @@ public class UserDao {
 
         return user;
     }
-    
-    public static void updatePassword(String password, String id){
-        try {
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement stm = con.prepareStatement("update [user] set password = ? where id = ?");
-            stm.setString(1, password);
-            stm.setString(2, id);
-            int count = stm.executeUpdate();
-            con.close();
-        } catch (Exception ex) {
-            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
+
+    public static void updatePassword(String password, String id, String currentPassword) throws SQLException, Exception {
+    Connection con = null;
+    PreparedStatement stm = null;
+    try {
+        con = DBUtils.makeConnection();
+        String query = "UPDATE [user] SET password = ? WHERE id = ? ";
+        if (currentPassword != null && !currentPassword.isEmpty()) {
+            query += "AND password = ?";
         }
-        
+        stm = con.prepareStatement(query);
+        stm.setString(1, password);
+        stm.setString(2, id);
+        if (currentPassword != null && !currentPassword.isEmpty()) {
+            stm.setString(3, currentPassword);
+        }
+        int count = stm.executeUpdate();
+        if (count == 0) {
+            throw new WrongPasswordException("Wrong password!!!");
+        }
+    } catch (WrongPasswordException e) {
+        throw new SQLException("Wrong password!!!", e);
+    } catch (SQLException e) {
+        throw e;
+    } finally {
+        if (con != null) {
+            con.close();
+        }
     }
+}
+
+
 }

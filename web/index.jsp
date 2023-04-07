@@ -160,6 +160,26 @@
                         </article>
                 </div>
             </section>
+            <br/>
+            <section class="posts-section">
+                <p class="posts-section_heading">Explore</h3>
+                <div class="posts-grid">
+                    <article class="post-card">
+                            <div class="post-card__header">
+                                <a href="${pageContext.request.servletContext.contextPath}/curriculums/2" class="post-card__title">
+                                    BIT_SE_K16C
+                                </a>
+                                <span class="badge text-bg-primary">Curriculum</span>
+                            </div>
+                            <div class="post-card__body">
+                                <p class="post-card__description">Text line</p>
+                            </div>
+                            <div class="post-card_footer">
+                                <time class="post-card_time">Updated at March 27, 2023</time>
+                            </div>
+                        </article>
+                </div>
+            </section>
         </main>
     </body>
 </html>
