@@ -10,6 +10,7 @@ import exceptions.SubjectException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
 
@@ -21,7 +22,7 @@ public class SubjectDao {
 
     //lấy subject theo id (subject detail)
     public static Subject getSubjectById(String id) throws Exception {
-        String query = "select * from Subject where id = '?'";
+        String query = "select * from Subject where id = ?";
         Subject subject = null;
         try {
             Connection con = DBUtils.makeConnection();
@@ -32,8 +33,8 @@ public class SubjectDao {
                 subject = new Subject();
                 subject.setId(rs.getString("id"));
                 subject.setName(rs.getString("name"));
-                subject.setCreatedAt(rs.getDate("createdAt").toString());
-                subject.setUpdatedAt(rs.getDate("updatedAt").toString());
+                subject.setCreatedAt(rs.getString("createdAt"));
+                subject.setUpdatedAt(rs.getString("updatedAt"));
                 subject.setPreRequisite(rs.getString("preRequisite"));//mục này chưa có trong db
                 subject.setSemester(rs.getInt("semester"));
                 subject.setCredit(rs.getInt("credit"));
@@ -49,8 +50,8 @@ public class SubjectDao {
     //lấy list môn theo curriculumId
     //cần junction table giữa Subject và Curiculum để chạy
     public static List<Subject> readSubjectList(String curId) throws Exception {
-        String query = "select distinct [id], [name], [createdAt], [updatedAt], [preRequisite], [semester], [credit], [knowlegdeCategoryID] from Subject join Subject_to_Cur on id = sub_ID where cur_ID = '?'";
-        List<Subject> list = null;
+        String query = "select distinct [id], [name], [createdAt], [updatedAt], [preRequisite], [semester], [credit], [knowlegdeCategoryID] from Subject join Subject_to_Cur on id = sub_ID where cur_ID = ?";
+        List<Subject> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
@@ -79,7 +80,7 @@ public class SubjectDao {
     //cần junction table giữa Subject và PLO
     public static List<Subject> readSubjectList(String curId, String KCId) throws Exception {
         String query = "select * from subject join ... on id = sub_id where cur_id = ? and knowlegdeCategoryID = ?";//cái nay chưa có trong db nên để tạm
-        List<Subject> list = null;
+        List<Subject> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);

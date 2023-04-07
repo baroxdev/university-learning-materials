@@ -10,6 +10,7 @@ import exceptions.CurriculumnException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
 
@@ -50,12 +51,12 @@ public class CurriculumDao {
 
     //lấy list curriculum theo code(search by code)
     public static List<Curriculum> readCurriculumListByCode(String code) throws Exception {
-        String query = "select * from Curriculum where code like '%?%'";
-        List<Curriculum> list = null;
+        String query = "select * from Curriculum where code like ?";
+        List<Curriculum> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, code);
+            pre.setString(1, "%" + code + "%");
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 Curriculum curriculum = new Curriculum();
@@ -65,8 +66,8 @@ public class CurriculumDao {
                 curriculum.setDescription(rs.getString("description"));
                 curriculum.setDecisionNo(rs.getString("decisionNo"));
                 curriculum.setViName(rs.getString("viName"));
-                curriculum.setCreatedAt(rs.getDate("createdAt").toString());
-                curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
+                curriculum.setCreatedAt(rs.getString("createdAt"));
+                curriculum.setUpdatedAt(rs.getString("updatedAt"));
                 list.add(curriculum);
             }
             con.close();
@@ -78,12 +79,12 @@ public class CurriculumDao {
 
     //lấy list curriculum theo name(search by name)
     public static List<Curriculum> readCurriculumListByName(String name) throws Exception {
-        String query = "select * from Curriculum where name like '%?%'";
-        List<Curriculum> list = null;
+        String query = "select * from Curriculum where name like ?";
+        List<Curriculum> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, name);
+            pre.setString(1, "%" + name + "%");
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 Curriculum curriculum = new Curriculum();
@@ -93,8 +94,8 @@ public class CurriculumDao {
                 curriculum.setDescription(rs.getString("description"));
                 curriculum.setDecisionNo(rs.getString("decisionNo"));
                 curriculum.setViName(rs.getString("viName"));
-                curriculum.setCreatedAt(rs.getDate("createdAt").toString());
-                curriculum.setUpdatedAt(rs.getDate("updatedAt").toString());
+                curriculum.setCreatedAt(rs.getString("createdAt"));
+                curriculum.setUpdatedAt(rs.getString("updatedAt"));
                 list.add(curriculum);
             }
             con.close();
