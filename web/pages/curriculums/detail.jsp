@@ -28,7 +28,7 @@
     <body>
         <%@include file="/components/common/header.jspf" %>
         <main class="container mt-5" id="main-content">
-            <div class="row">
+            <div class="row" style="column-gap: 32px;">
                 <div class="col-3 sidebar" style="position:relative">
                     <nav id="navbar" class="h-100 flex-column align-items-stretch pe-4 border-end">
                         <nav class="nav nav-pills flex-column">
@@ -42,18 +42,17 @@
                         </nav>
                     </nav>
                 </div>
-
-                <div class="col-9">
+                <div class="col-8">
                     <div data-bs-spy="scroll" data-bs-target="#navbar" data-bs-smooth-scroll="true" class="scrollspy-example-2" tabindex="0"
                          >
-                        <div id="item-1" style="height:100vh">
+                        <div id="item-1">
                             <span class="badge text-bg-primary">Curriculumn</span>
                             <h4 class="page-title mt-4"><%= cur.getName()%></h4>
                             <div class="d-flex align-items-center gap-5 mt-3">
                                 <p class="bold"><%= cur.getCode()%></p>
                                 <p><%= cur.getDecisionNo()%></p>
                             </div>
-                            <h5>Description</h5>
+                            <h4 class="page-title">Description</h4>
                             <div class="d-flex align-items-center gap-5 mt-3">
                                 <p><%= cur.getDescription()%></p>
                             </div>
@@ -61,55 +60,83 @@
                         <div id="item-2">
                             <h4 class="page-title">Objectives</h4>
                             <div id="item-2-1">
-                                <h5>Program Objectives</h5>
-                                <table class="table table-striped table-bordered">
-                                    <thead class="table-info">
-                                        <tr>
-                                            <th style="width: 10%">Id</th>
-                                            <th style="width: 10%">Name</th>
-                                            <th style="width: 50%">Description</th>
-                                            <th style="width: 15%">CreatedAt</th>
-                                            <th style="width: 15%">UpdatedAt</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="po" items="<%= poList%>">
-                                            <tr>
-                                                <td>${po.id}</td>
-                                                <td>${po.name}</td>
-                                                <td>${po.description}</td>
-                                                <td>${po.createdAt}</td>
-                                                <td>${po.updatedAt}</td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                <h5>1. Program Objectives</h5>
+                                <div>
+                                    <c:forEach var="po" items="<%= poList%>" varStatus="item">
+                                        <div class="objective-card">
+                                            <div class="col-md-1 d-flex align-items-center">
+                                                <div class="rounded-badge">${item.index + 1}</div>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <div class="card-body">
+                                                    ${po.description}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <!--                                <table class="table table-striped table-bordered">
+                                                                    <thead class="table-info">
+                                                                        <tr>
+                                                                            <th style="width: 10%">Id</th>
+                                                                            <th style="width: 10%">Name</th>
+                                                                            <th style="width: 50%">Description</th>
+                                                                            <th style="width: 15%">CreatedAt</th>
+                                                                            <th style="width: 15%">UpdatedAt</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                <%--<c:forEach var="po" items="<%= poList%>">--%>
+                                    <tr>
+                                        <td>${po.id}</td>
+                                        <td>${po.name}</td>
+                                        <td>${po.description}</td>
+                                        <td>${po.createdAt}</td>
+                                        <td>${po.updatedAt}</td>
+                                    </tr>
+                                <%--</c:forEach>--%>
+                            </tbody>
+                        </table>-->
                             </div>
                             <br/>
                             <div id="item-2-2">
-                                <h5>Program Learning Objectives</h5>
-                                <table class="table table-striped table-bordered">
-                                    <thead class="table-info">
-                                        <tr>
-                                            <th style="width: 10%">Id</th>
-                                            <th style="width: 10%">Name</th>
-                                            <th style="width: 50%">Description</th>
-                                            <th style="width: 15%">CreatedAt</th>
-                                            <th style="width: 15%">UpdatedAt</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="plo" items="<%= poList%>">
-                                            <tr>
-                                                <td>${plo.id}</td>
-                                                <td>${plo.name}</td>
-                                                <td>${plo.description}</td>
-                                                <td>${plo.createdAt}</td>
-                                                <td>${plo.updatedAt}</td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                <h5>2.Program Learning Objectives</h5>
+                                <div>
+                                    <c:forEach var="plo" items="<%= ploList%>" varStatus="item">
+                                        <div class="objective-card">
+                                            <div class="col-md-1 d-flex align-items-center">
+                                                <div class="rounded-badge">${item.index + 1}</div>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <div class="card-body">
+                                                    ${plo.description}
+                                                </div>
+                                            </div>
+                                        </div
+                                    </c:forEach>
+                                </div>
+                                <!--                                <table class="table table-striped table-bordered">
+                                                                    <thead class="table-info">
+                                                                        <tr>
+                                                                            <th style="width: 10%">Id</th>
+                                                                            <th style="width: 10%">Name</th>
+                                                                            <th style="width: 50%">Description</th>
+                                                                            <th style="width: 15%">CreatedAt</th>
+                                                                            <th style="width: 15%">UpdatedAt</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                <%--<c:forEach var="plo" items="<%= poList%>">--%>
+                                    <tr>
+                                        <td>${plo.id}</td>
+                                        <td>${plo.name}</td>
+                                        <td>${plo.description}</td>
+                                        <td>${plo.createdAt}</td>
+                                        <td>${plo.updatedAt}</td>
+                                    </tr>
+                                <%--</c:forEach>--%>
+                            </tbody>
+                        </table>-->
                             </div>
                         </div>
                         <br/>
