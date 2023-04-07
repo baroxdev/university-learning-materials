@@ -37,7 +37,7 @@ public class GetCurriculumnByID implements Action {
 
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
                 
-                if (cur == null) throw new NotFoundException("Curriculum is not found");
+                if (cur == null) throw new NotFoundException("Curriculum is not found!");
                 
                 List<ProgramObjective> poList = PODao.readPOListByCurId(curId);
                 List<ProgramLearningObjective> ploList = PLODao.readPLOList(curId);
@@ -48,7 +48,6 @@ public class GetCurriculumnByID implements Action {
 //                request.setAttribute(AppConfig.SUBJECT_LIST, subjectList);
                 request.setAttribute(AppConfig.CURRICULUM_ITEM, cur);
             } catch (Exception e) {
-                // Set an attribute with key is AppConfig.ERROR_MESSAGE to show in detail.jsp
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
                 request.getRequestDispatcher("/pages/not-found.jsp").forward(request, response);

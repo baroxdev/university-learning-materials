@@ -8,8 +8,10 @@ package exceptions;
  *
  * @author quocb
  */
-public class NotFoundException extends Exception{
-    public NotFoundException(String string) {
-        super(string);
+public class NotFoundException extends Exception {
+
+    public NotFoundException(String message) {
+        super(message);
     }
+
 }

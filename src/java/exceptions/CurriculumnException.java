@@ -8,8 +8,10 @@ package exceptions;
  *
  * @author quocb
  */
-public class CurriculumnException extends Exception{
-    public CurriculumnException(String string) {
-        super(string);
+public class CurriculumnException extends Exception {
+
+    public CurriculumnException(String message) {
+        super(message);
     }
+
 }

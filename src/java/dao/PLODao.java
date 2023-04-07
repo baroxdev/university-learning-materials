@@ -6,6 +6,7 @@
 package dao;
 
 import entities.ProgramLearningObjective;
+import exceptions.PLOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,23 +22,25 @@ public class PLODao {
 
     //lấy plo theo id (ko chắc có dùng ko :v)
     public static ProgramLearningObjective getPLOById(String id) throws Exception {
-        String query = "select * from Program_Learning_Objective where id = '?'";
+        String query = "select * from Program_Learning_Objective where id = ?";
         ProgramLearningObjective plo = null;
-        Connection con = DBUtils.makeConnection();
-
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setString(1, id);
-        ResultSet rs = pre.executeQuery();
-        while (rs.next()) {
-            plo = new ProgramLearningObjective();
-            plo.setId(rs.getInt("id"));
-            plo.setName(rs.getString("name"));
-            plo.setDescription(rs.getString("description"));
-            plo.setCreatedAt(rs.getDate("createdAt").toString());
-            plo.setUpdatedAt(rs.getDate("updatedAt").toString());
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, id);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                plo = new ProgramLearningObjective();
+                plo.setId(rs.getInt("id"));
+                plo.setName(rs.getString("name"));
+                plo.setDescription(rs.getString("description"));
+                plo.setCreatedAt(rs.getString("createdAt"));
+                plo.setUpdatedAt(rs.getString("updatedAt"));
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new PLOException("Something went wrong in get plo progress.");
         }
-
-        con.close();
         return plo;
     }
 
@@ -45,22 +48,24 @@ public class PLODao {
     public static List<ProgramLearningObjective> readPLOList(String curId) throws Exception {
         String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Learning_Objective inner join CLO_to_PLO_from_Cur on id = PLO_ID where curriculumID = ?";
         List<ProgramLearningObjective> list = new ArrayList<>();
-        Connection con = DBUtils.makeConnection();
-
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setString(1, curId);
-        ResultSet rs = pre.executeQuery();
-        while (rs.next()) {
-            ProgramLearningObjective plo = new ProgramLearningObjective();
-            plo.setId(rs.getInt("id"));
-            plo.setName(rs.getString("name"));
-            plo.setDescription(rs.getString("description"));
-            plo.setCreatedAt(rs.getString("createdAt"));
-            plo.setUpdatedAt(rs.getString("updatedAt"));
-            list.add(plo);
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curId);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                ProgramLearningObjective plo = new ProgramLearningObjective();
+                plo.setId(rs.getInt("id"));
+                plo.setName(rs.getString("name"));
+                plo.setDescription(rs.getString("description"));
+                plo.setCreatedAt(rs.getString("createdAt"));
+                plo.setUpdatedAt(rs.getString("updatedAt"));
+                list.add(plo);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new PLOException("Something went wrong in read plo progress.");
         }
-
-        con.close();
         return list;
     }
 
