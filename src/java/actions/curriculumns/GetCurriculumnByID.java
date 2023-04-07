@@ -11,9 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
+import dao.PLODao;
+import dao.PODao;
+import dao.SubjectDao;
 import entities.Curriculum;
+import entities.ProgramLearningObjective;
+import entities.ProgramObjective;
+import entities.Subject;
 import exceptions.NotFoundException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  *
@@ -32,6 +39,13 @@ public class GetCurriculumnByID implements Action {
                 
                 if (cur == null) throw new NotFoundException("Curriculum is not found");
                 
+                List<ProgramObjective> poList = PODao.readPOListByCurId(curId);
+                List<ProgramLearningObjective> ploList = PLODao.readPLOList(curId);
+//                List<Subject> subjectList = SubjectDao.readSubjectList(curId);
+                
+                request.setAttribute(AppConfig.PO_LIST, poList);
+                request.setAttribute(AppConfig.PLO_LIST, ploList);
+//                request.setAttribute(AppConfig.SUBJECT_LIST, subjectList);
                 request.setAttribute(AppConfig.CURRICULUM_ITEM, cur);
             } catch (Exception e) {
                 // Set an attribute with key is AppConfig.ERROR_MESSAGE to show in detail.jsp

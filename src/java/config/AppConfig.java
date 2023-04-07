@@ -21,7 +21,19 @@ public class AppConfig {
 
 //    CURRICULUMNS
     public final static String CURRICULUM_ITEM = "CURRICULUMN";
-    
+
+//    PO
+    public final static String PO_ITEM = "PO";
+    public final static String PO_LIST = "PO_LIST";
+
+//    PLO
+    public final static String PLO_ITEM = "PLO";
+    public final static String PLO_LIST = "PLO_LIST";
+
+//    SUBJECT
+    public final static String SUBJECT_ITEM = "SUBJECT";
+    public final static String SUBJECT_LIST = "SUBJECT_LIST";
+
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
 
