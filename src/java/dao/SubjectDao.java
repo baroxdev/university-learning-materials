@@ -9,6 +9,7 @@ import entities.Subject;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
 
@@ -46,8 +47,8 @@ public class SubjectDao {
     //lấy list môn theo curriculumId
     //cần junction table giữa Subject và Curiculum để chạy
     public static List<Subject> readSubjectList(String curId) throws Exception {
-        String query = "select distinct [id], [name], [createdAt], [updatedAt], [preRequisite], [semester], [credit], [knowlegdeCategoryID] from Subject join Subject_to_Cur on id = sub_ID where cur_ID = '?'";
-        List<Subject> list = null;
+        String query = "select distinct [id], [name], [createdAt], [updatedAt], [preRequisite], [semester], [credit], [knowlegdeCategoryID] from Subject join Subject_to_Cur on id = sub_ID where cur_ID = ?";
+        List<Subject> list = new ArrayList<>();
         Connection con = DBUtils.makeConnection();
 
         PreparedStatement pre = con.prepareStatement(query);
@@ -57,8 +58,8 @@ public class SubjectDao {
             Subject subject = new Subject();
             subject.setId(rs.getString("id"));
             subject.setName(rs.getString("name"));
-            subject.setCreatedAt(rs.getDate("createdAt").toString());
-            subject.setUpdatedAt(rs.getDate("updatedAt").toString());
+            subject.setCreatedAt(rs.getString("createdAt"));
+            subject.setUpdatedAt(rs.getString("updatedAt"));
             subject.setPreRequisite(rs.getString("preRequisite"));
             subject.setSemester(rs.getInt("semester"));
             subject.setCredit(rs.getInt("credit"));
