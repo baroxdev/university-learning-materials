@@ -4,6 +4,8 @@
     Author     : duyba
 --%>
 
+<%@page import="config.AppConfig"%>
+<%@page import="entities.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -30,19 +32,19 @@
                     <div class="col-md-12" id="current-password-input">
                         <div class="form-group">
                             <label class="mb-2" for="currentPassword">Current Password</label>
-                            <input type="password" name="current-password" id="currentPassword" class="form-control">
+                            <input type="password" name="current-password" id="currentPassword" class="form-control" required="">
                         </div>
                     </div>
                     <div class="col-md-12" id="new-password-input">
                         <div class="form-group">
                             <label class="mb-2" for="newPassword">New Password</label>
-                            <input type="password" name="password" id="newPassword" class="form-control">
+                            <input type="password" name="password" id="newPassword" class="form-control" required="">
                         </div>
                     </div>
                     <div class="col-md-12" id="confirm-password-input">
                         <div class="form-group">
                             <label class="mb-2" for="confirmPassword">Confirm Password</label>
-                            <input type="password" name="confirm-password" id="confirmPassword" class="form-control">
+                            <input type="password" name="confirm-password" id="confirmPassword" class="form-control" required="">
                         </div>
                     </div>
                     <br/>
@@ -53,6 +55,22 @@
             </div>
         </div> 
     </body>
+    <%
+        User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
+        String password = user.getPassword();
+        System.out.println(password);
+    %>
+    <script>
+        var currentPasswordLabel = document.querySelector('label[for="currentPassword"]');
+        var currentPasswordInput = document.getElementById("currentPassword");
+        var password = "<%= password%>";
+        console.log("day la " + password);
+        if (password === "null" || password === "") {
+            currentPasswordLabel.remove();
+            currentPasswordInput.remove();
+        }
+    </script>
+
 
 
 </html>

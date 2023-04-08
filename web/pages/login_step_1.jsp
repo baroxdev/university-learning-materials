@@ -47,6 +47,7 @@
         window.addEventListener("keydown", function (e) {
             if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
                 if (e.target.form == document.getElementById("login-form")) {
+                    event.preventDefault();
                     handleSubmit();
                 }
             }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import actions.Action;
+import utils.ResponseUtils;
 
 /**
  *
@@ -34,32 +35,23 @@ public class UpdatePasswordAction implements Action {
         String currentPassword = request.getParameter("current-password");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
-        System.out.println(currentPassword);
-        PrintWriter out = response.getWriter();
         try {
             if (password.equals(confirmPassword)) {
                 UserDao.updatePassword(password, username, currentPassword);
-                response.setStatus(HttpServletResponse.SC_OK);
-                JSONObject successObject = new JSONObject();
-                 request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, false);
-                successObject.put("success", "Password updated successfully.");
-                out.print(successObject);
-                out.flush();
+                JSONObject jsonResponse = new JSONObject();
+                jsonResponse.put("message", "Password updated successfully.");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, jsonResponse);
             } else {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                JSONObject errorObject = new JSONObject();
-                errorObject.put("error", "Passwords do not match.");
-                out.print(errorObject);
-                out.flush();
+                JSONObject jsonResponse = new JSONObject();
+                jsonResponse.put("message", "Passwords do not match.");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, jsonResponse);
             }
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            JSONObject errorObject = new JSONObject();
-            errorObject.put("error", e.getMessage());
-            out.print(errorObject);
-            out.flush();
-                
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("message", e.getMessage());
+            ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, jsonResponse);
             System.out.println(e.getMessage());
         }
     }
+
 }
