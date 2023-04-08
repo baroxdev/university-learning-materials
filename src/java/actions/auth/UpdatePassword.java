@@ -35,8 +35,6 @@ public class UpdatePassword implements Action {
         String currentPassword = request.getParameter("current-password");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
-        System.out.println(currentPassword);
-        PrintWriter out = response.getWriter();
         try {
             if (password.equals(confirmPassword)) {
                 UserDao.updatePassword(password, username, currentPassword);
@@ -49,16 +47,13 @@ public class UpdatePassword implements Action {
                 JSONObject errorObject = new JSONObject();
                 errorObject.put("error", "Passwords do not match.");
                 ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, errorObject);
-
             }
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            JSONObject errorObject = new JSONObject();
-            errorObject.put("error", e.getMessage());
-            out.print(errorObject);
-            out.flush();
-
-            System.out.println(e.getMessage());
+              JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("message", e.getMessage());
+            ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, jsonResponse);
+            e.printStackTrace();
         }
     }
+
 }
