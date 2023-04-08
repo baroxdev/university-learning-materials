@@ -41,6 +41,7 @@ public class GetCurriculumnByID implements Action {
                 
                 List<ProgramObjective> poList = PODao.readPOListByCurId(curId);
                 List<ProgramLearningObjective> ploList = PLODao.readPLOList(curId);
+                System.out.println("PLO " + ploList);
 //                List<Subject> subjectList = SubjectDao.readSubjectList(curId);
                 
                 request.setAttribute(AppConfig.PO_LIST, poList);

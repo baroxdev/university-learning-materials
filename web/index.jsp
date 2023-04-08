@@ -17,7 +17,7 @@
     <body>
         <%@include file="/components/common/header.jspf" %>
         <%
-            Boolean isForceUpdate = (Boolean) request.getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
+            Boolean isForceUpdate = (Boolean) request.getSession().getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
             User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
 
             if (isForceUpdate != null && isForceUpdate && user != null) {
@@ -30,7 +30,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
                         <form action="${pageContext.request.servletContext.contextPath}/auth/update-password" method="POST" id="update-password-form">
                             <input name="userId" value="<%= user.getId()%>" hidden/>
                             <label for="inputPassword5" class="form-label">Password</label>
@@ -63,7 +62,7 @@
             }
         %>
         <section id="hero">
-            <div class="search-box">
+            <div class="search-box shadowed with-padding">
                 <div class="search-box__icon">
                     <button type="button" class="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -77,9 +76,8 @@
                 <div class="search-box__dropdown">
                     <select class="form-select" id="inputGroupSelect01">
                         <option selected>Choose...</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option value="curriculum">Curriculum</option>
+                        <option value="syllabus">Syllabus</option>
                     </select>
                 </div>
             </div>
@@ -88,76 +86,76 @@
             <section class="posts-section">
                 <p class="posts-section_heading">Last viewed</h3>
                 <div class="posts-grid">
-                        <article class="post-card">
-                            <div class="post-card__header">
-                                <a class="post-card__title">
-                                    SWE291
-                                </a>
-                                <span class="badge text-bg-primary">Syllabus</span>
-                            </div>
-                            <div class="post-card__body">
-                                <p class="post-card__description">Text line</p>
-                            </div>
-                            <div class="post-card_footer">
-                                <time class="post-card_time">Updated at March 27, 2023</time>
-                            </div>
-                        </article>
                     <article class="post-card">
-                            <div class="post-card__header">
-                                <a class="post-card__title">
-                                    SWE291
-                                </a>
-                                <span class="badge text-bg-primary">Syllabus</span>
-                            </div>
-                            <div class="post-card__body">
-                                <p class="post-card__description">Text line</p>
-                            </div>
-                            <div class="post-card_footer">
-                                <time class="post-card_time">Updated at March 27, 2023</time>
-                            </div>
-                        </article>
+                        <div class="post-card__header">
+                            <a class="post-card__title">
+                                SWE291
+                            </a>
+                            <span class="badge text-bg-primary">Syllabus</span>
+                        </div>
+                        <div class="post-card__body">
+                            <p class="post-card__description">Text line</p>
+                        </div>
+                        <div class="post-card_footer">
+                            <time class="post-card_time">Updated at March 27, 2023</time>
+                        </div>
+                    </article>
                     <article class="post-card">
-                            <div class="post-card__header">
-                                <a class="post-card__title">
-                                    SWE291
-                                </a>
-                                <span class="badge text-bg-primary">Syllabus</span>
-                            </div>
-                            <div class="post-card__body">
-                                <p class="post-card__description">Text line</p>
-                            </div>
-                            <div class="post-card_footer">
-                                <time class="post-card_time">Updated at March 27, 2023</time>
-                            </div>
-                        </article>
+                        <div class="post-card__header">
+                            <a class="post-card__title">
+                                SWE291
+                            </a>
+                            <span class="badge text-bg-primary">Syllabus</span>
+                        </div>
+                        <div class="post-card__body">
+                            <p class="post-card__description">Text line</p>
+                        </div>
+                        <div class="post-card_footer">
+                            <time class="post-card_time">Updated at March 27, 2023</time>
+                        </div>
+                    </article>
                     <article class="post-card">
-                            <div class="post-card__header">
-                                <a class="post-card__title">
-                                    SWE291
-                                </a>
-                                <span class="badge text-bg-primary">Syllabus</span>
-                            </div>
-                            <div class="post-card__body">
-                                <p class="post-card__description">Text line</p>
-                            </div>
-                            <div class="post-card_footer">
-                                <time class="post-card_time">Updated at March 27, 2023</time>
-                            </div>
-                        </article>
+                        <div class="post-card__header">
+                            <a class="post-card__title">
+                                SWE291
+                            </a>
+                            <span class="badge text-bg-primary">Syllabus</span>
+                        </div>
+                        <div class="post-card__body">
+                            <p class="post-card__description">Text line</p>
+                        </div>
+                        <div class="post-card_footer">
+                            <time class="post-card_time">Updated at March 27, 2023</time>
+                        </div>
+                    </article>
                     <article class="post-card">
-                            <div class="post-card__header">
-                                <a class="post-card__title">
-                                    SWE291
-                                </a>
-                                <span class="badge text-bg-primary">Syllabus</span>
-                            </div>
-                            <div class="post-card__body">
-                                <p class="post-card__description">Text line</p>
-                            </div>
-                            <div class="post-card_footer">
-                                <time class="post-card_time">Updated at March 27, 2023</time>
-                            </div>
-                        </article>
+                        <div class="post-card__header">
+                            <a class="post-card__title">
+                                SWE291
+                            </a>
+                            <span class="badge text-bg-primary">Syllabus</span>
+                        </div>
+                        <div class="post-card__body">
+                            <p class="post-card__description">Text line</p>
+                        </div>
+                        <div class="post-card_footer">
+                            <time class="post-card_time">Updated at March 27, 2023</time>
+                        </div>
+                    </article>
+                    <article class="post-card">
+                        <div class="post-card__header">
+                            <a class="post-card__title">
+                                SWE291
+                            </a>
+                            <span class="badge text-bg-primary">Syllabus</span>
+                        </div>
+                        <div class="post-card__body">
+                            <p class="post-card__description">Text line</p>
+                        </div>
+                        <div class="post-card_footer">
+                            <time class="post-card_time">Updated at March 27, 2023</time>
+                        </div>
+                    </article>
                 </div>
             </section>
             <br/>
@@ -165,19 +163,19 @@
                 <p class="posts-section_heading">Explore</h3>
                 <div class="posts-grid">
                     <article class="post-card">
-                            <div class="post-card__header">
-                                <a href="${pageContext.request.servletContext.contextPath}/curriculums/2" class="post-card__title">
-                                    BIT_SE_K16C
-                                </a>
-                                <span class="badge text-bg-primary">Curriculum</span>
-                            </div>
-                            <div class="post-card__body">
-                                <p class="post-card__description">Text line</p>
-                            </div>
-                            <div class="post-card_footer">
-                                <time class="post-card_time">Updated at March 27, 2023</time>
-                            </div>
-                        </article>
+                        <div class="post-card__header">
+                            <a href="${pageContext.request.servletContext.contextPath}/curriculums/2" class="post-card__title">
+                                BIT_SE_K16C
+                            </a>
+                            <span class="badge text-bg-primary">Curriculum</span>
+                        </div>
+                        <div class="post-card__body">
+                            <p class="post-card__description">Text line</p>
+                        </div>
+                        <div class="post-card_footer">
+                            <time class="post-card_time">Updated at March 27, 2023</time>
+                        </div>
+                    </article>
                 </div>
             </section>
         </main>

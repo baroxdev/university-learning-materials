@@ -42,9 +42,9 @@ public class AuthFilter implements Filter {
         }
         
         User user = (User) req.getSession().getAttribute(AppConfig.AUTH_USER);
-        
-        if (user!= null && user.getPassword() == null) {
-              request.setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
+        Boolean forceUserUpdatePassword = (Boolean)  req.getSession().getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
+        if (user!= null && user.getPassword() == null && (forceUserUpdatePassword)) {
+              req.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
         }
 
         chain.doFilter(request, response);
