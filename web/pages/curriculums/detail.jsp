@@ -30,7 +30,7 @@
         <main class="container mt-5" id="main-content">
             <div class="row" style="column-gap: 32px;">
                 <div class="col-3 sidebar" style="position:relative">
-                    <nav id="navbar" class="h-100 flex-column align-items-stretch pe-4 border-end">
+                    <nav id="navbar" class="h-100 flex-column align-items-stretch">
                         <nav class="nav nav-pills flex-column">
                             <a class="nav-link" href="#item-1">Description</a>
                             <a class="nav-link" href="#item-2">Objectives</a>
@@ -42,7 +42,7 @@
                         </nav>
                     </nav>
                 </div>
-                <div class="col-8">
+                <div class="col-8 text-content">
                     <div data-bs-spy="scroll" data-bs-target="#navbar" data-bs-smooth-scroll="true" class="scrollspy-example-2" tabindex="0"
                          >
                         <div id="item-1">
@@ -61,7 +61,7 @@
                             <h4 class="page-title">Objectives</h4>
                             <div id="item-2-1">
                                 <h5>1. Program Objectives</h5>
-                                <div>
+                                <div class="objective-container">
                                     <c:forEach var="po" items="<%= poList%>" varStatus="item">
                                         <div class="objective-card">
                                             <div class="col-md-1 d-flex align-items-center">
@@ -75,33 +75,11 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <!--                                <table class="table table-striped table-bordered">
-                                                                    <thead class="table-info">
-                                                                        <tr>
-                                                                            <th style="width: 10%">Id</th>
-                                                                            <th style="width: 10%">Name</th>
-                                                                            <th style="width: 50%">Description</th>
-                                                                            <th style="width: 15%">CreatedAt</th>
-                                                                            <th style="width: 15%">UpdatedAt</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                <%--<c:forEach var="po" items="<%= poList%>">--%>
-                                    <tr>
-                                        <td>${po.id}</td>
-                                        <td>${po.name}</td>
-                                        <td>${po.description}</td>
-                                        <td>${po.createdAt}</td>
-                                        <td>${po.updatedAt}</td>
-                                    </tr>
-                                <%--</c:forEach>--%>
-                            </tbody>
-                        </table>-->
                             </div>
                             <br/>
                             <div id="item-2-2">
                                 <h5>2.Program Learning Objectives</h5>
-                                <div>
+                                <div class="objective-container">
                                     <c:forEach var="plo" items="<%= ploList%>" varStatus="item">
                                         <div class="objective-card">
                                             <div class="col-md-1 d-flex align-items-center">
@@ -112,7 +90,7 @@
                                                     ${plo.description}
                                                 </div>
                                             </div>
-                                        </div
+                                        </div>
                                     </c:forEach>
                                 </div>
                                 <!--                                <table class="table table-striped table-bordered">

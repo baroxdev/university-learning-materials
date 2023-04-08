@@ -16,7 +16,7 @@ import actions.Action;
  *
  * @author Admin
  */
-public class LogoutAction implements Action {
+public class Logout implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

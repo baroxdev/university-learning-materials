@@ -4,8 +4,8 @@
  */
 package controllers;
 
-import actions.auth.LoginAction;
-import actions.auth.LogoutAction;
+import actions.auth.Login;
+import actions.auth.Logout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;

@@ -4,9 +4,9 @@
  */
 package controllers;
 
-import actions.auth.LoginAction;
-import actions.auth.LogoutAction;
-import actions.auth.UpdatePasswordAction;
+import actions.auth.Login;
+import actions.auth.Logout;
+import actions.auth.UpdatePassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -28,8 +28,8 @@ public class AuthPassWordController extends HttpServlet {
     private Map<String, Action> actionMap = new HashMap<>();
 
     public void init() {
-        actionMap.put("/auth/reset-password", new UpdatePasswordAction());
-        actionMap.put("/auth/update-password", new UpdatePasswordAction());
+        actionMap.put("/auth/reset-password", new UpdatePassword());
+        actionMap.put("/auth/update-password", new UpdatePassword());
     }
 
     /**

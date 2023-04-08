@@ -15,16 +15,12 @@ import org.json.JSONObject;
  * @author quocb
  */
 public class ResponseUtils {
+
     public static void sendJson(HttpServletResponse response, Integer status, JSONObject json) throws IOException {
-        if (status >= 400) {
-            response.sendError(status, json.toString());
-        } else {
-            response.setStatus(status);
-            
-        }
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().print(json);
-            response.getWriter().flush();
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().print(json);
+        response.getWriter().flush();
     }
 }

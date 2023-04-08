@@ -19,7 +19,7 @@ import utils.ResponseUtils;
  *
  * @author quocb
  */
-public class UpdatePasswordAction implements Action {
+public class UpdatePassword implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,19 +38,21 @@ public class UpdatePasswordAction implements Action {
         try {
             if (password.equals(confirmPassword)) {
                 UserDao.updatePassword(password, username, currentPassword);
-                JSONObject jsonResponse = new JSONObject();
-                jsonResponse.put("message", "Password updated successfully.");
-                ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, jsonResponse);
+                response.setStatus(HttpServletResponse.SC_OK);
+                JSONObject successJson = new JSONObject();
+                request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, false);
+                response.sendRedirect(request.getContextPath() + "/");
             } else {
-                JSONObject jsonResponse = new JSONObject();
-                jsonResponse.put("message", "Passwords do not match.");
-                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, jsonResponse);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                JSONObject errorObject = new JSONObject();
+                errorObject.put("error", "Passwords do not match.");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, errorObject);
             }
         } catch (Exception e) {
-            JSONObject jsonResponse = new JSONObject();
+              JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("message", e.getMessage());
             ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, jsonResponse);
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
