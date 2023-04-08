@@ -46,7 +46,7 @@ public class PLODao {
 
     //lấy list plo theo curriculumID
     public static List<ProgramLearningObjective> readPLOList(String curId) throws Exception {
-        String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Learning_Objective inner join CLO_to_PLO_from_Cur on id = PLO_ID where curriculumID = ?";
+        String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Learning_Objective join Curr_to_PLO on id = PLO_ID where curriculumID = ?";
         List<ProgramLearningObjective> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
