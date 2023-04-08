@@ -8,11 +8,24 @@ package entities;
  *
  * @author quocb
  */
-public class CourseLearningObjective extends Objective{
+public class CourseLearningObjective extends Objective {
+
+    private int syllabusID;
+
     public CourseLearningObjective() {
     }
 
-    public CourseLearningObjective(int id, String name, String description, String createdAt, String updatedAt) {
+    public CourseLearningObjective(int syllabusID, int id, String name, String description, String createdAt, String updatedAt) {
         super(id, name, description, createdAt, updatedAt);
+        this.syllabusID = syllabusID;
     }
+
+    public int getSyllabusID() {
+        return syllabusID;
+    }
+
+    public void setSyllabusID(int syllabusID) {
+        this.syllabusID = syllabusID;
+    }
+
 }
