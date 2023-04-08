@@ -25,7 +25,7 @@ import actions.Action;
  *
  * @author Admin
  */
-public class LoginAction implements Action {
+public class Login implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,7 +50,7 @@ public class LoginAction implements Action {
                     case 1: {
                         if (user.getPassword() == null) {
                             request.getSession().setAttribute(AppConfig.AUTH_USER, user);
-                            request.setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
+                            request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
                             jsonResponse.put("redirectUrl", request.getContextPath() + "/");
                         } else {
                             jsonResponse.put("step", 2);

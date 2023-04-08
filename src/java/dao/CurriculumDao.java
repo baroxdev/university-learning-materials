@@ -5,7 +5,9 @@
  */
 package dao;
 
+import config.AppConfig;
 import entities.Curriculum;
+import entities.SearchResult;
 import exceptions.CurriculumnException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -77,7 +79,7 @@ public class CurriculumDao {
         return list;
     }
 
-    //lấy list curriculum theo name(search by name)
+    //Get list curriculum by name(search by name)
     public static List<Curriculum> readCurriculumListByName(String name) throws Exception {
         String query = "select * from Curriculum where name like ?";
         List<Curriculum> list = new ArrayList<>();
@@ -97,6 +99,30 @@ public class CurriculumDao {
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
                 list.add(curriculum);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumnException("Something went wrong in get curriculum progress.");
+        }
+        return list;
+    }
+    
+     public static List<SearchResult> searchByName(String name) throws Exception {
+        String query = "select * from Curriculum where name like ?";
+        List<SearchResult> list = new ArrayList<>();
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, "%" + name + "%");
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                SearchResult searchResult = new SearchResult();
+                searchResult.setId(rs.getInt("id"));
+                System.out.println("id " + rs.getInt("id"));
+                searchResult.setName(rs.getString("name"));
+                searchResult.setSlug(String.valueOf(rs.getInt("id")));
+                searchResult.setRoot_slug(AppConfig.CURRICULUM_ROOT_SLUG);
+                list.add(searchResult);
             }
             con.close();
         } catch (Exception e) {
