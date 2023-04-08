@@ -21,6 +21,7 @@ public class AppConfig {
 
 //    CURRICULUMNS
     public final static String CURRICULUM_ITEM = "CURRICULUMN";
+    public final static String CURRICULUM_ROOT_SLUG = "curriculums";
 
 //    PO
     public final static String PO_ITEM = "PO";
