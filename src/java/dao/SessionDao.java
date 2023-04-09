@@ -21,13 +21,13 @@ import utils.DBUtils;
 public class SessionDao {
 
     //lấy list session theo syllabusID
-    public static List<Session> readSessionListBySylId(String curId) throws Exception {
+    public static List<Session> readSessionListBySylId(String sylId) throws Exception {
         String query = "select * from Session where syllabusID = ?";
         List<Session> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curId);
+            pre.setString(1, sylId);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 Session session = new Session();

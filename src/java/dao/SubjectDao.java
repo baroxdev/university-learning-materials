@@ -35,10 +35,12 @@ public class SubjectDao {
                 subject.setName(rs.getString("name"));
                 subject.setCreatedAt(rs.getString("createdAt"));
                 subject.setUpdatedAt(rs.getString("updatedAt"));
-                subject.setPreRequisite(rs.getString("preRequisite"));//mục này chưa có trong db
+//                subject.setPreRequisite(rs.getString("preRequisite"));//mục này chưa có trong db
+                subject.setPreRequisite("");//set tạm
                 subject.setSemester(rs.getInt("semester"));
                 subject.setCredit(rs.getInt("credit"));
-                subject.setKnowlegdeCategoryID(rs.getInt("knowlegdeCategoryID"));//đây cũng vậy
+//                subject.setKnowlegdeCategoryID(rs.getInt("knowlegdeCategoryID"));//đây cũng vậy
+                subject.setKnowlegdeCategoryID(1);//set tạm
             }
             con.close();
         } catch (Exception e) {
