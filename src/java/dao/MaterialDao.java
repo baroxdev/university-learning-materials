@@ -21,13 +21,13 @@ import utils.DBUtils;
 public class MaterialDao {
 
     //lấy list material theo syllabusID
-    public static List<Material> readMaterialListBySylId(String curId) throws Exception {
+    public static List<Material> readMaterialListBySylId(String sylId) throws Exception {
         String query = "select * from Material where syllabusID = ?";
         List<Material> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curId);
+            pre.setString(1, sylId);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 Material material = new Material();

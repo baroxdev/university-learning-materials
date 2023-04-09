@@ -23,7 +23,6 @@ public class SyllabusDao {
     //lấy syllabus theo id(syllabus detail)
     public static Syllabus getSyllabusById(String id) throws Exception {
         Syllabus syllabus = null;
-
         try {
             String query = "select * from Syllabus where id = ?";
             Connection con = DBUtils.makeConnection();
@@ -33,12 +32,13 @@ public class SyllabusDao {
             while (rs.next()) {
                 syllabus = new Syllabus();
                 syllabus.setId(rs.getInt("id"));
-                syllabus.setName(rs.getString("name"));//thiếu cột name trong tbl Syllabus
+//                syllabus.setName(rs.getString("name"));//thiếu cột name trong tbl Syllabus
+                syllabus.setName("Nhat Nam");//thiếu cột name trong tbl Syllabus
                 syllabus.setCredit(rs.getInt("credit"));
                 syllabus.setDescription(rs.getString("description"));
                 syllabus.setTasks(rs.getString("tasks"));
                 syllabus.setScoringScale(rs.getInt("scoringScale"));
-                syllabus.setStatus(rs.getBoolean("stastus"));
+                syllabus.setStatus(rs.getBoolean("status"));
                 syllabus.setMinScore(rs.getInt("minScore"));
                 syllabus.setCreatedAt(rs.getString("createdAt"));
                 syllabus.setUpdatedAt(rs.getString("updatedAt"));

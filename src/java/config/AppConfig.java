@@ -19,6 +19,12 @@ public class AppConfig {
     public final static String AUTH_FORCE_UPDATE_PASSWORD = "FORCE_UPDATE_PASSWORD";
     public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register"));
 
+//    REQUISITE
+    public final static String REQUISITE_ITEM = "REQUISITE";
+
+//    SYLLABUS
+    public final static String SYLLABUS_ITEM = "SYLLABUS";
+
 //    CURRICULUMNS
     public final static String CURRICULUM_ITEM = "CURRICULUMN";
     public final static String CURRICULUM_ROOT_SLUG = "curriculums";
@@ -30,6 +36,18 @@ public class AppConfig {
 //    PLO
     public final static String PLO_ITEM = "PLO";
     public final static String PLO_LIST = "PLO_LIST";
+
+//    CLO
+    public final static String CLO_ITEM = "CLO";
+    public final static String CLO_LIST = "CLO_LIST";
+
+//    MATERIALS
+    public final static String MATERIALS_ITEM = "MATERIALS";
+    public final static String MATERIALS_LIST = "MATERIALS_LIST";
+
+//    SESSION
+    public final static String SESSION_ITEM = "SESSION";
+    public final static String SESSION_LIST = "SESSION_LIST";
 
 //    SUBJECT
     public final static String SUBJECT_ITEM = "SUBJECT";

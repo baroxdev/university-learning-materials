@@ -8,7 +8,7 @@ package dao;
 import config.AppConfig;
 import entities.Curriculum;
 import entities.SearchResult;
-import exceptions.CurriculumnException;
+import exceptions.CurriculumException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -126,7 +126,7 @@ public class CurriculumDao {
             }
             con.close();
         } catch (Exception e) {
-            throw new CurriculumnException("Something went wrong in get curriculum progress.");
+            throw new CurriculumException("Something went wrong in get curriculum progress.");
         }
         return list;
     }

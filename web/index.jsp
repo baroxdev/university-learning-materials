@@ -88,7 +88,7 @@
                 <div class="posts-grid">
                     <article class="post-card">
                         <div class="post-card__header">
-                            <a class="post-card__title">
+                            <a href="${pageContext.request.servletContext.contextPath}/syllabus/2" class="post-card__title">
                                 SWE291
                             </a>
                             <span class="badge text-bg-primary">Syllabus</span>
