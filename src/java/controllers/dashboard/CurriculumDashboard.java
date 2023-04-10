@@ -1,12 +1,13 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controllers;
+package controllers.dashboard;
 
-import actions.auth.Login;
-import actions.auth.Logout;
+import actions.Action;
+import actions.curriculumns.GetCurriculumnByID;
+import actions.dashboard.AddNewCurriculum;
+import actions.dashboard.ViewListCurriculum;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -16,19 +17,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import actions.Action;
 
 /**
  *
- * @author Admin
+ * @author quocb
  */
-@WebServlet(name = "UserController", urlPatterns = {"/login", "/logout"})
-public class AuthController extends HttpServlet {
+//@WebServlet(name = "CurriculumDashboard", urlPatterns = {"/dashboard/curriculums"})
+public class CurriculumDashboard extends HttpServlet {
 
-    private Map<String, Action> actionMap = new HashMap<>();
+    private final Map<String, Action> actionMap = new HashMap<>();
+
+    @Override
     public void init() {
-        actionMap.put("/login", new Login());
-        actionMap.put("/logout", new Logout());
+        actionMap.put("/curriculums", new ViewListCurriculum());
+        actionMap.put("/curriculums/add", new AddNewCurriculum());
     }
 
     /**
@@ -43,18 +45,6 @@ public class AuthController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UserController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -69,7 +59,7 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Action action = actionMap.get(request.getServletPath());
+        Action action = actionMap.get(request.getPathInfo().trim());
         if (action != null) {
             action.doGet(request, response);
         } else {
@@ -89,8 +79,7 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("path " + request.getServletPath());
-        Action action = actionMap.get(request.getServletPath());
+        Action action = actionMap.get(request.getPathInfo());
         if (action != null) {
             action.doPost(request, response);
         } else {
