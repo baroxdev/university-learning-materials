@@ -1,11 +1,12 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controllers;
+package controllers.auth;
 
 import actions.auth.Login;
 import actions.auth.Logout;
+import actions.auth.UpdatePassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -16,19 +17,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import actions.Action;
-import actions.curriculumns.GetCurriculumnByID;
 
 /**
  *
  * @author quocb
  */
-@WebServlet(name = "CurriculumController", urlPatterns = {"/curriculums/*"})
-public class CurriculumController extends HttpServlet {
+@WebServlet(name = "Auth2", urlPatterns = {"/auth/*"})
+public class AuthPassWordController extends HttpServlet {
 
-    private final Map<String, Action> actionMap = new HashMap<>();
+    private Map<String, Action> actionMap = new HashMap<>();
 
     public void init() {
-        actionMap.put("/curriculums", new GetCurriculumnByID());
+        actionMap.put("/auth/reset-password", new UpdatePassword());
+        actionMap.put("/auth/update-password", new UpdatePassword());
     }
 
     /**
@@ -48,10 +49,10 @@ public class CurriculumController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CurriculumController</title>");
+            out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CurriculumController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Auth2 at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -69,7 +70,9 @@ public class CurriculumController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Action action = actionMap.get(request.getServletPath());
+        String path = request.getServletPath() + request.getPathInfo();
+        Action action = actionMap.get(path);
+        System.out.println("path " + path);
         if (action != null) {
             action.doGet(request, response);
         } else {
@@ -89,7 +92,10 @@ public class CurriculumController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Action action = actionMap.get(request.getServletPath());
+        System.out.println(request.getContextPath());
+        String path = request.getServletPath() + request.getPathInfo();
+        Action action = actionMap.get(path);
+        System.out.println("path " + path);
         if (action != null) {
             action.doPost(request, response);
         } else {
