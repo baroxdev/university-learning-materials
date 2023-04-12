@@ -116,4 +116,36 @@ public class SyllabusDao {
         }
         return list;
     }
+
+    //lấy list syllabus đầy đủ
+    public static List<Syllabus> readSyllabusFullList() throws Exception {
+        String query = "select * from Syllabus";
+        List<Syllabus> list = new ArrayList<>();
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Syllabus syllabus = new Syllabus();
+                syllabus.setId(rs.getInt("id"));
+//                syllabus.setName(rs.getString("name"));//thiếu cột name trong tbl Syllabus
+                syllabus.setName("Nhat Nam");//thiếu cột name trong tbl Syllabus
+                syllabus.setCredit(rs.getInt("credit"));
+                syllabus.setDescription(rs.getString("description"));
+                syllabus.setTasks(rs.getString("tasks"));
+                syllabus.setScoringScale(rs.getInt("scoringScale"));
+                syllabus.setStatus(rs.getBoolean("status"));
+                syllabus.setMinScore(rs.getInt("minScore"));
+                syllabus.setCreatedAt(rs.getString("createdAt"));
+                syllabus.setUpdatedAt(rs.getString("updatedAt"));
+                syllabus.setIsApproved(rs.getBoolean("isApproved"));
+                syllabus.setSubjectID(rs.getString("subjectID"));
+                list.add(syllabus);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new SyllabusException("Something went wrong in get syllabus progress.");
+        }
+        return list;
+    }
 }

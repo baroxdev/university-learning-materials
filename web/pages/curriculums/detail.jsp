@@ -42,7 +42,10 @@
                         </nav>
                     </nav>
                 </div>
-                <div class="col-8 text-content">
+                <button class="hamburger_btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="col-md-8 col-12 text-content">
                     <div data-bs-spy="scroll" data-bs-target="#navbar" data-bs-smooth-scroll="true" class="scrollspy-example-2" tabindex="0"
                          >
                         <div id="item-1">
@@ -93,28 +96,6 @@
                                         </div>
                                     </c:forEach>
                                 </div>
-                                <!--                                <table class="table table-striped table-bordered">
-                                                                    <thead class="table-info">
-                                                                        <tr>
-                                                                            <th style="width: 10%">Id</th>
-                                                                            <th style="width: 10%">Name</th>
-                                                                            <th style="width: 50%">Description</th>
-                                                                            <th style="width: 15%">CreatedAt</th>
-                                                                            <th style="width: 15%">UpdatedAt</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                <%--<c:forEach var="plo" items="<%= poList%>">--%>
-                                    <tr>
-                                        <td>${plo.id}</td>
-                                        <td>${plo.name}</td>
-                                        <td>${plo.description}</td>
-                                        <td>${plo.createdAt}</td>
-                                        <td>${plo.updatedAt}</td>
-                                    </tr>
-                                <%--</c:forEach>--%>
-                            </tbody>
-                        </table>-->
                             </div>
                         </div>
                         <br/>

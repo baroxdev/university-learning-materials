@@ -316,6 +316,11 @@ time.post-card_time {
     margin-bottom: 1rem;
 }
 
+.hamburger_btn{
+    background-color: violet;
+    
+}
+
 @media only screen and (max-width: 768px) {
     .components {
         display: none !important;
@@ -340,6 +345,10 @@ time.post-card_time {
 
     .posts-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .sidebar{
+        display: none;
     }
 
 }
