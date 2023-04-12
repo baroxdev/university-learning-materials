@@ -56,9 +56,6 @@
                         </nav>
                     </nav>
                 </div>
-                <button class="hamburger_btn">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
                 <div class="col-md-8 col-12 text-content">
                     <div data-bs-spy="scroll" data-bs-target="#navbar" data-bs-smooth-scroll="true" class="scrollspy-example-2" tabindex="0"
                          >
