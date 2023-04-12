@@ -4,6 +4,8 @@
     Author     : quocb
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="entities.Explore"%>
 <%@page import="entities.User"%>
 <%@page import="config.AppConfig"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -17,6 +19,7 @@
     <body>
         <%@include file="/components/common/header.jspf" %>
         <%
+            List<Explore> exList = (List) request.getAttribute(AppConfig.EXPLORE_LIST);
             Boolean isForceUpdate = (Boolean) request.getSession().getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
             User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
 
@@ -162,20 +165,22 @@
             <section class="posts-section">
                 <p class="posts-section_heading">Explore</h3>
                 <div class="posts-grid">
-                    <article class="post-card">
-                        <div class="post-card__header">
-                            <a href="${pageContext.request.servletContext.contextPath}/curriculums/2" class="post-card__title">
-                                BIT_SE_K16C
-                            </a>
-                            <span class="badge text-bg-primary">Curriculum</span>
-                        </div>
-                        <div class="post-card__body">
-                            <p class="post-card__description">Text line</p>
-                        </div>
-                        <div class="post-card_footer">
-                            <time class="post-card_time">Updated at March 27, 2023</time>
-                        </div>
-                    </article>
+                    <c:forEach var="ex" items="<%= exList%>">
+                        <article class="post-card">
+                            <div class="post-card__header">
+                                <a href="${pageContext.request.servletContext.contextPath}/${ex.controller}/${ex.id}" class="post-card__title">
+                                    ${ex.code}
+                                </a>
+                                <span class="badge text-bg-primary">${ex.type}</span>
+                            </div>
+                            <div class="post-card__body">
+                                <p class="post-card__description">Text line</p>
+                            </div>
+                            <div class="post-card_footer">
+                                <time class="post-card_time">Updated at <fmt:formatDate pattern="MMMM dd, yyyy" value="${ex.updatedAt!=null?ex.updatedAt:ex.createdAt}" /></time>
+                            </div>
+                        </article>
+                    </c:forEach>           
                 </div>
             </section>
         </main>

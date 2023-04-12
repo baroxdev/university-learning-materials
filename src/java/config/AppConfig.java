@@ -53,6 +53,9 @@ public class AppConfig {
     public final static String SUBJECT_ITEM = "SUBJECT";
     public final static String SUBJECT_LIST = "SUBJECT_LIST";
 
+//    EXPLORE
+    public final static String EXPLORE_LIST = "EXPLORE_LIST";
+    
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
 

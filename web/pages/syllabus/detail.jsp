@@ -30,6 +30,21 @@
         <%@include file="/components/common/header.jspf" %>
         <main class="container mt-5" id="main-content">
             <div class="row" style="column-gap: 32px;">
+                <div class=" over-hamburger d-md-none flex-column d-flex align-items-center justify-content-between">
+                    <div class="hamburger flex-column d-flex align-items-center justify-content-between">
+                        <div class="bar"></div>
+                    </div>
+                </div>
+                <div class="nav_mobile d-md-none">
+                    <nav class="nav nav-pills flex-column">
+                        <a class="nav-link" href="#item-1">Description</a>
+                        <a id="nav-pa-mobile" class="nav-link" href="#item-2">Objectives</a>
+                        <a class="nav-link ms-3 my-1 nav-chi-mobile" href="#item-2-1">Course Learning Objectives</a>
+                        <a class="nav-link" href="#item-3">Materials & Tools</a>
+                        <a class="nav-link" href="#item-3">Sessions</a>
+                        <a class="nav-link" href="#item-3">Student Tasks</a>
+                    </nav>
+                </div>
                 <div class="col-3 sidebar" style="position:relative">
                     <nav id="navbar" class="h-100 flex-column align-items-stretch">
                         <nav class="nav nav-pills flex-column">
@@ -172,6 +187,35 @@
                 innerWrapperSelector: '.sidebar',
                 topSpacing: 20,
                 bottomSpacing: 20
+            });
+        </script>
+
+        <!-- Hamburgur button and navbar animation ( open and close) -->
+        <script>
+            const menu_btn = document.querySelector('.hamburger');
+            const nav_mobile = document.querySelector('.nav_mobile');
+
+            menu_btn.addEventListener('click', function () {
+                menu_btn.classList.toggle('is-active');
+                nav_mobile.classList.toggle('is-active');
+            });
+        </script>
+
+        <!-- Navbar_mobile click animation -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.nav_mobile a').on('click', function () {
+                    if ($(this).context.className.indexOf('nav-chi-mobile') > 0) {
+                        $(this).siblings().removeClass('is-active');
+                        $(this).addClass('is-active');
+                        const xxx = document.getElementById("nav-pa-mobile");
+                        xxx.classList.add('is-active');
+                    } else {
+                        $(this).siblings().removeClass('is-active');
+                        $(this).addClass('is-active');
+                    }
+
+                })
             });
         </script>
     </body>

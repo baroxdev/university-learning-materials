@@ -51,7 +51,7 @@ public class Login implements Action {
                         if (user.getPassword() == null) {
                             request.getSession().setAttribute(AppConfig.AUTH_USER, user);
                             request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
-                            jsonResponse.put("redirectUrl", request.getContextPath() + "/");
+                            jsonResponse.put("redirectUrl", request.getContextPath() + "/explore");
                         } else {
                             jsonResponse.put("step", 2);
                         }
@@ -66,9 +66,9 @@ public class Login implements Action {
                             if (user.getRoleid().equals("ADM")) {
                                 jsonResponse.put("redirectUrl", request.getContextPath() + "/dashboard");
                             } else {
-                                jsonResponse.put("redirectUrl", request.getContextPath() + "/");
+                                jsonResponse.put("redirectUrl", request.getContextPath() + "/explore");
+                                System.out.println(request.getContextPath());
                             }
-
                             ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, jsonResponse);
                         } else {
                             jsonResponse.put("message", "Invalid ID or password");
