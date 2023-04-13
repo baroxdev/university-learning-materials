@@ -84,6 +84,22 @@ public class PLODao {
             throw new PLOException("Something went wrong in link curriculum to plo progress.");
         }
     }
+    
+    //link po to plo
+    public static void linkToPO(int PO_ID, int PLO_ID) throws Exception {
+        try {
+            String query = "insert Curr_to_PLO values(?,?)";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setInt(1, PO_ID);
+            pre.setInt(2, PLO_ID);
+
+            pre.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            throw new PLOException("Something went wrong in link curriculum to plo progress.");
+        }
+    }
 
     //Add new plo to db
     public static void add(ProgramLearningObjective plo) throws Exception {
