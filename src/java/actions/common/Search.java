@@ -2,6 +2,7 @@ package actions.common;
 
 import actions.Action;
 import dao.CurriculumDao;
+import dao.SyllabusDao;
 import entities.SearchResult;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,16 +31,19 @@ public class Search implements Action {
                 String category = request.getParameter("c");
                 System.out.println("cate " + category);
                 List<SearchResult> results = new ArrayList<>();
+                System.out.println("query" + query);
                 switch (category) {
                     case "curriculum": {
                         results = CurriculumDao.searchByName(query);
                         break;
                     }
                     case "syllabus": {
+                        System.out.println("syllabus");
+                        results = SyllabusDao.searchBySubId(query);
                         break;
                     }
                 }
-
+                
                 JSONArray jsonArray = new JSONArray(results);
                 json.put("data", jsonArray);
             } catch (Exception e) {
