@@ -41,7 +41,7 @@ public class UpdatePassword implements Action {
                 response.setStatus(HttpServletResponse.SC_OK);
                 JSONObject successJson = new JSONObject();
                 request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, false);
-                response.sendRedirect(request.getContextPath() + "/explore");
+                response.sendRedirect(request.getContextPath() + "/");
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 JSONObject errorObject = new JSONObject();
