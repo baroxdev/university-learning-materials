@@ -44,4 +44,20 @@ public class PODao {
         }
         return list;
     }
+    
+    //link curriculum to po
+    public static void link(String curId, String PO_ID) throws Exception {
+        try {
+            String query = "insert Curr_to_PO values(?,?)";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curId);
+            pre.setString(2, PO_ID);
+            
+            pre.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            throw new POException("Something went wrong in link curriculum to po progress.");
+        }
+    }
 }
