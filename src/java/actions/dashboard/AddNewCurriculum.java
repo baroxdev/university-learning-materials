@@ -72,7 +72,7 @@ public class AddNewCurriculum implements Action {
                 request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
                 return;
             }
-            request.getRequestDispatcher("/pages/curriculums/detail.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
         }
     }
 
@@ -128,7 +128,7 @@ public class AddNewCurriculum implements Action {
                 request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
                 return;
             }
-            request.getRequestDispatcher("/pages/curriculums/detail.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
         }
     }
 
