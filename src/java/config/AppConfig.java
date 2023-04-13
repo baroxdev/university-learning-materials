@@ -56,8 +56,9 @@ public class AppConfig {
 
 //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";
-    
+
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
-
+//    PATHS
+    public final static String NOT_FOUND_PAGE = "/pages/not-found.jsp";
 }

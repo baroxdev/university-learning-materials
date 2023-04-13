@@ -21,7 +21,7 @@ import utils.DBUtils;
 public class PODao {
 
     //lấy list po theo curriculumID
-    public static List<ProgramObjective> readPOListByCurId(String curId) throws Exception {
+    public static List<ProgramObjective> readPOList(String curId) throws Exception {
         String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Objective join Curr_to_PO on id = PO_ID where curriculumID = ?";
         List<ProgramObjective> list = new ArrayList<>();
         try {
@@ -44,20 +44,37 @@ public class PODao {
         }
         return list;
     }
-    
+
     //link curriculum to po
-    public static void link(String curId, String PO_ID) throws Exception {
+    public static void link(int curId, int PO_ID) throws Exception {
         try {
             String query = "insert Curr_to_PO values(?,?)";
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curId);
-            pre.setString(2, PO_ID);
-            
+            pre.setInt(1, curId);
+            pre.setInt(2, PO_ID);
+
             pre.executeUpdate();
             con.close();
         } catch (Exception e) {
             throw new POException("Something went wrong in link curriculum to po progress.");
+        }
+    }
+
+    //Add new po to db
+    public static void add(ProgramObjective po) throws Exception {
+        try {
+            String query = "insert Program_Objective values(?,?,GETDATE(),?)";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, po.getName());
+            pre.setString(2, po.getDescription());
+            pre.setString(3, null);
+
+            pre.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            throw new POException("Something went wrong in add po progress.");
         }
     }
 }
