@@ -70,13 +70,13 @@ public class PLODao {
     }
 
     //link curriculum to plo
-    public static void link(String curId, String PLO_ID) throws Exception {
+    public static void link(int curId, int PLO_ID) throws Exception {
         try {
             String query = "insert Curr_to_PLO values(?,?)";
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curId);
-            pre.setString(2, PLO_ID);
+            pre.setInt(1, curId);
+            pre.setInt(2, PLO_ID);
 
             pre.executeUpdate();
             con.close();
