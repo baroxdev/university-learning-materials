@@ -200,4 +200,21 @@ public class CurriculumDao {
             throw new CurriculumException("Something went wrong in update curriculum progress.");
         }
     }
+
+    //check exist code
+    public static boolean isExist(String curCode) throws Exception {
+        try {
+            String query = "select * from Curriculum where upper(code) = upper(?)";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curCode);
+            ResultSet rs = pre.executeQuery();
+
+            con.close();
+
+            return !rs.wasNull();
+        } catch (Exception e) {
+            throw new CurriculumException("Something went wrong in get curriculum progress.");
+        }
+    }
 }
