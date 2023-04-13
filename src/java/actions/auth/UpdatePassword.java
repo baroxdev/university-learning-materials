@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import actions.Action;
+import entities.User;
 import utils.ResponseUtils;
 
 /**
@@ -40,6 +41,9 @@ public class UpdatePassword implements Action {
                 UserDao.updatePassword(password, username, currentPassword);
                 response.setStatus(HttpServletResponse.SC_OK);
                 JSONObject successJson = new JSONObject();
+                User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
+                user.setPassword(password);
+                request.getSession().setAttribute(AppConfig.AUTH_USER, user);
                 request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, false);
                 response.sendRedirect(request.getContextPath() + "/");
             } else {
@@ -49,7 +53,7 @@ public class UpdatePassword implements Action {
                 ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, errorObject);
             }
         } catch (Exception e) {
-              JSONObject jsonResponse = new JSONObject();
+            JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("message", e.getMessage());
             ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, jsonResponse);
             e.printStackTrace();

@@ -225,7 +225,7 @@ header h3 {
     border: 1px solid #E9ECEF;
     min-height: 140px;
     transition: all 0.25s ease-in-out;
-    cursor: poitner;
+    cursor: pointer;
 }
 
 .post-card__header {

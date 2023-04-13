@@ -24,6 +24,7 @@ public class AppConfig {
 
 //    SYLLABUS
     public final static String SYLLABUS_ITEM = "SYLLABUS";
+    public final static String SYLLABUS_ROOT_SLUG = "syllabus";
 
 //    CURRICULUMNS
     public final static String CURRICULUM_ITEM = "CURRICULUMN";
@@ -55,8 +56,9 @@ public class AppConfig {
 
 //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";
-    
+
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
-
+//    PATHS
+    public final static String NOT_FOUND_PAGE = "/pages/not-found.jsp";
 }

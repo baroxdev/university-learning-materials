@@ -30,20 +30,22 @@ public class GetCurriculumnByID implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             try {
                 String curId = request.getPathInfo();
                 curId = curId.replace("/", "");
 
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
-                
-                if (cur == null) throw new NotFoundException("Curriculum is not found!");
-                
-                List<ProgramObjective> poList = PODao.readPOListByCurId(curId);
+
+                if (cur == null) {
+                    throw new NotFoundException("Curriculum is not found!");
+                }
+
+                List<ProgramObjective> poList = PODao.readPOList(curId);
                 List<ProgramLearningObjective> ploList = PLODao.readPLOList(curId);
                 System.out.println("PLO " + ploList);
 //                List<Subject> subjectList = SubjectDao.readSubjectList(curId);
-                
+
                 request.setAttribute(AppConfig.PO_LIST, poList);
                 request.setAttribute(AppConfig.PLO_LIST, ploList);
 //                request.setAttribute(AppConfig.SUBJECT_LIST, subjectList);
