@@ -168,10 +168,10 @@ public class CurriculumDao {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curriculum.getCode());
-            pre.setString(2, curriculum.getName());
-            pre.setString(3, curriculum.getDescription());
-            pre.setString(4, curriculum.getDecisionNo());
-            pre.setString(5, curriculum.getViName());
+            pre.setString(2, curriculum.getViName());
+            pre.setString(3, curriculum.getName());
+            pre.setString(4, curriculum.getDescription());
+            pre.setString(5, curriculum.getDecisionNo());
             pre.setString(6, null);
 
             pre.executeUpdate();
@@ -188,10 +188,10 @@ public class CurriculumDao {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curriculum.getCode());
-            pre.setString(2, curriculum.getName());
-            pre.setString(3, curriculum.getDescription());
-            pre.setString(4, curriculum.getDecisionNo());
-            pre.setString(5, curriculum.getViName());
+            pre.setString(2, curriculum.getViName());
+            pre.setString(3, curriculum.getName());
+            pre.setString(4, curriculum.getDescription());
+            pre.setString(5, curriculum.getDecisionNo());
             pre.setInt(6, curriculum.getId());
 
             pre.executeUpdate();
