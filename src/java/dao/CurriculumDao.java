@@ -12,6 +12,7 @@ import exceptions.CurriculumException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -45,6 +46,8 @@ public class CurriculumDao {
             }
 
             con.close();
+        } catch (SQLException se) {
+            return null;
         } catch (Exception e) {
             throw new CurriculumException("Something went wrong in get curriculum progress.");
         }
@@ -156,5 +159,45 @@ public class CurriculumDao {
             throw new CurriculumException("Something went wrong in get curriculum progress.");
         }
         return list;
+    }
+
+    //Add new curriculum to db
+    public static void add(Curriculum curriculum) throws Exception {
+        try {
+            String query = "insert Curriculum values(?,?,?,?,?,GETDATE(),?)";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curriculum.getCode());
+            pre.setString(2, curriculum.getName());
+            pre.setString(3, curriculum.getDescription());
+            pre.setString(4, curriculum.getDecisionNo());
+            pre.setString(5, curriculum.getViName());
+            pre.setString(6, null);
+
+            pre.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumException("Something went wrong in add curriculum progress.");
+        }
+    }
+
+    //Update existing curiculum in db
+    public static void update(Curriculum curriculum) throws Exception {
+        try {
+            String query = "update Curriculum set code = ?, name = ?, description = ?, decisionNo = ?, viName = ?, updateAt = GETDATE() where id = ?";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curriculum.getCode());
+            pre.setString(2, curriculum.getName());
+            pre.setString(3, curriculum.getDescription());
+            pre.setString(4, curriculum.getDecisionNo());
+            pre.setString(5, curriculum.getViName());
+            pre.setInt(6, curriculum.getId());
+
+            pre.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumException("Something went wrong in update curriculum progress.");
+        }
     }
 }
