@@ -77,11 +77,28 @@ public class PLODao {
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curId);
             pre.setString(2, PLO_ID);
-            
+
             pre.executeUpdate();
             con.close();
         } catch (Exception e) {
             throw new PLOException("Something went wrong in link curriculum to plo progress.");
+        }
+    }
+
+    //Add new plo to db
+    public static void add(ProgramLearningObjective plo) throws Exception {
+        try {
+            String query = "insert Program_Learning_Objective values(?,?,GETDATE(),?)";
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, plo.getName());
+            pre.setString(2, plo.getDescription());
+            pre.setString(3, null);
+
+            pre.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            throw new PLOException("Something went wrong in add po progress.");
         }
     }
 }
