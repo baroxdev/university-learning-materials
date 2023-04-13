@@ -75,12 +75,12 @@ header {
     align-items: center;
 }
 
-header a{
+header a {
     color: #000;
     text-decoration: none;
 }
 
-header h3{
+header h3 {
     margin-bottom: 0;
 }
 
@@ -143,14 +143,14 @@ header h3{
     box-shadow: none;
 }
 
-.search-box__dropdown select{
+.search-box__dropdown select {
     border: none;
     outline: none;
 }
 
 .btn-search-trigger {
-    --bs-btn-bg: #F5F5F5!important;
-    --bs-btn-hover-bg: #F1F1F1!important;
+    --bs-btn-bg: #F5F5F5 !important;
+    --bs-btn-hover-bg: #F1F1F1 !important;
     width: 40px;
     height: 40px;
 }
@@ -182,7 +182,7 @@ header h3{
 .search-results__item .title {
     font-weight: 600;
     font-size: 16px;
-    margin: 0!important;
+    margin: 0 !important;
 }
 
 .btn-search-trigger:hover {
@@ -191,11 +191,9 @@ header h3{
 
 /* Posts Section */
 
-.posts-section {
+.posts-section {}
 
-}
-
-.posts-section + .posts-section {
+.posts-section+.posts-section {
     margin-bottom: 30px;
 }
 
@@ -280,7 +278,7 @@ time.post-card_time {
 
 .objective-card {
     background: #ffffff;
-    box-shadow: 2px 3px 9px 0 rgba(13,110,253,.25);
+    box-shadow: 2px 3px 9px 0 rgba(13, 110, 253, .25);
     display: flex;
     align-items: center;
     padding: 12px;
@@ -295,7 +293,7 @@ time.post-card_time {
     background: linear-gradient(-45deg, #a1c7ff, transparent);
 }
 
-.objective-card:last-child{
+.objective-card:last-child {
     margin-bottom: 0;
 }
 
@@ -314,6 +312,84 @@ time.post-card_time {
     font-size: 20px;
     margin-top: 1.5px;
     margin-bottom: 1rem;
+}
+
+/* Syllabus and Curriculum details Responsive */
+
+.nav_mobile {
+    width: 250px !important;
+    background-image: linear-gradient(0, rgb(255, 255, 255, 0.9), rgb(255, 255, 255, 0.9));
+    box-shadow: -2px -1px 20px 8px #d7d4d4;
+    position: fixed;
+    top: 55px;
+    bottom: 20px;
+    left: -100%;
+    border-radius: 10px;
+    transition: 0.4s;
+}
+
+.nav_mobile>nav {
+    position: absolute;
+    padding-right: 18px;
+    top: 30px;
+}
+
+.nav_mobile.is-active {
+    left: 2%;
+}
+
+.nav_mobile a:hover {
+    color: white;
+    background-color: #0d6efd;
+}
+
+a:is(:link, :active, :visited).is-active {
+    color: white;
+    background-color: #0d6efd;
+}
+
+.over-hamburger {
+    position: fixed;
+    left: 180px;
+    bottom: 20px;
+    background-color: #0d6efd;
+    padding: 7px;
+    border-radius: 10px;
+    height: 50px;
+    width: 55px !important;
+    left: 82%;
+
+}
+
+.hamburger {
+    position: relative;
+    display: block;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    background-color: #0d6efd;
+}
+
+.hamburger .bar, .hamburger::after, .hamburger::before {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 5px;
+    margin: 3px 0px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+.hamburger.is-active::before {
+    transform: rotate(-45deg) translate(-9px, 9px);
+}
+
+.hamburger.is-active::after {
+    transform: rotate(45deg) translate(-8px, -8px);
+}
+
+.hamburger.is-active .bar {
+    opacity: 0;
 }
 
 @media only screen and (max-width: 768px) {
@@ -340,6 +416,16 @@ time.post-card_time {
 
     .posts-grid {
         grid-template-columns: 1fr;
+    }
+
+    /* Syllabus and Curriculum details Responsive */
+
+    .sidebar {
+        display: none;
+    }
+
+    .nav_mobile {
+        display: block;
     }
 
 }

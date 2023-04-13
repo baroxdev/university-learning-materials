@@ -106,8 +106,35 @@ public class CurriculumDao {
         }
         return list;
     }
-    
-     public static List<SearchResult> searchByName(String name) throws Exception {
+
+    //Get full list curriculum
+    public static List<Curriculum> readCurriculumFullList() throws Exception {
+        String query = "select * from Curriculum";
+        List<Curriculum> list = new ArrayList<>();
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Curriculum curriculum = new Curriculum();
+                curriculum.setId(rs.getInt("id"));
+                curriculum.setCode(rs.getString("code"));
+                curriculum.setName(rs.getString("name"));
+                curriculum.setDescription(rs.getString("description"));
+                curriculum.setDecisionNo(rs.getString("decisionNo"));
+                curriculum.setViName(rs.getString("viName"));
+                curriculum.setCreatedAt(rs.getString("createdAt"));
+                curriculum.setUpdatedAt(rs.getString("updatedAt"));
+                list.add(curriculum);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new CurriculumException("Something went wrong in get curriculum progress.");
+        }
+        return list;
+    }
+
+    public static List<SearchResult> searchByName(String name) throws Exception {
         String query = "select * from Curriculum where name like ?";
         List<SearchResult> list = new ArrayList<>();
         try {

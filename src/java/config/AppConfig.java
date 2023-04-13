@@ -17,7 +17,7 @@ public class AppConfig {
 //    AUTHENTICATION
     public final static String AUTH_USER = "USER";
     public final static String AUTH_FORCE_UPDATE_PASSWORD = "FORCE_UPDATE_PASSWORD";
-    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register"));
+    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register", "/test"));
 
 //    REQUISITE
     public final static String REQUISITE_ITEM = "REQUISITE";
@@ -53,6 +53,9 @@ public class AppConfig {
     public final static String SUBJECT_ITEM = "SUBJECT";
     public final static String SUBJECT_LIST = "SUBJECT_LIST";
 
+//    EXPLORE
+    public final static String EXPLORE_LIST = "EXPLORE_LIST";
+    
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
 

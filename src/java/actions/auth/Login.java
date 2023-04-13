@@ -10,12 +10,9 @@ import dao.UserDao;
 import entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.json.JSONObject;
 import utils.JsonUtils;
 import utils.ResponseUtils;
@@ -51,7 +48,7 @@ public class Login implements Action {
                         if (user.getPassword() == null) {
                             request.getSession().setAttribute(AppConfig.AUTH_USER, user);
                             request.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
-                            jsonResponse.put("redirectUrl", request.getContextPath() + "/");
+                            jsonResponse.put("redirectUrl", request.getContextPath() + "/explore");
                         } else {
                             jsonResponse.put("step", 2);
                         }
@@ -66,9 +63,9 @@ public class Login implements Action {
                             if (user.getRoleid().equals("ADM")) {
                                 jsonResponse.put("redirectUrl", request.getContextPath() + "/dashboard");
                             } else {
-                                jsonResponse.put("redirectUrl", request.getContextPath() + "/");
+                                jsonResponse.put("redirectUrl", request.getContextPath() + "/explore");
+                                System.out.println(request.getContextPath());
                             }
-
                             ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, jsonResponse);
                         } else {
                             jsonResponse.put("message", "Invalid ID or password");
