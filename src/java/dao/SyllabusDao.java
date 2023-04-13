@@ -5,6 +5,8 @@
  */
 package dao;
 
+import config.AppConfig;
+import entities.SearchResult;
 import entities.Syllabus;
 import exceptions.SyllabusException;
 import java.sql.Connection;
@@ -45,7 +47,7 @@ public class SyllabusDao {
                 syllabus.setIsApproved(rs.getBoolean("isApproved"));
                 syllabus.setSubjectID(rs.getString("subjectID"));
             }
-
+            
             con.close();
         } catch (Exception e) {
             throw new SyllabusException("Something went wrong in get syllabus progress.");
@@ -144,6 +146,33 @@ public class SyllabusDao {
             }
             con.close();
         } catch (Exception e) {
+            throw new SyllabusException("Something went wrong in get syllabus progress.");
+        }
+        return list;
+    }
+    
+    public static List<SearchResult> searchBySubId(String subjectID) throws Exception {
+        System.out.println(subjectID);
+        String query = "select * from Syllabus where subjectID like ?";
+        List<SearchResult> list = new ArrayList<>();
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, "%" + subjectID + "%");
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                SearchResult searchResult = new SearchResult();
+                searchResult.setId(rs.getInt("id"));
+                System.out.println("id sy" + rs.getInt("id"));
+                // name trong syllus de trong
+               searchResult.setName(rs.getString("subjectID"));
+                searchResult.setSlug(String.valueOf(rs.getInt("id")));
+                searchResult.setRoot_slug(AppConfig.SYLLABUS_ROOT_SLUG);
+                list.add(searchResult);
+            }
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new SyllabusException("Something went wrong in get syllabus progress.");
         }
         return list;

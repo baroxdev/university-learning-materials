@@ -24,6 +24,7 @@ public class AppConfig {
 
 //    SYLLABUS
     public final static String SYLLABUS_ITEM = "SYLLABUS";
+    public final static String SYLLABUS_ROOT_SLUG = "syllabus";
 
 //    CURRICULUMNS
     public final static String CURRICULUM_ITEM = "CURRICULUMN";
