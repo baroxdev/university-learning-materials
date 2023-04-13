@@ -4,6 +4,7 @@
     Author     : quocb
 --%>
 
+<%@page import="entities.ExploreList"%>
 <%@page import="java.util.List"%>
 <%@page import="entities.Explore"%>
 <%@page import="entities.User"%>
@@ -19,7 +20,7 @@
     <body>
         <%@include file="/components/common/header.jspf" %>
         <%
-            List<Explore> exList = (List) request.getAttribute(AppConfig.EXPLORE_LIST);
+            List<Explore> exList = (List) ExploreList.getExpList();
             Boolean isForceUpdate = (Boolean) request.getSession().getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
             User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
 

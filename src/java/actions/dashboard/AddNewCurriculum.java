@@ -65,7 +65,7 @@ public class AddNewCurriculum implements Action {
                             break;
                     }
                 }
-
+                request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();

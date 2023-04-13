@@ -429,3 +429,34 @@ a:is(:link, :active, :visited).is-active {
     }
 
 }
+
+/* Admin CSS */
+.left {
+    background-color: #052C65;
+}
+
+legend {
+    font-weight: 700;
+    font-size: 28px;
+}
+
+span {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+table{
+    font-size: 16px;
+}
+
+table td a{
+    width: 16px;
+    height: 16px;
+    color: #212529;
+    display: inline-block;
+    margin-left: 100%;
+}
+
+input[type="file"] {
+    display: none;
+}
