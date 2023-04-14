@@ -22,22 +22,20 @@
                     </div>
                     <div class="col-md-12" id="username-input">
                         <div class="form-group">
-                            <label class="mb-2" for="studentID">Student ID</label>
-                            <input type="text" name="studentID" id="studentID" class="form-control">
+                            <input type="text" name="studentID" id="studentID" class="form-control" placeholder="Student ID">
                         </div>
                     </div>
                     <div  class="col-md-12" id="password-input"></div>
-                    <div class="row mb-3 components">
+                    <div class="row mb-3 mt-3 components">
                         <div class="col-md-6 text-center">
                             <input class="form-check-input" type="checkbox" name="" id="rememberMe">
                             <label class="form-check-label" for="rememberMe">Remember me</label>
                         </div>
-                        <div class="col-md-6 text-center">
+                        <div class="col-md-6 text-center" style="white-space: nowrap">
                             <a href="#">Forgot password?</a>
                         </div>
                     </div>
-                    <button class="btn-primary btn btn-block col-md-12 col-12 gap-2" id="btn-continue" type="button" onclick="handleSubmit()">Continue<i
-                            class="fa-solid fa-arrow-right-long"></i>
+                    <button class="btn-primary btn btn-block col-md-12 col-12 d-flex align-items-center gap-2 justify-content-center" id="btn-continue" type="button" onclick="handleSubmit()">Continue
                     </button>
                 </form>
             </div>

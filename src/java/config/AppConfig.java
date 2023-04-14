@@ -57,6 +57,9 @@ public class AppConfig {
 //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";
 
+//    Dashboard
+    public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
+
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
 //    PATHS
