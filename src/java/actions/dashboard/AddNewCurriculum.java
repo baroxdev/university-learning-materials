@@ -51,7 +51,6 @@ public class AddNewCurriculum implements Action {
                     String s[] = op.split("_");
                     op = s[0];
                     String id = s[1];
-                    List<Objective> list = null;
                     switch (op) {
                         case "add":
                             addToList(id, poList, ploList, request, response);
@@ -65,7 +64,9 @@ public class AddNewCurriculum implements Action {
                             editFromList(id, poList, ploList, request, response);
                             break;
                     }
-                } else {//check curCode exist
+                }
+                if (request.getParameter("comfirm") == "yes") {
+                    //check curCode exist
                     String curCode = request.getParameter("code");//lấy từ input(cần sửa)
                     if (CurriculumDao.isExist(curCode)) {
                         throw new CurriculumException("Curriculum Code already exist");
