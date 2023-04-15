@@ -151,8 +151,7 @@ public class AddNewCurriculum implements Action {
         return list;
     }
 
-    public boolean isMapped(String poName, HttpSession session) {
-        List<ProgramLearningObjective> ploList = (ArrayList) session.getAttribute("ploList");
+    public boolean isMapped(String poName, List<ProgramLearningObjective> ploList) {
         return ploList.stream().anyMatch(e -> e.getMapToPO().equals(poName));
     }
 
@@ -175,7 +174,7 @@ public class AddNewCurriculum implements Action {
         List<Objective> list = null;
         if (id.equals("po")) {
             list = new ArrayList(poList);
-            if (isMapped(request.getParameter("nameToDelete"), request.getSession())) {
+            if (isMapped(request.getParameter("nameToDelete"), ploList)) {
                 throw new IllegalArgumentException("Can't remove already mapped PO.");
             }
         } else if (id.equals("plo")) {
@@ -191,7 +190,7 @@ public class AddNewCurriculum implements Action {
         String newDescription = request.getParameter("newDescription");
         if (id.equals("po")) {
             list = new ArrayList(poList);
-            if (isMapped(request.getParameter("nameToEdit"), request.getSession())) {
+            if (isMapped(request.getParameter("nameToEdit"), ploList)) {
                 throw new IllegalArgumentException("Can't modify already mapped PO name.");
             }
         } else if (id.equals("plo")) {
