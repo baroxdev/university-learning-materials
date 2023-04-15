@@ -164,7 +164,7 @@ public class CurriculumDao {
     //Add new curriculum to db
     public static void add(Curriculum curriculum) throws Exception {
         try {
-            String query = "insert Curriculum values(?,?,?,?,?,GETDATE(),?)";
+            String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curriculum.getCode());
@@ -184,7 +184,7 @@ public class CurriculumDao {
     //Update existing curiculum in db
     public static void update(Curriculum curriculum) throws Exception {
         try {
-            String query = "update Curriculum set code = ?, name = ?, description = ?, decisionNo = ?, viName = ?, updateAt = GETDATE() where id = ?";
+            String query = "update Curriculum set code = ?, name = ?, description = ?, decisionNo = ?, viName = ?, updateAt = cast(GETDATE() as date) where id = ?";
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curriculum.getCode());
