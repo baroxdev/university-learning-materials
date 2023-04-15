@@ -9,13 +9,28 @@ package entities;
  *
  * @author giahu
  */
-public class ProgramLearningObjective extends Objective{
+public class ProgramLearningObjective extends Objective {
+
+    String mapToPO;
 
     public ProgramLearningObjective() {
     }
 
     public ProgramLearningObjective(int id, String name, String description, String createdAt, String updatedAt) {
         super(id, name, description, createdAt, updatedAt);
+    }
+
+    public ProgramLearningObjective(String mapToPO, int id, String name, String description, String createdAt, String updatedAt) {
+        super(id, name, description, createdAt, updatedAt);
+        this.mapToPO = mapToPO;
+    }
+
+    public String getMapToPO() {
+        return mapToPO;
+    }
+
+    public void setMapToPO(String mapToPO) {
+        this.mapToPO = mapToPO;
     }
 
 }
