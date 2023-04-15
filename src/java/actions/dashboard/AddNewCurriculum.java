@@ -10,6 +10,7 @@ import dao.CurriculumDao;
 import dao.PLODao;
 import dao.PODao;
 import entities.Curriculum;
+import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
 import exceptions.CurriculumException;
@@ -37,31 +38,65 @@ public class AddNewCurriculum implements Action {
 
                 //lấy list từ session
                 HttpSession session = request.getSession();
-                List<ProgramObjective> poList = (ArrayList) session.getAttribute("poList");
-                Map<String, ProgramLearningObjective> ploList = (Map) session.getAttribute("ploList");
-                if (poList.isEmpty()) {
+                List<Objective> poList = (ArrayList) session.getAttribute("poList");
+                List<Objective> ploList = (ArrayList) session.getAttribute("ploList");
+                if (poList == null) {
                     poList = new ArrayList<>();
                 }
-                if (ploList.isEmpty()) {
-                    ploList = new HashMap<>();
+                if (ploList == null) {
+                    ploList = new ArrayList<>();
                 }
                 //thêm obj vào list
                 String op = request.getParameter("op");
+                String id = request.getParameter("id");
+                List<Objective> list = null;
                 if (op != null) {
                     switch (op) {
-                        case "addPO":
-                            ProgramObjective po = new ProgramObjective();
-                            po.setName(request.getParameter("poName"));
-                            po.setDescription(request.getParameter("poDescription"));
-                            poList.add(po);
-                            session.setAttribute("poList", poList);
+                        case "add":
+                            if (id.equals("po")) {
+                                ProgramObjective obj = new ProgramObjective();
+                                list = new ArrayList(poList);
+                                list = addObjInput(list, obj, id, request, response);
+                            } else {
+                                ProgramLearningObjective obj = new ProgramLearningObjective();
+                                obj.setMapToPO(request.getParameter("mapToPO"));
+                                list = new ArrayList(ploList);
+                                list = addObjInput(list, obj, id, request, response);
+                            }
+                            session.setAttribute(id + "List", list);
                             break;
-                        case "addPLO":
-                            ProgramLearningObjective plo = new ProgramLearningObjective();
-                            plo.setName(request.getParameter("ploName"));
-                            plo.setDescription(request.getParameter("ploDescription"));
-                            ploList.put(request.getParameter("mapToPO"), plo);
-                            session.setAttribute("ploList", ploList);
+
+                        case "remove":
+                            if (id.equals("po")) {
+                                list = new ArrayList(poList);
+                                list.removeIf(e -> e.getName().equals(request.getParameter("nameToDelete")));
+                            } else {
+                                list = new ArrayList(ploList);
+                                list.removeIf(e -> e.getName().equals(request.getParameter("nameToDelete")));
+                            }
+                            session.setAttribute(id + "List", list);
+                            break;
+
+                        case "edit":
+                            String newName = request.getParameter("newName");
+                            String newDescription = request.getParameter("newDescription");
+                            if (id.equals("po")) {
+                                list = new ArrayList(poList);
+                            } else {
+                                list = new ArrayList(ploList);
+                            }
+
+                            list.replaceAll(e -> {
+                                if (e.getName().equals(request.getParameter("nameToEdit"))) {
+                                    e.setName(newName);
+                                }
+                                if (e.getDescription().equals(request.getParameter("descriptionToEdit"))) {
+                                    e.setDescription(newDescription);
+                                }
+                                return e;
+                            });
+
+                            session.setAttribute(id + "List", list);
                             break;
                     }
                 }
@@ -132,4 +167,16 @@ public class AddNewCurriculum implements Action {
         }
     }
 
+    public <T extends Objective> T readObjInput(T obj, String objName, HttpServletRequest request, HttpServletResponse response) {
+        obj.setName(request.getParameter(objName + "Name"));
+        obj.setDescription(request.getParameter(objName + "Description"));
+        return obj;
+    }
+
+    public <T extends Objective> List<T> addObjInput(List list, T obj, String objName, HttpServletRequest request, HttpServletResponse response) {
+        obj.setName(request.getParameter(objName + "Name"));
+        obj.setDescription(request.getParameter(objName + "Description"));
+        list.add(obj);
+        return list;
+    }
 }
