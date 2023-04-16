@@ -57,6 +57,13 @@ public class AppConfig {
 //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";
 
+<<<<<<< Updated upstream
+=======
+//    Dashboard
+    public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
+    public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
+
+>>>>>>> Stashed changes
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
 //    PATHS
