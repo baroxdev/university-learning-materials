@@ -7,6 +7,8 @@ package dao;
 
 import config.AppConfig;
 import entities.Curriculum;
+import entities.ProgramLearningObjective;
+import entities.ProgramObjective;
 import entities.SearchResult;
 import exceptions.CurriculumException;
 import java.sql.Connection;
@@ -161,23 +163,70 @@ public class CurriculumDao {
         return list;
     }
 
-    //Add new curriculum to db
-    public static void add(Curriculum curriculum) throws Exception {
+    //Add new curriculum(+po,plo) to db
+    public static void add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
+        Connection con = null;
         try {
-            String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curriculum.getCode());
-            pre.setString(2, curriculum.getViName());
-            pre.setString(3, curriculum.getName());
-            pre.setString(4, curriculum.getDescription());
-            pre.setString(5, curriculum.getDecisionNo());
-            pre.setString(6, null);
+            con = DBUtils.makeConnection();
+            con.setAutoCommit(false);
 
-            pre.executeUpdate();
-            con.close();
+            if (poList.isEmpty()) {
+                throw new IllegalArgumentException("Atleast one PO must be add.");
+            }
+            if (ploList.isEmpty()) {
+                throw new IllegalArgumentException("Atleast one PLO must be add.");
+            }
+
+            for (ProgramObjective po : poList) {
+                PODao.add(con, po);
+                PODao.link(con, curriculum.getId(), po.getId());
+            }
+            for (ProgramLearningObjective plo : ploList) {
+                PLODao.add(con, plo);
+                PLODao.link(con, curriculum.getId(), plo.getId());
+                for (ProgramObjective po : poList) {
+                    if (plo.getMapToPO().equals(po.getName())) {
+                        PLODao.linkToPO(con, po.getId(), plo.getId());
+                    }
+                }
+            }
+
+            CurriculumDao.add(con, curriculum);
+            con.commit();
         } catch (Exception e) {
-            throw new CurriculumException("Something went wrong in add curriculum progress.");
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            throw e;
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //Add new curriculum to db
+    public static void add(Connection con, Curriculum curriculum) throws Exception {
+        String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, curriculum.getCode());
+        pre.setString(2, curriculum.getViName());
+        pre.setString(3, curriculum.getName());
+        pre.setString(4, curriculum.getDescription());
+        pre.setString(5, curriculum.getDecisionNo());
+        pre.setString(6, null);
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Add curriculum failed, no rows affected.");
         }
     }
 

@@ -10,6 +10,7 @@ import exceptions.PLOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -70,51 +71,42 @@ public class PLODao {
     }
 
     //link curriculum to plo
-    public static void link(int curId, int PLO_ID) throws Exception {
-        try {
-            String query = "insert Curr_to_PLO values(?,?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setInt(1, curId);
-            pre.setInt(2, PLO_ID);
+    public static void link(Connection con, int curId, int PLO_ID) throws Exception {
+        String query = "insert Curr_to_PLO values(?,?)";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, curId);
+        pre.setInt(2, PLO_ID);
 
-            pre.executeUpdate();
-            con.close();
-        } catch (Exception e) {
-            throw new PLOException("Something went wrong in link curriculum to plo progress.");
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Link curriculum to PLO failed, no rows affected.");
         }
     }
-    
-    //link po to plo
-    public static void linkToPO(int PO_ID, int PLO_ID) throws Exception {
-        try {
-            String query = "insert Curr_to_PLO values(?,?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setInt(1, PO_ID);
-            pre.setInt(2, PLO_ID);
 
-            pre.executeUpdate();
-            con.close();
-        } catch (Exception e) {
-            throw new PLOException("Something went wrong in link curriculum to plo progress.");
+    //link po to plo
+    public static void linkToPO(Connection con, int PO_ID, int PLO_ID) throws Exception {
+        String query = "insert Curr_to_PLO values(?,?)";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, PO_ID);
+        pre.setInt(2, PLO_ID);
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Link curriculum to PLO failed, no rows affected.");
         }
     }
 
     //Add new plo to db
-    public static void add(ProgramLearningObjective plo) throws Exception {
-        try {
-            String query = "insert Program_Learning_Objective values(?,?,GETDATE(),?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, plo.getName());
-            pre.setString(2, plo.getDescription());
-            pre.setString(3, null);
+    public static void add(Connection con, ProgramLearningObjective plo) throws Exception {
+        String query = "insert Program_Learning_Objective values(?,?,GETDATE(),?)";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, plo.getName());
+        pre.setString(2, plo.getDescription());
+        pre.setString(3, null);
 
-            pre.executeUpdate();
-            con.close();
-        } catch (Exception e) {
-            throw new PLOException("Something went wrong in add po progress.");
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Add PLO failed, no rows affected.");
         }
     }
 }

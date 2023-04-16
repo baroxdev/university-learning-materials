@@ -10,6 +10,7 @@ import exceptions.POException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -46,35 +47,29 @@ public class PODao {
     }
 
     //link curriculum to po
-    public static void link(int curId, int PO_ID) throws Exception {
-        try {
-            String query = "insert Curr_to_PO values(?,?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setInt(1, curId);
-            pre.setInt(2, PO_ID);
+    public static void link(Connection con, int curId, int PO_ID) throws Exception {
+        String query = "insert Curr_to_PO values(?,?)";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, curId);
+        pre.setInt(2, PO_ID);
 
-            pre.executeUpdate();
-            con.close();
-        } catch (Exception e) {
-            throw new POException("Something went wrong in link curriculum to po progress.");
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Link curriculum to PO failed, no rows affected.");
         }
     }
 
     //Add new po to db
-    public static void add(ProgramObjective po) throws Exception {
-        try {
-            String query = "insert Program_Objective values(?,?,GETDATE(),?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, po.getName());
-            pre.setString(2, po.getDescription());
-            pre.setString(3, null);
+    public static void add(Connection con, ProgramObjective po) throws Exception {
+        String query = "insert Program_Objective values(?,?,GETDATE(),?)";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, po.getName());
+        pre.setString(2, po.getDescription());
+        pre.setString(3, null);
 
-            pre.executeUpdate();
-            con.close();
-        } catch (Exception e) {
-            throw new POException("Something went wrong in add po progress.");
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Add PO failed, no rows affected.");
         }
     }
 }

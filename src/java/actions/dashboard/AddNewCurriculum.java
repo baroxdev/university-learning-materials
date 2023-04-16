@@ -65,44 +65,24 @@ public class AddNewCurriculum implements Action {
                             break;
                     }
                 }
-                if (request.getParameter("comfirm") == "yes") {
+                //confirm click
+                if (request.getParameter("comfirm") == "yes") {//tạo button confirm
                     //check curCode exist
-                    String curCode = request.getParameter("code");//lấy từ input(cần sửa)
+                    String curCode = request.getParameter("code");
                     if (CurriculumDao.isExist(curCode)) {
                         throw new CurriculumException("Curriculum Code already exist");
                     }
                     //tạo mới curriculum
-                    Curriculum cur = new Curriculum();//cần thêm class attributes để tạo curriculum mới
+                    Curriculum cur = new Curriculum();
                     cur.setCode(curCode);
-                    cur.setName(request.getParameter("englishName"));//lấy từ input(cần sửa)
-                    cur.setDescription(request.getParameter("description"));//lấy từ input(cần sửa)
-                    cur.setDecisionNo(request.getParameter("decisionNo"));//lấy từ input(cần sửa)
-                    cur.setViName(request.getParameter("vietnameseName"));//lấy từ input(cần sửa)
+                    cur.setName(request.getParameter("englishName"));
+                    cur.setDescription(request.getParameter("description"));
+                    cur.setDecisionNo(request.getParameter("decisionNo"));
+                    cur.setViName(request.getParameter("vietnameseName"));
 
-                    //tạo liên kết với po, plo...(??????)
+                    //tạo liên kết với po, plo...
                     //thêm vào db
-                    if (!poList.isEmpty()) {
-                        for (ProgramObjective po : poList) {
-                            PODao.add(po);
-                            PODao.link(cur.getId(), po.getId());
-                        }
-                    } else {
-                        throw new IllegalArgumentException("Atleast one PO must be add.");
-                    }
-                    if (!ploList.isEmpty()) {
-                        for (ProgramLearningObjective plo : ploList) {
-                            PLODao.add(plo);
-                            PLODao.link(cur.getId(), plo.getId());
-                            for (ProgramObjective po : poList) {
-                                if (plo.getMapToPO().equals(po.getName())) {
-                                    PLODao.linkToPO(po.getId(), plo.getId());
-                                }
-                            }
-                        }
-                    } else {
-                        throw new IllegalArgumentException("Atleast one PLO must be add.");
-                    }
-                    CurriculumDao.add(cur);
+                    CurriculumDao.add(cur, poList, ploList);
 
                     session.removeAttribute("poList");
                     session.removeAttribute("ploList");
