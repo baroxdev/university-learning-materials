@@ -58,7 +58,7 @@
                     <main class="row">
                         <div class="xxx row ms-1">
                             <legend>Add Curriculum</legend>
-                            <form class="mt-4">
+                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />">
 
                                 <!-- Basic Infomation -->
                                 <span>Basic Infomation</span>
@@ -66,8 +66,8 @@
                                     <div class="col-2">
                                         <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                     </div>
-                                    <div class="col-5" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="code" class="form-control" placeholder="code">
+                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                        <input type="text" name="code" id="code" class="form-control" placeholder="code" required="">
                                     </div>
                                 </div>
 
@@ -75,8 +75,8 @@
                                     <div class="col-2">
                                         <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
                                     </div>
-                                    <div class="col-5" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="slug" class="form-control" placeholder="bit-set-k16c">
+                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c" required="">
                                     </div>
                                 </div>
 
@@ -85,9 +85,9 @@
                                         <label for="englishName" class="col-form-label" style="font-size: 16px;">English
                                             name</label>
                                     </div>
-                                    <div class="col-5" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="englishName" class="form-control"
-                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major">
+                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                        <input type="text" id="englishName" name="englishName" class="form-control"
+                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major" required="">
                                     </div>
                                 </div>
 
@@ -96,9 +96,9 @@
                                         <label for="vietnameseName" class="col-form-label"
                                                style="font-size: 16px;">Vietnamese name</label>
                                     </div>
-                                    <div class="col-5" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="vietnameseName" class="form-control"
-                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm">
+                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                        <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
+                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm" required="">
                                     </div>
                                 </div>
 
@@ -107,8 +107,8 @@
                                         <label for="description" class="col-form-label"
                                                style="font-size: 16px;">Description</label>
                                     </div>
-                                    <div class="col-5" style="width: 751px; margin-left: -40px;">
-                                        <textarea class="form-control"></textarea>
+                                    <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
+                                        <textarea class="form-control" name="description" required=""></textarea>
                                     </div>
                                 </div>
 
@@ -117,8 +117,8 @@
                                         <label for="decisionNo" class="col-form-label" style="font-size: 16px;">Decision
                                             No</label>
                                     </div>
-                                    <div class="col-5" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="decisionNo" class="form-control" placeholder="BIT_SE_K16C">
+                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                        <input type="text" id="decisionNo" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
                                     </div>
                                 </div>
 
@@ -129,61 +129,48 @@
                                 <!-- Objectives / Program Objectives (PO) -->
                                 <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
                                     Objectives (PO)</span>
-                                <table style="width: 96%; margin-bottom: 32px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 7.6%;">Name</th>
-                                            <th style="width: 72%">Description</th>
-                                            <th style="width: 20.4%;"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="color: #495057;">PO01</td>
-                                            <td>Having basic knowledge of social sciences, politics and law, security and
-                                                defense, foundational knowledge of the IT industry & in-depth knowledge of
-                                                the specialized training: techniques, methods, technologies, in-depth
-                                                application areas; development trends in the world; at the same time
-                                                understand the overall market, context, functions and tasks of the
-                                                professions in the specialized training.</td>
-                                            <td>
-                                                <a href=""><i class="fa-solid fa-pencil"></i></i></a>
-                                                <a href=""><i class="fa-solid fa-x"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr style="height: 18px;"></tr>
-                                        <tr>
-                                            <td style="color: #495057;">PO02</td>
-                                            <td>Be able to work as a full member of a professional team in the field of
-                                                training: participate in designing, selecting techniques and technologies in
-                                                line with development trends, solving technical problems; understand
-                                                technology trends and user requirements; can do the complete solution
-                                                development plan; performance management and change management in his or her
-                                                part of the job; understand state policies in specialized fields.</td>
-                                            <td>
-                                                <a href=""><i class="fa-solid fa-pencil"></i></i></a>
-                                                <a href=""><i class="fa-solid fa-x"></i></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <c:if test="${poList != null}">
+                                    <table id="poTbl" style="width: 96%; margin-bottom: 32px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 7.6%;">Name</th>
+                                                <th style="width: 72%">Description</th>
+                                                <th style="width: 20.4%;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="po" items="${poList}">
+                                                <tr>
+                                                    <td style="color: #495057;">${po.name}</td>
+                                                    <td>${po.description}</td>
+                                                    <td>
+                                                        <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                                        <a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr style="height: 18px;"></tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:if>
 
                                 <div class="row g-3 align-items-center mt-1">
                                     <div class="row col-7">
                                         <div class="col-12">
-                                            <label for="name" class="col-form-label" style="font-size: 16px;">Name</label>
+                                            <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
                                         </div>
                                         <div class="col-12" style="width: 356px;">
-                                            <input type="text" id="name" class="form-control" placeholder="PO03">
+                                            <input type="text" id="poName" name="poName" class="form-control" placeholder="PO3">
                                         </div>
                                     </div>
                                     <div class="row col-3">
                                         <div class="col-12">
-                                            <label for="vietnameseName" class="col-form-label" style="font-size: 16px;">List
+                                            <label for="POList" class="col-form-label" style="font-size: 16px;">List
                                                 of PO</label>
                                         </div>
                                         <div class="col-12">
-                                            <label class="btn btn-secondary">
+                                            <label id="POList" class="btn btn-secondary">
                                                 <input type="file" />
                                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                             </label>
@@ -193,85 +180,87 @@
 
                                 <div class="row g-3 align-items-center mt-1">
                                     <div class="col-12">
-                                        <label for="description" class="col-form-label"
+                                        <label for="poDescription" class="col-form-label"
                                                style="font-size: 16px;">Description</label>
                                     </div>
                                     <div class="col-12" style="width: 751px; margin-top: 8px;">
-                                        <textarea class="form-control"
+                                        <textarea id="poDescription" class="form-control" name="poDescription"
                                                   placeholder="Mastering professional skills and soft skills of 21st century citizens (thinking skills, work skills, skills in using work tools, life skills in a global society.)"></textarea>
                                     </div>
                                 </div>
                                 <div style="margin-top: 16px;">
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" name="op" value="add_po">Add</button>
+                                    <button type="submit" class="btn btn-secondary" value="">Cancel</button>
+                                </div>
+                                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
+                                    PO_ERROR_MESSAGE
                                 </div>
 
                                 <!-- Objectives / Program Learning Objectives (PLO) -->
                                 <span
                                     style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Program
-                                    Objectives (PO)</span>
-                                <table style="width: 96%; margin-bottom: 32px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 7.6%;">Name</th>
-                                            <th style="width: 65%">Description</th>
-                                            <th style="width: 22%; text-align: right;">Map to PO</th>
-                                            <th style="width: 5.4%;"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="color: #495057;">PLO01</td>
-                                            <td>Demonstrate basic knowledge of social sciences, politics and law, national
-                                                security and defense, contributing to the formation of worldview and
-                                                scientific methodology.</td>
-                                            <td style="text-align: right;">PO01</td>
-                                            <td>
-                                                <a href=""><i class="fa-solid fa-pencil"></i></i></a>
-                                                <a href=""><i class="fa-solid fa-x"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr style="height: 66px;"></tr>
-                                        <tr>
-                                            <td style="color: #495057;">PLO02</td>
-                                            <td>Demonstrate an entrepreneurial, creative, critical, and problem-solving
-                                                mindset.</td>
-                                            <td style="text-align: right;">PO02</td>
-                                            <td>
-                                                <a href=""><i class="fa-solid fa-pencil"></i></i></a>
-                                                <a href=""><i class="fa-solid fa-x"></i></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    Program Learning Objectives (PLO)</span>
+
+                                <c:if test="${ploList != null}">
+                                    <table id="ploTbl" style="width: 96%; margin-bottom: 32px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 7.6%;">Name</th>
+                                                <th style="width: 65%">Description</th>
+                                                <th style="width: 22%; text-align: right;">Map to PO</th>
+                                                <th style="width: 5.4%;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="plo" items="${ploList}" >
+                                                <tr>
+                                                    <td style="color: #495057;">${plo.name}</td>
+                                                    <td>${plo.description}</td>
+                                                    <td style="text-align: right;">${plo.mapToPO}</td>
+                                                    <td>
+                                                        <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                                        <a href="<c:url value="/dashboard/curriculums/add?op=remove_plo&nameToDelete=${plo.name}" />"><i class="fa-solid fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr style="height: 66px;"></tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:if>
 
                                 <div class="row g-3 align-items-center mt-1">
                                     <div class="row col-4">
                                         <div class="col-12">
-                                            <label for="name" class="col-form-label" style="font-size: 16px;">Name</label>
+                                            <label for="ploName" class="col-form-label" style="font-size: 16px;">Name</label>
                                         </div>
                                         <div class="col-12" style="width: 356px;">
-                                            <input type="text" id="name" class="form-control" placeholder="PLO03">
+                                            <input type="text" id="ploName" name="ploName" class="form-control" placeholder="PLO3">
                                         </div>
                                     </div>
                                     <div class="row col-4">
                                         <div class="col-12">
-                                            <label for="name" class="col-form-label" style="font-size: 16px;">Map to
+                                            <label for="mapToPO" class="col-form-label" style="font-size: 16px;">Map to
                                                 PO</label>
                                         </div>
                                         <div class="col-12" style="width: 356px;">
-                                            <select style="color: #495057;" id="name" class="form-select">
-                                                <option selected>Please select</option>
+                                            <select style="color: #495057;" name="mapToPO" id="mapToPO" class="form-select">
+                                                <c:if test="${empty poList}" >
+                                                    <option selected>Please select</option>
+                                                </c:if>
+                                                <c:forEach var="po" items="${poList}">
+                                                    <option value="${po.name}" >${po.name}</option>
+                                                </c:forEach>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row col-2">
                                         <div class="col-12">
-                                            <label for="vietnameseName" class="col-form-label" style="font-size: 16px;">List
+                                            <label for="PLOList" class="col-form-label" style="font-size: 16px;">List
                                                 of PLO</label>
                                         </div>
                                         <div class="col-12">
-                                            <label class="btn btn-secondary">
+                                            <label id="PLOList" class="btn btn-secondary">
                                                 <input type="file" />
                                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                             </label>
@@ -281,22 +270,26 @@
 
                                 <div class="row g-3 align-items-center mt-1">
                                     <div class="col-12">
-                                        <label for="description" class="col-form-label"
+                                        <label for="ploDescription" class="col-form-label"
                                                style="font-size: 16px;">Description</label>
                                     </div>
                                     <div class="col-12" style="width: 751px; margin-top: 8px;">
-                                        <textarea class="form-control"
+                                        <textarea id="ploDescription" class="form-control" name="ploDescription"
                                                   placeholder="Mastering professional skills and soft skills of 21st century citizens (thinking skills, work skills, skills in using work tools, life skills in a global society.)"></textarea>
                                     </div>
                                 </div>
                                 <div style="margin-top: 16px;">
-                                    <button type="submit" class="btn btn-primary">Add</button>
-                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" name="op" value="add_plo">Add</button>
+                                    <button type="submit" class="btn btn-secondary" value="">Cancel</button>
                                 </div>
-
+                                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
+                                    PLO_ERROR_MESSAGE
+                                </div>
                                 <!-- Subject -->
                                 <span
                                     style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
+
+                                <button type="submit" class="btn btn-primary" name="confirm" value="yes">Confirm</button>  
                             </form>
                         </div>
                     </main>
@@ -304,6 +297,122 @@
             </div>
         </div>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script>
+           
+            $(document).ready(function () {
+                var oldName;
+                var oldDescription;
+                
+//                var basicCode;
+//                var basicSlug;
+//                var basicEngName;
+//                var basicViName;
+//                var basicDescription;
+//                var basicDescriptionNo;
+                
+//                $("button").click(function () {
+//                    basicCode = $(".basicIn").find("input, textarea").eq(0).val();
+//                    basicSlug = $(".basicIn").find("input, textarea").eq(1).val();
+//                    basicEngName = $(".basicIn").find("input, textarea").eq(2).val();
+//                    basicViName = $(".basicIn").find("input, textarea").eq(3).val();
+//                    basicDescription = $(".basicIn").find("input, textarea").eq(4).val();
+//                    basicDescriptionNo = $(".basicIn").find("input, textarea").eq(5).val();
+//
+//                    $(".basicIn").find("input, texarea").eq(0).val(basicCode);
+//                    $(".basicIn").find("input, texarea").eq(1).attr('value', basicSlug);
+//                    $(".basicIn").find("input, texarea").eq(2).attr('value', basicEngName);
+//                    $(".basicIn").find("input, texarea").eq(3).attr('value', basicViName);
+//                    $(".basicIn").find("input, texarea").eq(4).attr('value', basicDescription);
+//                    $(".basicIn").find("input, texarea").eq(5).attr('value', basicDescriptionNo);
+//                });
+
+                $("#poTbl").on("click", "[name='editBtn']", function () {
+                    oldName = $(this).closest("tr").find("td").eq(0).text();
+                    oldDescription = $(this).closest("tr").find("td").eq(1).text();
+                    var tdList = $(this).closest("tr").find("td");
+                    tdList.each(function (index, element) {
+                        if (index != tdList.length - 1) {
+                            $(this).attr("contenteditable", "true");
+                        }
+                    });
+                    $(this).eq(0).attr("name", "saveBtn");
+                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
+                    $(this).closest("tr").find("a").eq(0).css("display", "none");
+                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                });
+
+                $("#ploTbl").on("click", "[name='editBtn']", function () {
+                    oldName = $(this).closest("tr").find("td").eq(0).text();
+                    oldDescription = $(this).closest("tr").find("td").eq(1).text();
+                    var tdList = $(this).closest("tr").find("td:gt(0)");
+                    tdList.each(function (index, element) {
+                        if (index != tdList.length - 1) {
+                            $(this).attr("contenteditable", "true");
+                        }
+                    });
+                    $(this).eq(0).attr("name", "saveBtn");
+                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
+                    $(this).closest("tr").find("a").eq(0).css("display", "none");
+                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                });
+
+                $("table").on("click", "[name='saveBtn']", function () {
+                    var newName = $(this).closest("tr").find("td").eq(0).text();
+                    var newDescription = $(this).closest("tr").find("td").eq(1).text();
+
+                    $(this).eq(0).attr("name", "editBtn");
+                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
+                    $(this).closest("tr").find("a").eq(0).css("display", "inline");
+                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
+
+                    $(this).closest("tr").find("td:gt(0)").each(function () {
+                        $(this).attr("contenteditable", "false");
+                    });
+
+                    if (newName.includes('PO')) {
+                        $.ajax({
+                            url: '/university-learning-materials/dashboard/curriculums/add?op=edit_po',
+                            data: {
+                                newName: newName,
+                                newDescription: newDescription,
+                                nameToEdit: oldName
+                            },
+                            type: 'GET'
+                        });
+                    } else {
+                        $.ajax({
+                            url: '/university-learning-materials/dashboard/curriculums/add?op=edit_plo',
+                            data: {
+                                newName: newName,
+                                newDescription: newDescription,
+                                nameToEdit: oldName
+                            },
+                            type: 'GET'
+                        });
+                    }
+
+
+
+                }
+                );
+
+                $("table").on("click", "[name='cancelBtn']", function () {
+                    $(this).closest("tr").find("td").eq(0).text(oldName);
+                    $(this).closest("tr").find("td").eq(1).text(oldDescription);
+                    $(this).closest("tr").find("td:gt(0)").each(function () {
+                        $(this).attr("contenteditable", "false");
+                    });
+                    $(this).closest("tr").find("[name='saveBtn']").find("i").eq(0).attr("class", "fa-solid fa-pencil");
+                    $(this).closest("tr").find("[name='saveBtn']").eq(0).attr("name", "editBtn");
+//                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
+                    $(this).closest("tr").find("a").eq(0).css("display", "inline");
+                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
+                });
+
+            });
+
+        </script>
     </body>
 
 </html>

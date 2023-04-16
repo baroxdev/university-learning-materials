@@ -26,7 +26,7 @@ public class ViewListCurriculum implements Action{
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             try {
-                 ArrayList<Curriculum> lsCur = CurriculumDao.readCurriculumFullList();
+                 ArrayList<Curriculum> lsCur = (ArrayList<Curriculum>) CurriculumDao.readCurriculumFullList();
                  request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_LIST, lsCur);
                  request.getRequestDispatcher("/pages/dashboard/viewCurriculums.jsp").forward(request, response);
             } catch (Exception e) {
