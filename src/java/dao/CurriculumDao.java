@@ -15,8 +15,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.eclipse.jdt.core.compiler.InvalidInputException;
 import utils.DBUtils;
 
 /**
@@ -166,6 +168,7 @@ public class CurriculumDao {
     //Add new curriculum(+po,plo) to db
     public static void add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
         Connection con = null;
+        Integer curId = null;
         try {
             con = DBUtils.makeConnection();
             con.setAutoCommit(false);
@@ -177,13 +180,15 @@ public class CurriculumDao {
                 throw new IllegalArgumentException("Atleast one PLO must be add.");
             }
 
+            curId = add(con, curriculum);
+
             for (ProgramObjective po : poList) {
                 PODao.add(con, po);
-                PODao.link(con, curriculum.getId(), po.getId());
+                PODao.link(con, curId, po.getId());
             }
             for (ProgramLearningObjective plo : ploList) {
                 PLODao.add(con, plo);
-                PLODao.link(con, curriculum.getId(), plo.getId());
+                PLODao.link(con, curId, plo.getId());
                 for (ProgramObjective po : poList) {
                     if (plo.getMapToPO().equals(po.getName())) {
                         PLODao.linkToPO(con, po.getId(), plo.getId());
@@ -191,7 +196,6 @@ public class CurriculumDao {
                 }
             }
 
-            CurriculumDao.add(con, curriculum);
             con.commit();
         } catch (Exception e) {
             if (con != null) {
@@ -214,9 +218,10 @@ public class CurriculumDao {
     }
 
     //Add new curriculum to db
-    public static void add(Connection con, Curriculum curriculum) throws Exception {
+    public static int add(Connection con, Curriculum curriculum) throws Exception {
+        Integer id = -1;
         String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
-        PreparedStatement pre = con.prepareStatement(query);
+        PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         pre.setString(1, curriculum.getCode());
         pre.setString(2, curriculum.getViName());
         pre.setString(3, curriculum.getName());
@@ -228,6 +233,13 @@ public class CurriculumDao {
         if (affectedRows == 0) {
             throw new SQLException("Add curriculum failed, no rows affected.");
         }
+        ResultSet generatedCurId = pre.getGeneratedKeys();
+        if (generatedCurId.next()) {
+            id = generatedCurId.getInt(1);
+        } else {
+            throw new SQLException("Inserting curriculum failed, no ID obtained.");
+        }
+        return id;
     }
 
     //Update existing curiculum in db
@@ -258,10 +270,10 @@ public class CurriculumDao {
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curCode);
             ResultSet rs = pre.executeQuery();
+            boolean isExist = rs.wasNull();
 
             con.close();
-
-            return !rs.wasNull();
+            return isExist;
         } catch (Exception e) {
             throw new CurriculumException("Something went wrong in get curriculum progress.");
         }
