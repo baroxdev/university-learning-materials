@@ -15,7 +15,7 @@
         <title>List Syllabus</title>
     </head>
     <body>
-         <%
+        <%
             ArrayList<Syllabus> lsSyllabus = (ArrayList<Syllabus>) request.getAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST);
         %>
         <div class="dashboard-container">
@@ -24,7 +24,7 @@
                     ULM Dashboard
                 </h2>
             </div>
-            <div class="container-xl">
+            <div class="container-2xl">
                 <table class="table">
                     <thead>
                         <tr>
@@ -46,29 +46,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">
-                                <input type="checkbox" />
-                            </th>
-                            <td>${cur.id}</td>
-                            <td>${cur.name}</td>
-                            <td>${cur.credit}</td>
-                            <td>${cur.description}</td>
-                            <td>${cur.task}</td>
-                            <td>${cur.scoringScale}</td>
-                            <td>${cur.status}</td>
-                            <td>${cur.minScore}</td>
-                            <td>${cur.createdAt}</td>
-                            <td>${cur.updatedAt}</td>
-                            <td>${cur.isApproved}</td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        <c:forEach var="syllabus" items="<%= lsSyllabus%>">
+                            <tr>
+                                <th scope="row">
+                                    <input type="checkbox" />
+                                </th>
+                                <td>${syllabus.id}</td>
+                                <td>${syllabus.name}</td>
+                                <td>${syllabus.credit}</td>
+                                <td>${syllabus.description}</td>
+                                <td>${syllabus.tasks}</td>
+                                <td>${syllabus.scoringScale}</td>
+                                <td>${syllabus.status}</td>
+                                <td>${syllabus.minScore}</td>
+                                <td>${syllabus.createdAt}</td>
+                                <td>${syllabus.updatedAt}</td>
+                                <td>${syllabus.isApproved}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>

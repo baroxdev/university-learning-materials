@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 import utils.DBUtils;
+import utils.DataUtils;
 
 /**
  *
@@ -47,6 +48,8 @@ public class CurriculumDao {
                 curriculum.setViName(rs.getString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
+                System.out.println("AFter convert " + DataUtils.getBoolean(rs.getInt("active")));
+                curriculum.setActive(DataUtils.getBoolean(rs.getInt("active")));
             }
 
             con.close();
@@ -132,6 +135,7 @@ public class CurriculumDao {
                 curriculum.setViName(rs.getString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
+                curriculum.setActive(DataUtils.getBoolean(rs.getInt("active")));
                 list.add(curriculum);
             }
             con.close();
@@ -166,7 +170,7 @@ public class CurriculumDao {
     }
 
     //Add new curriculum(+po,plo) to db
-    public static void add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
+    public static Integer add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
         Connection con = null;
         Integer curId = null;
         try {
@@ -214,7 +218,7 @@ public class CurriculumDao {
                 e.printStackTrace();
             }
         }
-        return id;
+        return curId;
     }
 
     //Add new curriculum to db
@@ -245,19 +249,22 @@ public class CurriculumDao {
     //Update existing curiculum in db
     public static void update(Curriculum curriculum) throws Exception {
         try {
-            String query = "update Curriculum set code = ?, name = ?, description = ?, decisionNo = ?, viName = ?, updateAt = cast(GETDATE() as date) where id = ?";
+            String query = "update Curriculum set code = ?, viName = ?, name = ?, description = ?, decisionNo = ?, active = ?, updatedAt = cast(GETDATE() as date) where id = ?";
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, curriculum.getCode());
-            pre.setString(2, curriculum.getViName());
+            pre.setNString(2, curriculum.getViName());
             pre.setString(3, curriculum.getName());
             pre.setString(4, curriculum.getDescription());
-            pre.setString(5, curriculum.getDecisionNo());
-            pre.setInt(6, curriculum.getId());
+            pre.setNString(5, curriculum.getDecisionNo());
+            pre.setInt(6, DataUtils.getInteger(curriculum.getActive()));
+            pre.setInt(7, curriculum.getId());
+            System.out.println("after convert in dao " + DataUtils.getInteger(curriculum.getActive()));
 
             pre.executeUpdate();
             con.close();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CurriculumException("Something went wrong in update curriculum progress.");
         }
     }

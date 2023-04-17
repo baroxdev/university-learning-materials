@@ -120,9 +120,9 @@ public class SyllabusDao {
     }
 
     //lấy list syllabus đầy đủ
-    public static List<Syllabus> readSyllabusFullList() throws Exception {
+    public static ArrayList<Syllabus> readSyllabusFullList() throws Exception {
         String query = "select * from Syllabus";
-        List<Syllabus> list = new ArrayList<>();
+        ArrayList<Syllabus> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);

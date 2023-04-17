@@ -11,7 +11,6 @@ import entities.Curriculum;
 import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
-import exceptions.CurriculumException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -19,98 +18,61 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
 
 /**
  *
  * @author quocb
  */
-public class AddNewCurriculum implements Action {
+public class EditCurriculum implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-
+                String curId = request.getParameter("id");
                 //lấy list từ session
-                HttpSession session = request.getSession();
-                List<ProgramObjective> poList = (ArrayList) session.getAttribute("poList");
-                List<ProgramLearningObjective> ploList = (ArrayList) session.getAttribute("ploList");
-                if (poList == null) {
-                    poList = new ArrayList<>();
-                }
-                if (ploList == null) {
-                    ploList = new ArrayList<>();
-                }
-                //thêm obj vào list
-                String op = request.getParameter("op");
-                if (op != null) {
-                    String s[] = op.split("_");
-                    op = s[0];
-                    String id = s[1];
-                    switch (op) {
-                        case "add":
-                            addToList(id, poList, ploList, request, response);
-                            break;
-
-                        case "remove":
-                            removeFromList(id, poList, ploList, request, response);
-                            break;
-
-                        case "edit":
-                            editFromList(id, poList, ploList, request, response);
-                            break;
-                    }
-                }
-                //confirm click
-                String confirm = request.getParameter("comfirm");
-                if (confirm == null) {
-                    throw new IllegalArgumentException();
-                }
-                if (confirm.equals("yes")) {//tạo button confirm
-                    //check curCode exist
-                    String curCode = request.getParameter("code");
-                    if (CurriculumDao.isExist(curCode)) {
-                        throw new CurriculumException("Curriculum Code already exist");
-                    }
-
-                    //tạo mới curriculum
-                    Curriculum cur = new Curriculum();
-                    cur.setCode(curCode);
-                    cur.setName(request.getParameter("englishName"));
-                    cur.setDescription(request.getParameter("description"));
-                    cur.setDecisionNo(request.getParameter("decisionNo"));
-                    cur.setViName(request.getParameter("vietnameseName"));
-                    
-                    //tạo liên kết với po, plo...
-                    //thêm vào db
-                    CurriculumDao.add(cur, poList, ploList);
-
-                    session.removeAttribute("poList");
-                    session.removeAttribute("ploList");
-                    request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
-                } else {
-                    session.removeAttribute("poList");
-                    session.removeAttribute("ploList");
-                    request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
-                }
-            } catch (InvalidInputException | IllegalArgumentException ie) {
-                ie.printStackTrace();
-                request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
+                Curriculum cur = CurriculumDao.getCurriculumById(curId);
+                System.out.println("id " + cur.getId());
+                request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET, cur);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
                 request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
                 return;
             }
-            request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/dashboard/editCurriculum.jsp").forward(request, response);
         }
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            try {
+                Curriculum cur = new Curriculum();
+                cur.setId(Integer.parseInt(request.getParameter("id")));
+                cur.setName(request.getParameter("englishName"));
+                System.out.println("en " + request.getParameter("englishName"));
+                System.out.println("vi " + request.getParameter("vietnameseName"));
+                cur.setViName(request.getParameter("vietnameseName"));
+                Boolean active = false;
+                String strActive = request.getParameter("active");
+                if (strActive != null && strActive.equals("on")) {
+                    active = true;
+                }
+                cur.setActive(active);
+                cur.setCode(request.getParameter("code"));
+                cur.setDecisionNo(request.getParameter("decisionNo"));
+                cur.setDescription(request.getParameter("description"));
+                CurriculumDao.update(cur);
+                response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute(AppConfig.ERROR_MESSAGE, "Cannot update curriculum.");
+            }
+        }
     }
 
     public <T extends Objective> T readObjInput(T obj, String objName, HttpServletRequest request, HttpServletResponse response) throws Exception {

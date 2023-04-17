@@ -4,13 +4,13 @@
     Author     : Admin
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="config.AppConfig"%>
+<%@page import="entities.Curriculum"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,9 +23,11 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-        <title>Document</title>
+        <title>Edit curriculum</title>
     </head>
-
+    <%
+        Curriculum cur = (Curriculum) request.getAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET);
+    %>
     <body>
         <div class="container-fluid h-100">
             <div class="row h-100">
@@ -56,18 +58,21 @@
                     </header>
                     <hr />
                     <main class="row">
-                        <div class="xxx row ms-1">
-                            <legend>Add Curriculum</legend>
-                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />">
-
-                                <!-- Basic Infomation -->
+                        <div class="row ms-1">
+                            <legend>Edit Curriculum</legend>
+                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/edit" />" method="POST">
+                                <input type="hidden" name="id" value="<%= cur.getId() %>"/>
                                 <span>Basic Infomation</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="active" type="checkbox" role="switch" id="active-switch" <%= cur.getActive() ? "checked" : "" %>>
+                                    <label class="form-check-label" for="active-switch">Active</label>
+                                </div>
                                 <div class="row g-3 align-items-center" style="margin-top: 23px;">
                                     <div class="col-2">
                                         <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="code" id="code" class="form-control" placeholder="code" required="">
+                                        <input type="text" name="code" id="code" value="<%= cur.getCode()%>" class="form-control" placeholder="code" required="">
                                     </div>
                                 </div>
 
@@ -76,7 +81,7 @@
                                         <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c" required="">
+                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c">
                                     </div>
                                 </div>
 
@@ -87,7 +92,8 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="englishName" name="englishName" class="form-control"
-                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major" required="">
+                                               value="<%= cur.getName()%>"
+                                               required="">
                                     </div>
                                 </div>
 
@@ -98,7 +104,8 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm" required="">
+                                               value="<%=  cur.getViName()%>"
+                                               required="">
                                     </div>
                                 </div>
 
@@ -108,7 +115,7 @@
                                                style="font-size: 16px;">Description</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                        <textarea class="form-control" name="description" required=""></textarea>
+                                        <textarea class="form-control"  name="description" required=""><%= cur.getDescription()%></textarea>
                                     </div>
                                 </div>
 
@@ -118,7 +125,7 @@
                                             No</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="decisionNo" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
+                                        <input type="text" id="decisionNo"  value="<%= cur.getDecisionNo()%>" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
                                     </div>
                                 </div>
 
@@ -288,8 +295,12 @@
                                 <!-- Subject -->
                                 <span
                                     style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
-
-                                <button type="submit" class="btn btn-primary" name="confirm" value="yes">Confirm</button>  
+                                <div class="fixed-footer">
+                                    <div class="btn-group">
+                                        <input type="hidden" id="${cur.id}"/>
+                                        <button type="submit" class="btn btn-primary">Save</button>  
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </main>
@@ -299,18 +310,18 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script>
-           
+
             $(document).ready(function () {
                 var oldName;
                 var oldDescription;
-                
+
 //                var basicCode;
 //                var basicSlug;
 //                var basicEngName;
 //                var basicViName;
 //                var basicDescription;
 //                var basicDescriptionNo;
-                
+
 //                $("button").click(function () {
 //                    basicCode = $(".basicIn").find("input, textarea").eq(0).val();
 //                    basicSlug = $(".basicIn").find("input, textarea").eq(1).val();

@@ -30,6 +30,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Decision No</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Edit</th>
                         </tr>
                     </thead>
@@ -44,9 +45,21 @@
                                 <td>${cur.description}</td>
                                 <td>${cur.decisionNo}</td>
                                 <td>
+                                    <c:choose>
+                                        <c:when test="${cur.active}">
+                                            <span class="badge rounded-pill text-bg-success">active</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge rounded-pill text-bg-secondary">in-active</span>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </td>
+                                <td>
                                     <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
+                                        <a type="button" class="btn btn-outline-primary btn-sm"
+                                           href="${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit?id=${cur.id}"
+                                           style="width: 100%;height: 100%;">Edit</a>
                                         <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
                                     </div>
                                 </td>

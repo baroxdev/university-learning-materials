@@ -21,15 +21,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
-@WebServlet(name = "SyllabusDashboard", urlPatterns = {"/syllabus"})
 public class SyllabusDashboard extends HttpServlet {
 
     private final Map<String, Action> actionMap = new HashMap<>();
 
     @Override
     public void init() {
-        actionMap.put("/syllabus", (Action) new ViewListSyllabus());
-        actionMap.put("/syllabus/add", (Action) new AddNewSyllabus());
+        actionMap.put("/syllabus",  new ViewListSyllabus());
+        actionMap.put("/syllabus/add", new AddNewSyllabus());
     }
 
     /**

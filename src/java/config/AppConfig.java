@@ -6,7 +6,6 @@ package config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  *
@@ -59,6 +58,7 @@ public class AppConfig {
 
 //    Dashboard
     public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
+    public final static String DASHBOARD_CURRICULUM_TARGET = "curriculum";
     public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
 
 //    ERRORS
