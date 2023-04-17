@@ -1,33 +1,35 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package controllers.dashboard;
 
 import actions.Action;
-import actions.dashboard.AddNewCurriculum;
-import actions.dashboard.ViewListCurriculum;
+import actions.dashboard.AddNewSyllabus;
+import actions.dashboard.ViewListSyllabus;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author quocb
+ * @author admin
  */
-//@WebServlet(name = "CurriculumDashboard", urlPatterns = {"/dashboard/curriculums"})
-public class CurriculumDashboard extends HttpServlet {
+@WebServlet(name = "SyllabusDashboard", urlPatterns = {"/syllabus"})
+public class SyllabusDashboard extends HttpServlet {
 
     private final Map<String, Action> actionMap = new HashMap<>();
 
     @Override
     public void init() {
-        actionMap.put("/curriculums", new ViewListCurriculum());
-        actionMap.put("/curriculums/add", new AddNewCurriculum());
+        actionMap.put("/syllabus", (Action) new ViewListSyllabus());
+        actionMap.put("/syllabus/add", (Action) new AddNewSyllabus());
     }
 
     /**

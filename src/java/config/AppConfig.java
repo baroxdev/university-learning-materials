@@ -59,6 +59,7 @@ public class AppConfig {
 
 //    Dashboard
     public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
+    public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
 
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
