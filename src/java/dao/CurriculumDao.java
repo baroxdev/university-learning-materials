@@ -119,7 +119,7 @@ public class CurriculumDao {
 
     //Get full list curriculum
     public static List<Curriculum> readCurriculumFullList() throws Exception {
-        String query = "select * from Curriculum";
+        String query = "select * from Curriculum where active = 1";
         List<Curriculum> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
