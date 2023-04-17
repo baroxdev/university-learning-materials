@@ -57,15 +57,15 @@ public class AppConfig {
 //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";
 
-<<<<<<< Updated upstream
-=======
 //    Dashboard
     public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
     public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
 
->>>>>>> Stashed changes
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
+    public final static String PO_ERROR_MESSAGE = "PO_ERROR_MESSAGE";
+    public final static String PLO_ERROR_MESSAGE = "PLO_ERROR_MESSAGE";
+
 //    PATHS
     public final static String NOT_FOUND_PAGE = "/pages/not-found.jsp";
 }
