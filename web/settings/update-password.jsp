@@ -47,6 +47,7 @@
                             <input type="password" name="confirm-password" id="confirmPassword" class="form-control" required="">
                         </div>
                     </div>
+                    <div class="col-md-12" id="error-message"></div>
                     <br/>
                     <button class="btn-primary btn btn-block col-md-12 col-12 gap-2" id="btn-update">Update<i
                             class="fa-solid fa-arrow-right-long"></i>
