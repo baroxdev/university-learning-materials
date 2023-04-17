@@ -2,7 +2,7 @@
 <%@page import="config.AppConfig"%>
 <header>
     <div class="d-flex align-items-center justify-content-between container h-100">
-        <a href="<%=request.getContextPath()+"/explore"%>"><h3>ULM</h3></a>
+        <a href="<%=request.getContextPath()+"/"%>"><h3>ULM</h3></a>
         <div class="d-flex align-items-center gap-3">
             <button type="button" class="btn btn-search-trigger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#searchModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -45,10 +45,10 @@
                     </form>
                     <div class="search-results">
                         <div class="search-results__item">
-                            <a class="search-results__item-container" href="${pageContext.request.contextPath}/syllabuses/prf192">
+<!--                            <a class="search-results__item-container" href="${pageContext.request.contextPath}/syllabuses/prf192">
                                 <p class="title">PRF192</p>
                                 <span class="badge text-bg-primary">Syllabus</span>
-                            </a>
+                            </a>-->
                         </div>
                     </div>
                 </div>

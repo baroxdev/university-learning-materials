@@ -72,6 +72,7 @@ public class AddNewCurriculum implements Action {
                     if (CurriculumDao.isExist(curCode)) {
                         throw new CurriculumException("Curriculum Code already exist");
                     }
+
                     //tạo mới curriculum
                     Curriculum cur = new Curriculum();
                     cur.setCode(curCode);
@@ -79,7 +80,7 @@ public class AddNewCurriculum implements Action {
                     cur.setDescription(request.getParameter("description"));
                     cur.setDecisionNo(request.getParameter("decisionNo"));
                     cur.setViName(request.getParameter("vietnameseName"));
-
+                    
                     //tạo liên kết với po, plo...
                     //thêm vào db
                     CurriculumDao.add(cur, poList, ploList);
@@ -92,7 +93,6 @@ public class AddNewCurriculum implements Action {
                     session.removeAttribute("ploList");
                     request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
                 }
-
             } catch (InvalidInputException | IllegalArgumentException ie) {
                 ie.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());

@@ -181,7 +181,6 @@ public class CurriculumDao {
             }
 
             curId = add(con, curriculum);
-
             for (ProgramObjective po : poList) {
                 PODao.add(con, po);
                 PODao.link(con, curId, po.getId());
@@ -215,6 +214,7 @@ public class CurriculumDao {
                 e.printStackTrace();
             }
         }
+        return id;
     }
 
     //Add new curriculum to db
