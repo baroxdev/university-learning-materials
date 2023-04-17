@@ -171,6 +171,7 @@ public class CurriculumDao {
         Integer curId = null;
         try {
             con = DBUtils.makeConnection();
+            con.setAutoCommit(false);
 
             if (poList.isEmpty()) {
                 throw new IllegalArgumentException("Atleast one PO must be add.");
@@ -180,9 +181,6 @@ public class CurriculumDao {
             }
 
             curId = add(con, curriculum);
-            System.out.println(curId);
-            con.setAutoCommit(false);
-            
             for (ProgramObjective po : poList) {
                 PODao.add(con, po);
                 PODao.link(con, curId, po.getId());
@@ -216,6 +214,7 @@ public class CurriculumDao {
                 e.printStackTrace();
             }
         }
+        return id;
     }
 
     //Add new curriculum to db

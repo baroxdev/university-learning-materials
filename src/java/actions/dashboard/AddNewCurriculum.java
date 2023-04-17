@@ -7,8 +7,6 @@ package actions.dashboard;
 import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
-import dao.PLODao;
-import dao.PODao;
 import entities.Curriculum;
 import entities.Objective;
 import entities.ProgramLearningObjective;
@@ -66,17 +64,18 @@ public class AddNewCurriculum implements Action {
                     }
                 }
                 //confirm click
-                String confirm = request.getParameter("confirm");
-                if (confirm != null && confirm.equals("yes")) {//tạo button confirm
+                String confirm = request.getParameter("comfirm");
+                if (confirm == null) {
+                    throw new IllegalArgumentException();
+                }
+                if (confirm.equals("yes")) {//tạo button confirm
                     //check curCode exist
-                   
                     String curCode = request.getParameter("code");
                     if (CurriculumDao.isExist(curCode)) {
                         throw new CurriculumException("Curriculum Code already exist");
                     }
-                    
-                    //tạo mới curriculum      
-                    
+
+                    //tạo mới curriculum
                     Curriculum cur = new Curriculum();
                     cur.setCode(curCode);
                     cur.setName(request.getParameter("englishName"));
@@ -87,13 +86,15 @@ public class AddNewCurriculum implements Action {
                     //tạo liên kết với po, plo...
                     //thêm vào db
                     CurriculumDao.add(cur, poList, ploList);
-                    System.out.println("Luu roi");
+
                     session.removeAttribute("poList");
                     session.removeAttribute("ploList");
-                    
+                    request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
+                } else {
+                    session.removeAttribute("poList");
+                    session.removeAttribute("ploList");
                     request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
                 }
-
             } catch (InvalidInputException | IllegalArgumentException ie) {
                 ie.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
@@ -109,75 +110,7 @@ public class AddNewCurriculum implements Action {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        try (PrintWriter out = response.getWriter()) {
-//            try {
-//
-//                //lấy list từ session
-//                HttpSession session = request.getSession();
-//                List<ProgramObjective> poList = (ArrayList) session.getAttribute("poList");
-//                List<ProgramLearningObjective> ploList = (ArrayList) session.getAttribute("ploList");
-//                if (poList == null) {
-//                    poList = new ArrayList<>();
-//                }
-//                if (ploList == null) {
-//                    ploList = new ArrayList<>();
-//                }
-//                //thêm obj vào list
-//                String op = request.getParameter("op");
-//                if (op != null) {
-//                    String s[] = op.split("_");
-//                    op = s[0];
-//                    String id = s[1];
-//                    switch (op) {
-//                        case "add":
-//                            addToList(id, poList, ploList, request, response);
-//                            break;
-//
-//                        case "remove":
-//                            removeFromList(id, poList, ploList, request, response);
-//                            break;
-//
-//                        case "edit":
-//                            editFromList(id, poList, ploList, request, response);
-//                            break;
-//                    }
-//                }
-//                //confirm click
-//                if (request.getParameter("comfirm") == "yes") {//tạo button confirm
-//                    //check curCode exist
-//                    String curCode = request.getParameter("code");
-//                    if (CurriculumDao.isExist(curCode)) {
-//                        throw new CurriculumException("Curriculum Code already exist");
-//                    }
-//                    //tạo mới curriculum
-//                    Curriculum cur = new Curriculum();
-//                    cur.setCode(curCode);
-//                    cur.setName(request.getParameter("englishName"));
-//                    cur.setDescription(request.getParameter("description"));
-//                    cur.setDecisionNo(request.getParameter("decisionNo"));
-//                    cur.setViName(request.getParameter("vietnameseName"));
-//
-//                    //tạo liên kết với po, plo...
-//                    //thêm vào db
-//                    CurriculumDao.add(cur, poList, ploList);
-//
-//                    session.removeAttribute("poList");
-//                    session.removeAttribute("ploList");
-//                    request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
-//                }
-//
-//            } catch (InvalidInputException ie) {
-//                request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
-//            } catch (IllegalArgumentException ae) {
-//                request.setAttribute(AppConfig.ERROR_MESSAGE, ae.getMessage());
-//            } catch (Exception e) {
-//                request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
-//                e.printStackTrace();
-//                request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
-//                return;
-//            }
-//            request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
-//        }
+
     }
 
     public <T extends Objective> T readObjInput(T obj, String objName, HttpServletRequest request, HttpServletResponse response) throws Exception {
