@@ -185,6 +185,8 @@ public class CurriculumDao {
             }
 
             curId = add(con, curriculum);
+            con.commit();
+
             for (ProgramObjective po : poList) {
                 PODao.add(con, po);
                 PODao.link(con, curId, po.getId());
@@ -222,7 +224,7 @@ public class CurriculumDao {
     }
 
     //Add new curriculum to db
-    public static int add(Connection con, Curriculum curriculum) throws Exception {
+    public static Integer add(Connection con, Curriculum curriculum) throws Exception {
         Integer id = -1;
         String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
         PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
