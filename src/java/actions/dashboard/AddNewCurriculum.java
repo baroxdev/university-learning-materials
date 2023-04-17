@@ -65,10 +65,8 @@ public class AddNewCurriculum implements Action {
                 }
                 //confirm click
                 String confirm = request.getParameter("comfirm");
-                if (confirm == null) {
-                    throw new IllegalArgumentException();
-                }
-                if (confirm.equals("yes")) {//tạo button confirm
+
+                if (confirm.equalsIgnoreCase("yes")) {//tạo button confirm
                     //check curCode exist
                     String curCode = request.getParameter("code");
                     if (CurriculumDao.isExist(curCode)) {
@@ -90,7 +88,7 @@ public class AddNewCurriculum implements Action {
                     session.removeAttribute("poList");
                     session.removeAttribute("ploList");
                     request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
-                } else {
+                } else if (confirm.equalsIgnoreCase("no")) {
                     session.removeAttribute("poList");
                     session.removeAttribute("ploList");
                     request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
