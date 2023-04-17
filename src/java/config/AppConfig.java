@@ -62,6 +62,7 @@ public class AppConfig {
 
 //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
+    
 //    PATHS
     public final static String NOT_FOUND_PAGE = "/pages/not-found.jsp";
 }
