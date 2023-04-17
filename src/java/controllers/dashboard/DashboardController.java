@@ -30,6 +30,7 @@ public class DashboardController extends HttpServlet {
     @Override
     public void init() {
         controllerMap.put("curriculums", new CurriculumDashboard());
+        controllerMap.put("syllabus", new SyllabusDashboard());
     }
 
     /**

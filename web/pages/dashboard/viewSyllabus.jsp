@@ -15,7 +15,7 @@
         <title>List Syllabus</title>
     </head>
     <body>
-         <%
+        <%
             ArrayList<Syllabus> lsSyllabus = (ArrayList<Syllabus>) request.getAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST);
         %>
         <div class="dashboard-container">
@@ -46,29 +46,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">
-                                <input type="checkbox" />
-                            </th>
-                            <td>${cur.id}</td>
-                            <td>${cur.name}</td>
-                            <td>${cur.credit}</td>
-                            <td>${cur.description}</td>
-                            <td>${cur.task}</td>
-                            <td>${cur.scoringScale}</td>
-                            <td>${cur.status}</td>
-                            <td>${cur.minScore}</td>
-                            <td>${cur.createdAt}</td>
-                            <td>${cur.updatedAt}</td>
-                            <td>${cur.isApproved}</td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
-                                    <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                        <c:forEach var="syl" items="<%= lsSyllabus%>">
+                            <tr>
+                                <th scope="row">
+                                    <input type="checkbox" />
+                                </th>
+                                <td>${syl.id}</td>
+                                <td>${syl.name}</td>
+                                <td>${syl.credit}</td>
+                                <td>${syl.description}</td>
+                                <td>${syl.task}</td>
+                                <td>${syl.scoringScale}</td>
+                                <td>${syl.status}</td>
+                                <td>${syl.minScore}</td>
+                                <td>${syl.createdAt}</td>
+                                <td>${syl.updatedAt}</td>
+                                <td>${syl.isApproved}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
             </div>

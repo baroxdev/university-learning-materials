@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,15 +20,15 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
-@WebServlet(name = "SyllabusDashboard", urlPatterns = {"/syllabus"})
+//@WebServlet(name = "SyllabusDashboard", urlPatterns = {"/syllabus"})
 public class SyllabusDashboard extends HttpServlet {
 
     private final Map<String, Action> actionMap = new HashMap<>();
 
     @Override
     public void init() {
-        actionMap.put("/syllabus", (Action) new ViewListSyllabus());
-        actionMap.put("/syllabus/add", (Action) new AddNewSyllabus());
+        actionMap.put("/syllabus", new ViewListSyllabus());
+        actionMap.put("/syllabus/add", new AddNewSyllabus());
     }
 
     /**

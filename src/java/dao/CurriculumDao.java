@@ -214,7 +214,6 @@ public class CurriculumDao {
                 e.printStackTrace();
             }
         }
-        return id;
     }
 
     //Add new curriculum to db
