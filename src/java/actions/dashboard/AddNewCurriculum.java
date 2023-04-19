@@ -19,8 +19,10 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.eclipse.jdt.core.compiler.InvalidInputException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utils.JsonUtils;
 
 /**
  *
@@ -30,69 +32,43 @@ public class AddNewCurriculum implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
             try {
 
-                //lấy list từ session
-                HttpSession session = request.getSession();
-                List<ProgramObjective> poList = (ArrayList) session.getAttribute("poList");
-                List<ProgramLearningObjective> ploList = (ArrayList) session.getAttribute("ploList");
-                if (poList == null) {
-                    poList = new ArrayList<>();
+                //nhận data từ form 
+                JSONObject json = JsonUtils.getRequestJson(request);
+                String curCode = json.getString("code");
+                String curName = json.getString("name");
+                String curDescription = json.getString("description");
+                String curDecisionNo = json.getString("decisionNo");
+                String curViName = json.getString("viName");
+                JSONArray poArray = json.getJSONArray("poList");
+                JSONArray ploArray = json.getJSONArray("ploList");
+
+                //check curCode exist
+                if (CurriculumDao.isExist(curCode)) {
+                    throw new CurriculumException("Curriculum Code already exist");
                 }
-                if (ploList == null) {
-                    ploList = new ArrayList<>();
-                }
-                //thêm obj vào list
-                String op = request.getParameter("op");
-                if (op != null) {
-                    String s[] = op.split("_");
-                    op = s[0];
-                    String id = s[1];
-                    switch (op) {
-                        case "add":
-                            addToList(id, poList, ploList, request, response);
-                            break;
+                Curriculum cur = new Curriculum();
+                cur.setCode(curCode);
+                cur.setName(curName);
+                cur.setDescription(curDescription);
+                cur.setDecisionNo(curDecisionNo);
+                cur.setViName(curViName);
 
-                        case "remove":
-                            removeFromList(id, poList, ploList, request, response);
-                            break;
+                //convert jsonArray to list
+                List<ProgramObjective> poList = jsonArrayToList("po", poArray);
+                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
 
-                        case "edit":
-                            editFromList(id, poList, ploList, request, response);
-                            break;
-                    }
-                }
-                //confirm click
-                String confirm = request.getParameter("comfirm");
+                //tạo liên kết với po, plo...
+                //thêm vào db
+                CurriculumDao.add(cur, poList, ploList);
 
-                if (confirm.equalsIgnoreCase("yes")) {//tạo button confirm
-                    //check curCode exist
-                    String curCode = request.getParameter("code");
-                    if (CurriculumDao.isExist(curCode)) {
-                        throw new CurriculumException("Curriculum Code already exist");
-                    }
-
-                    //tạo mới curriculum
-                    Curriculum cur = new Curriculum();
-                    cur.setCode(curCode);
-                    cur.setName(request.getParameter("englishName"));
-                    cur.setDescription(request.getParameter("description"));
-                    cur.setDecisionNo(request.getParameter("decisionNo"));
-                    cur.setViName(request.getParameter("vietnameseName"));
-                    
-                    //tạo liên kết với po, plo...
-                    //thêm vào db
-                    CurriculumDao.add(cur, poList, ploList);
-
-                    session.removeAttribute("poList");
-                    session.removeAttribute("ploList");
-                    request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
-                } else if (confirm.equalsIgnoreCase("no")) {
-                    session.removeAttribute("poList");
-                    session.removeAttribute("ploList");
-                    request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
-                }
             } catch (InvalidInputException | IllegalArgumentException ie) {
                 ie.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
@@ -106,89 +82,27 @@ public class AddNewCurriculum implements Action {
         }
     }
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    public <T extends Objective> T readObjInput(T obj, String objName, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String name = request.getParameter(objName + "Name");
-        String description = request.getParameter(objName + "Description");
-        if (!name.matches(objName.toUpperCase() + "[\\d]+")) {
-            throw new InvalidInputException(objName.toUpperCase() + " Name must follow format "
-                    + objName.toUpperCase() + "(number)");
-        }
-        obj.setName(name);
-        obj.setDescription(description);
-        return obj;
-    }
-
-    public <T extends Objective> List<T> addObjInput(List<T> list, T obj, String objName, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        obj = readObjInput(obj, objName, request, response);
-        for (Objective o : list) {
-            if (o.getName().equals(obj.getName())) {
-                throw new InvalidInputException(objName.toUpperCase() + " already exist.");
+    public <T extends Objective> List<T> jsonArrayToList(String id, JSONArray jsonArray) throws Exception {
+        List<T> list = new ArrayList<T>();
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = jsonArray.getJSONObject(i);
+                String name = json.getString("name");
+                String description = json.getString("description");
+                if (id.equals("po")) {
+                    ProgramObjective obj = new ProgramObjective();
+                    obj.setName(name);
+                    obj.setDescription(description);
+                    list.add((T) obj);
+                } else {
+                    ProgramLearningObjective obj = new ProgramLearningObjective();
+                    obj.setMapToPO(json.getString("mapToPO"));
+                    obj.setName(name);
+                    obj.setDescription(description);
+                    list.add((T) obj);
+                }
             }
         }
-
-        list.add(obj);
         return list;
     }
-
-    public boolean isMapped(String poName, List<ProgramLearningObjective> ploList) {
-        return ploList.stream().anyMatch(e -> e.getMapToPO().equals(poName));
-    }
-
-    public void addToList(String id, List poList, List ploList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Objective> list = null;
-        if (id.equals("po")) {
-            ProgramObjective obj = new ProgramObjective();
-            list = new ArrayList(poList);
-            list = addObjInput(list, obj, id, request, response);
-        } else {
-            ProgramLearningObjective obj = new ProgramLearningObjective();
-            obj.setMapToPO(request.getParameter("mapToPO"));
-            list = new ArrayList(ploList);
-            list = addObjInput(list, obj, id, request, response);
-        }
-        request.getSession().setAttribute(id + "List", list);
-    }
-
-    public void removeFromList(String id, List poList, List ploList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Objective> list = null;
-        if (id.equals("po")) {
-            list = new ArrayList(poList);
-            if (isMapped(request.getParameter("nameToDelete"), ploList)) {
-                throw new IllegalArgumentException("Can't remove already mapped PO.");
-            }
-        } else if (id.equals("plo")) {
-            list = new ArrayList(ploList);
-        }
-        list.removeIf(e -> e.getName().equals(request.getParameter("nameToDelete")));
-        request.getSession().setAttribute(id + "List", list);
-    }
-
-    public void editFromList(String id, List poList, List ploList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Objective> list = null;
-        String newName = request.getParameter("newName");
-        String newDescription = request.getParameter("newDescription");
-        if (id.equals("po")) {
-            list = new ArrayList(poList);
-            if (isMapped(request.getParameter("nameToEdit"), ploList)) {
-                throw new IllegalArgumentException("Can't modify already mapped PO name.");
-            }
-        } else if (id.equals("plo")) {
-            list = new ArrayList(ploList);
-        }
-
-        list.replaceAll(e -> {
-            if (e.getName().equals(request.getParameter("nameToEdit"))) {
-                e.setName(newName);
-                e.setDescription(newDescription);
-            }
-            return e;
-        });
-        request.getSession().setAttribute(id + "List", list);
-    }
-
 }
