@@ -6,7 +6,6 @@ package config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  *
@@ -17,7 +16,7 @@ public class AppConfig {
 //    AUTHENTICATION
     public final static String AUTH_USER = "USER";
     public final static String AUTH_FORCE_UPDATE_PASSWORD = "FORCE_UPDATE_PASSWORD";
-    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register", "/test"));
+    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register", "/Test"));
 
 //    REQUISITE
     public final static String REQUISITE_ITEM = "REQUISITE";
@@ -59,11 +58,8 @@ public class AppConfig {
 
 //    Dashboard
     public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
-<<<<<<< Updated upstream
-=======
     public final static String DASHBOARD_CURRICULUM_TARGET = "curriculum";
     public final static String DASHBOARD_SYLLABUS_TARGET = "syllabus";
->>>>>>> Stashed changes
     public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
 
 //    ERRORS

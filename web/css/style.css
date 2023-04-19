@@ -465,3 +465,26 @@ table td a{
 input[type="file"] {
     display: none;
 }
+
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 16.66666667%;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    padding: 12px;
+    box-shadow: 0px -9px 15px 0 #00000024;
+}
+
+.fixed-footer .btn-group {
+    margin-left: auto;
+}
+
+#add-curriculum-page td {
+    padding: 12px 0;
+    padding-right: 20px;
+}

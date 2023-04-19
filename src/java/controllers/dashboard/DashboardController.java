@@ -5,10 +5,8 @@
 package controllers.dashboard;
 
 import actions.Action;
-import actions.curriculumns.GetCurriculumnByID;
 import actions.dashboard.ViewDashboard;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;

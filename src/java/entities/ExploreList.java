@@ -20,52 +20,42 @@ public abstract class ExploreList implements List {
 
     public static List<Explore> getExpList() throws Exception {
         List<Explore> exList = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<Curriculum> currList = CurriculumDao.readCurriculumFullList();
-        List<Syllabus> syllList = SyllabusDao.readSyllabusFullList();
-//                List<Explore> exList = new ArrayList<>();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            List<Curriculum> currList = CurriculumDao.readCurriculumFullList();
+            List<Syllabus> syllList = SyllabusDao.readSyllabusFullList();
 
-        for (Curriculum curr : currList) {
-            Explore ex = new Explore();
-            ex.setId(curr.getId());
-            ex.setCode(curr.getCode());
-            if (curr.getCreatedAt() != null) {
-                ex.setCreatedAt(sdf.parse(curr.getCreatedAt()));
-            } else {
-                ex.setCreatedAt(null);
+            for (Curriculum curr : currList) {
+                Explore ex = new Explore();
+                ex.setId(curr.getId());
+                ex.setCode(curr.getCode());
+                if (curr.getCreatedAt() != null) {
+                    ex.setCreatedAt(sdf.parse(curr.getCreatedAt()));
+                } 
+                if (curr.getUpdatedAt() != null) {
+                    ex.setUpdatedAt(sdf.parse(curr.getUpdatedAt()));
+                } 
+                ex.setController("curriculums");
+                ex.setType("Curriculum");
+                exList.add(ex);
             }
-            if (curr.getUpdatedAt() != null) {
-                ex.setUpdatedAt(sdf.parse(curr.getUpdatedAt()));
-            } else {
-                ex.setUpdatedAt(null);
-            }
-            ex.setController("curriculums");
-            ex.setType("Curriculum");
-            exList.add(ex);
-        }
 
-        for (Syllabus syll : syllList) {
-            Explore ex = new Explore();
-            ex.setId(syll.getId());
-            ex.setCode(syll.getSubjectID());
-            if (syll.getCreatedAt() != null) {
-                ex.setCreatedAt(sdf.parse(syll.getCreatedAt()));
-            } else {
-                ex.setCreatedAt(null);
+            for (Syllabus syll : syllList) {
+                Explore ex = new Explore();
+                ex.setId(syll.getId());
+                ex.setCode(syll.getSubjectID());
+                if (syll.getCreatedAt() != null) {
+                    ex.setCreatedAt(sdf.parse(syll.getCreatedAt()));
+                } 
+                if (syll.getUpdatedAt() != null) {
+                    ex.setUpdatedAt(sdf.parse(syll.getUpdatedAt()));
+                } 
+                ex.setController("syllabus");
+                ex.setType("Syllabus");
+                exList.add(ex);
             }
-            if (syll.getUpdatedAt() != null) {
-                ex.setUpdatedAt(sdf.parse(syll.getUpdatedAt()));
-            } else {
-                ex.setUpdatedAt(null);
-            }
-            ex.setController("syllabus");
-            ex.setType("Syllabus");
-            exList.add(ex);
-        }
 
-        Collections.sort(exList, new Comparator<Explore>() {
-            @Override
-            public int compare(Explore o1, Explore o2) {
+            Collections.sort(exList, (Explore o1, Explore o2) -> {
                 if (o1.getUpdatedAt() != null && o2.getUpdatedAt() != null) {
                     return o2.getUpdatedAt().compareTo(o1.getUpdatedAt());
                 } else if (o1.getUpdatedAt() != null && o2.getUpdatedAt() == null) {
@@ -79,10 +69,13 @@ public abstract class ExploreList implements List {
                         return o2.getCreatedAt().compareTo(o1.getCreatedAt());
                     }
                 }
-            }
+            });
 
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return exList;
+
     }
 }

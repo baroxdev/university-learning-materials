@@ -27,7 +27,7 @@ public class ViewListSyllabus implements Action {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             try {
-                ArrayList<Syllabus> lsSyllabus = (ArrayList<Syllabus>) SyllabusDao.readSyllabusFullList();
+                ArrayList<Syllabus> lsSyllabus = SyllabusDao.readSyllabusFullList();
                 request.setAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST, lsSyllabus);
                 request.getRequestDispatcher("/pages/dashboard/viewCurriculums.jsp").forward(request, response);
             } catch (Exception e) {
@@ -37,7 +37,6 @@ public class ViewListSyllabus implements Action {
         }
     }
 
-    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

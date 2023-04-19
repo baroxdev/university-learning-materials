@@ -24,7 +24,7 @@
                     ULM Dashboard
                 </h2>
             </div>
-            <div class="container-xl">
+            <div class="container-2xl">
                 <table class="table">
                     <thead>
                         <tr>
@@ -47,10 +47,6 @@
                     </thead>
                     <tbody>
                         <c:forEach var="syl" items="<%= lsSyllabus%>">
-                            <tr>
-                                <th scope="row">
-                                    <input type="checkbox" />
-                                </th>
                                 <td>${syl.id}</td>
                                 <td>${syl.name}</td>
                                 <td>${syl.credit}</td>

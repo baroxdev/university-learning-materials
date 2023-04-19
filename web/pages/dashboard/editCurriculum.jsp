@@ -4,13 +4,13 @@
     Author     : Admin
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="config.AppConfig"%>
+<%@page import="entities.Curriculum"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,11 +23,13 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-        <title>Document</title>
+        <title>Edit curriculum</title>
     </head>
-
+    <%
+        Curriculum cur = (Curriculum) request.getAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET);
+    %>
     <body>
-        <div class="container-fluid h-100" id="add-curriculum-page">
+        <div class="container-fluid h-100">
             <div class="row h-100">
                 <div class="left col-md-2">
 
@@ -56,18 +58,21 @@
                     </header>
                     <hr />
                     <main class="row">
-                        <div class="xxx row ms-1">
-                            <legend>Add Curriculum</legend>
-                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />">
-
-                                <!-- Basic Infomation -->
+                        <div class="row ms-1">
+                            <legend>Edit Curriculum</legend>
+                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/edit" />" method="POST">
+                                <input type="hidden" name="id" value="<%= cur.getId() %>"/>
                                 <span>Basic Infomation</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="active" type="checkbox" role="switch" id="active-switch" <%= cur.getActive() ? "checked" : "" %>>
+                                    <label class="form-check-label" for="active-switch">Active</label>
+                                </div>
                                 <div class="row g-3 align-items-center" style="margin-top: 23px;">
                                     <div class="col-2">
                                         <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="code" id="code" class="form-control" placeholder="code" required="">
+                                        <input type="text" name="code" id="code" value="<%= cur.getCode()%>" class="form-control" placeholder="code" required="">
                                     </div>
                                 </div>
 
@@ -76,7 +81,7 @@
                                         <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c" required="">
+                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c">
                                     </div>
                                 </div>
 
@@ -87,7 +92,8 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="englishName" name="englishName" class="form-control"
-                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major" required="">
+                                               value="<%= cur.getName()%>"
+                                               required="">
                                     </div>
                                 </div>
 
@@ -98,7 +104,8 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm" required="">
+                                               value="<%=  cur.getViName()%>"
+                                               required="">
                                     </div>
                                 </div>
 
@@ -108,7 +115,7 @@
                                                style="font-size: 16px;">Description</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                        <textarea class="form-control" name="description" required=""></textarea>
+                                        <textarea class="form-control"  name="description" required=""><%= cur.getDescription()%></textarea>
                                     </div>
                                 </div>
 
@@ -118,7 +125,7 @@
                                             No</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="decisionNo" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
+                                        <input type="text" id="decisionNo"  value="<%= cur.getDecisionNo()%>" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
                                     </div>
                                 </div>
 
@@ -129,50 +136,39 @@
                                 <!-- Objectives / Program Objectives (PO) -->
                                 <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
                                     Objectives (PO)</span>
-                                <table id="poTbl" style="width: 96%; margin-bottom: 32px; display:none;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 7.6%;">Name</th>
-                                            <th style="width: 72%">Description</th>
-                                            <th style="width: 20.4%;"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="po" items="${poList}">
+                                    <c:if test="${poList != null}">
+                                    <table id="poTbl" style="width: 96%; margin-bottom: 32px;">
+                                        <thead>
                                             <tr>
-                                                <td style="color: #495057;">${po.name}</td>
-                                                <td>${po.description}</td>
-                                                <td>
-                                                    <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                                    <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                    <a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>
-                                                </td>
+                                                <th style="width: 7.6%;">Name</th>
+                                                <th style="width: 72%">Description</th>
+                                                <th style="width: 20.4%;"></th>
                                             </tr>
-                                            <tr style="height: 18px;"></tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="po" items="${poList}">
+                                                <tr>
+                                                    <td style="color: #495057;">${po.name}</td>
+                                                    <td>${po.description}</td>
+                                                    <td>
+                                                        <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                                        <a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr style="height: 18px;"></tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:if>
+
                                 <div class="row g-3 align-items-center mt-1">
-                                    <div class="row col-7" id="add-po-form">
+                                    <div class="row col-7">
                                         <div class="col-12">
                                             <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
                                         </div>
                                         <div class="col-12" style="width: 356px;">
                                             <input type="text" id="poName" name="poName" class="form-control" placeholder="PO3">
-                                        </div>
-                                        <div class="row g-3 align-items-center mt-1">
-                                            <div class="col-12">
-                                                <label for="poDescription" class="col-form-label"
-                                                       style="font-size: 16px;">Description</label>
-                                            </div>
-                                            <div class="col-12" style="width: 751px; margin-top: 8px;">
-                                                <textarea id="poDescription" class="form-control" name="poDescription"
-                                                          ></textarea>
-                                            </div>
-                                            <div style="margin-top: 16px;">
-                                                <button type="button" class="btn btn-primary" id="btn-add" name="op" value="add_po">Add</button>
-                                                <button type="button" class="btn btn-secondary" value="">Cancel</button>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="row col-3">
@@ -189,8 +185,20 @@
                                     </div>
                                 </div>
 
-
-
+                                <div class="row g-3 align-items-center mt-1">
+                                    <div class="col-12">
+                                        <label for="poDescription" class="col-form-label"
+                                               style="font-size: 16px;">Description</label>
+                                    </div>
+                                    <div class="col-12" style="width: 751px; margin-top: 8px;">
+                                        <textarea id="poDescription" class="form-control" name="poDescription"
+                                                  placeholder="Mastering professional skills and soft skills of 21st century citizens (thinking skills, work skills, skills in using work tools, life skills in a global society.)"></textarea>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 16px;">
+                                    <button type="submit" class="btn btn-primary" name="op" value="add_po">Add</button>
+                                    <button type="submit" class="btn btn-secondary" value="">Cancel</button>
+                                </div>
                                 <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
                                     PO_ERROR_MESSAGE
                                 </div>
@@ -287,8 +295,12 @@
                                 <!-- Subject -->
                                 <span
                                     style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
-
-                                <button type="submit" class="btn btn-primary" name="confirm" value="yes">Confirm</button>  
+                                <div class="fixed-footer">
+                                    <div class="btn-group">
+                                        <input type="hidden" id="${cur.id}"/>
+                                        <button type="submit" class="btn btn-primary">Save</button>  
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </main>
@@ -411,88 +423,6 @@
 
             });
 
-            window.addEventListener("load", () => {
-                let listPO = getListPOFromLocalStorage();
-                renderListPO(listPO);
-                updatePLOMapPOOptions(listPO);
-            });
-            document.getElementById("btn-add").addEventListener("click", handleAddPO);
-
-            function getListPOFromLocalStorage() {
-                let listPO = JSON.parse(localStorage.getItem("list_po"));
-
-                if (listPO === null) {
-                    listPO = [];
-                }
-
-                return listPO;
-            }
-
-            function handleAddPO() {
-                const addPOForm = document.getElementById('add-po-form');
-
-                const namePONode = addPOForm.querySelector("#poName");
-                const descriptionPONode = addPOForm.querySelector("#poDescription");
-
-                if (!namePONode || !namePONode) {
-                    throw new Error("Missing value");
-                }
-
-                let listPO = getListPOFromLocalStorage();
-
-                const name = namePONode.value;
-                const description = descriptionPONode.value;
-
-                listPO.push({
-                    name: name,
-                    description: description
-                })
-                console.log({name, description});
-
-                renderListPO(listPO);
-                localStorage.setItem("list_po", JSON.stringify(listPO));
-                updatePLOMapPOOptions(listPO)
-            }
-
-            function updatePLOMapPOOptions(listPO) {
-                const selectNode = document.getElementById("mapToPO");
-                if (!selectNode || !listPO)
-                    return console.error("Cannot update list PO options");
-                const htmls = listPO.map((po, index) => `
-                     <option value="\${po.name}">\${po.name}</option>
-                `).join("");
-                
-                selectNode.innerHTML = htmls;
-            }
-            
-            function renderListPO(listPO) {
-                if (!listPO)
-                    throw new Error("Cannot render list PO");
-                const POTableBody = document.querySelector("#poTbl tbody");
-                const htmls = listPO.map((po, index) => `
-                     <tr>
-                        <td style="color: #495057;">\${po?.name}</td>
-                        <td>\${po?.description}</td>
-                        <td>
-                            <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                            <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                            <a href="/dashboard/curriculums/add?op=remove_po&nameToDelete=\${po.name}"><i class="fa-solid fa-trash"></i></a>
-                        </td>
-                    </tr>
-                `).join("");
-
-                POTableBody.parentNode.style.display = 'block';
-                POTableBody.innerHTML = htmls;
-            }
-
-            function resetAddPOForm(POFormNode) {
-                const nameNode = POFormNode.querySelector("#poName");
-                const descriptionNode = POFormNode.querySelector("#poDescription");
-
-                nameNode.value = "";
-                descriptionNode.value = "";
-            }
-            // \${pageContext.request.servletContext.contextPath}/dashboard/....
         </script>
     </body>
 

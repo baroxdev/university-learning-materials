@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -85,7 +86,7 @@ public class PLODao {
 
     //link po to plo
     public static void linkToPO(Connection con, int PO_ID, int PLO_ID) throws Exception {
-        String query = "insert Curr_to_PLO values(?,?)";
+        String query = "insert PO_to_PLO values(?,?)";
         PreparedStatement pre = con.prepareStatement(query);
         pre.setInt(1, PO_ID);
         pre.setInt(2, PLO_ID);
@@ -97,9 +98,10 @@ public class PLODao {
     }
 
     //Add new plo to db
-    public static void add(Connection con, ProgramLearningObjective plo) throws Exception {
+    public static Integer add(Connection con, ProgramLearningObjective plo) throws Exception {
+        Integer id = -1;
         String query = "insert Program_Learning_Objective values(?,?,GETDATE(),?)";
-        PreparedStatement pre = con.prepareStatement(query);
+        PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         pre.setString(1, plo.getName());
         pre.setString(2, plo.getDescription());
         pre.setString(3, null);
@@ -108,5 +110,12 @@ public class PLODao {
         if (affectedRows == 0) {
             throw new SQLException("Add PLO failed, no rows affected.");
         }
+        ResultSet generatedId = pre.getGeneratedKeys();
+        if (generatedId.next()) {
+            id = generatedId.getInt(1);
+        } else {
+            throw new SQLException("Inserting PLO failed, no ID obtained.");
+        }
+        return id;
     }
 }
