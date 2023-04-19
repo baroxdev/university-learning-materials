@@ -67,7 +67,7 @@
                                         <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="code" id="code" class="form-control" placeholder="code" required="">
+                                        <input type="text" name="code" id="code" class="form-control" placeholder="BIT_SE_K16C">
                                     </div>
                                 </div>
 
@@ -76,7 +76,7 @@
                                         <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c" required="">
+                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-se-k16c">
                                     </div>
                                 </div>
 
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="englishName" name="englishName" class="form-control"
-                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major" required="">
+                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major">
                                     </div>
                                 </div>
 
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm" required="">
+                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm">
                                     </div>
                                 </div>
 
@@ -108,7 +108,7 @@
                                                style="font-size: 16px;">Description</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                        <textarea class="form-control" id="description" name="description" required=""></textarea>
+                                        <textarea class="form-control" id="description" name="description"></textarea>
                                     </div>
                                 </div>
 
@@ -118,8 +118,11 @@
                                             No</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="decisionNo" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
+                                        <input type="text" id="decisionNo" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C">
                                     </div>
+                                </div>
+                                <div class="alert alert-danger" id="basic-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;">
+                                    BASIC_INFO_ERROR_MESSAGE
                                 </div>
 
                                 <!-- Objectives -->
@@ -192,7 +195,7 @@
 
 
 
-                                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
+                                <div class="alert alert-danger" id="po-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;">
                                     PO_ERROR_MESSAGE
                                 </div>
 
@@ -280,14 +283,16 @@
                                         <button type="submit" class="btn btn-secondary" value="">Cancel</button>
                                     </div>
                                 </div>
-                                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
+                                <div class="alert alert-danger" id="plo-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
                                     PLO_ERROR_MESSAGE
                                 </div>
                                 <!-- Subject -->
-                                <span
-                                    style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
-
+                                <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
+                                <br/>
                                 <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Submit</button>  
+                                <div class="alert alert-danger" id="submit-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                    PLO_ERROR_MESSAGE
+                                </div>
                             </form>
                         </div>
                     </main>
@@ -301,34 +306,9 @@
             $(document).ready(function () {
                 var oldName;
                 var oldDescription;
-
-//                var basicCode;
-//                var basicSlug;
-//                var basicEngName;
-//                var basicViName;
-//                var basicDescription;
-//                var basicDescriptionNo;
-
-//                $("button").click(function () {
-//                    basicCode = $(".basicIn").find("input, textarea").eq(0).val();
-//                    basicSlug = $(".basicIn").find("input, textarea").eq(1).val();
-//                    basicEngName = $(".basicIn").find("input, textarea").eq(2).val();
-//                    basicViName = $(".basicIn").find("input, textarea").eq(3).val();
-//                    basicDescription = $(".basicIn").find("input, textarea").eq(4).val();
-//                    basicDescriptionNo = $(".basicIn").find("input, textarea").eq(5).val();
-//
-//                    $(".basicIn").find("input, texarea").eq(0).val(basicCode);
-//                    $(".basicIn").find("input, texarea").eq(1).attr('value', basicSlug);
-//                    $(".basicIn").find("input, texarea").eq(2).attr('value', basicEngName);
-//                    $(".basicIn").find("input, texarea").eq(3).attr('value', basicViName);
-//                    $(".basicIn").find("input, texarea").eq(4).attr('value', basicDescription);
-//                    $(".basicIn").find("input, texarea").eq(5).attr('value', basicDescriptionNo);
-//                });
-
                 $("#btn-submit").click(function () {
-                    handleConfirm();
+                    handleSubmit();
                 });
-
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
@@ -344,7 +324,6 @@
                     $(this).closest("tr").find("#btn-delete-po").eq(0).css("display", "none");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
                 });
-
                 $("#ploTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
@@ -359,32 +338,25 @@
                     $(this).closest("tr").find("#btn-delete-plo").eq(0).css("display", "none");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
                 });
-
                 $("table").on("click", "[name='saveBtn']", function () {
                     var newName = $(this).closest("tr").find("td").eq(0).text();
                     var newDescription = $(this).closest("tr").find("td").eq(1).text();
                     var newMapToPO;
-
                     $(this).eq(0).attr("name", "editBtn");
                     $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
                     $(this).closest("tr").find("#btn-delete-po, #btn-delete-plo").eq(0).css("display", "block");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
-
                     $(this).closest("tr").find("td:gt(0)").each(function () {
                         $(this).attr("contenteditable", "false");
                     });
-
                     if (newName.includes('PO')) {
                         handleEditPO(oldName, newName, newDescription);
                     } else {
                         newMapToPO = $(this).closest("tr").find("td").eq(2).text();
-                        console.log(newMapToPO);
                         handleEditPLO(oldName, newName, newDescription, newMapToPO);
                     }
-
                 }
                 );
-
                 $("table").on("click", "[name='cancelBtn']", function () {
                     $(this).closest("tr").find("td").eq(0).text(oldName);
                     $(this).closest("tr").find("td").eq(1).text(oldDescription);
@@ -397,43 +369,36 @@
                     $(this).closest("tr").find("#btn-delete-po, #btn-delete-plo").eq(0).css("display", "block");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
                 });
-
+                $('table').on("click", "#btn-delete-po", function () {
+                    const addPOForm = $('#add-po-form');
+                    const name = $(this).closest("tr").find("td").eq(0).text();
+                    let listPO = getListPOFromLocalStorage();
+                    listPO = listPO.filter(po => po.name != name);
+                    renderListPO(listPO, addPOForm);
+                    localStorage.setItem("list_po", JSON.stringify(listPO));
+                    updatePLOMapPOOptions(listPO)
+                });
+                $('table').on("click", "#btn-delete-plo", function () {
+                    const addPLOForm = $('#add-po-form');
+                    const name = $(this).closest("tr").find("td").eq(0).text();
+                    let listPLO = getListPLOFromLocalStorage();
+                    listPLO = listPLO.filter(plo => plo.name != name);
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                });
             });
-
-            $('table').on("click", "#btn-delete-po", function () {
-                const addPOForm = $('#add-po-form');
-                const name = $(this).closest("tr").find("td").eq(0).text();
-                let listPO = getListPOFromLocalStorage();
-                listPO = listPO.filter(po => po.name != name);
-
-                renderListPO(listPO, addPOForm);
-                localStorage.setItem("list_po", JSON.stringify(listPO));
-                updatePLOMapPOOptions(listPO)
-            });
-
-            $('table').on("click", "#btn-delete-plo", function () {
-                const addPLOForm = $('#add-po-form');
-                const name = $(this).closest("tr").find("td").eq(0).text();
-                let listPLO = getListPLOFromLocalStorage();
-                listPLO = listPLO.filter(plo => plo.name != name);
-
-                renderListPLO(listPLO, addPLOForm);
-                localStorage.setItem("list_plo", JSON.stringify(listPLO));
-            });
-
             window.addEventListener("load", () => {
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
+                renderBasicInf();
                 renderListPO(listPO);
                 renderListPLO(listPLO);
                 updatePLOMapPOOptions(listPO);
             });
             document.getElementById("btn-add-po").addEventListener("click", handleAddPO);
             document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
-
             function getListPOFromLocalStorage() {
                 let listPO = JSON.parse(localStorage.getItem("list_po"));
-
                 if (listPO === null) {
                     listPO = [];
                 }
@@ -443,7 +408,6 @@
 
             function getListPLOFromLocalStorage() {
                 let listPLO = JSON.parse(localStorage.getItem("list_plo"));
-
                 if (listPLO === null) {
                     listPLO = [];
                 }
@@ -453,68 +417,79 @@
 
             function handleAddPO() {
                 const addPOForm = document.getElementById('add-po-form');
-
                 const namePONode = addPOForm.querySelector("#poName");
                 const descriptionPONode = addPOForm.querySelector("#poDescription");
-
-                if (!namePONode || !descriptionPONode) {
+                const name = namePONode.value;
+                var errorShow = $('#po-error');
+                if (!namePONode) {
                     throw new Error("Missing value");
                 }
 
-                let listPO = getListPOFromLocalStorage();
-
-                const name = namePONode.value;
-                const description = descriptionPONode.value;
-
-                listPO.push({
-                    name: name,
-                    description: description
-                });
-                console.log({name, description});
-
-                renderListPO(listPO, addPOForm);
-                localStorage.setItem("list_po", JSON.stringify(listPO));
-                updatePLOMapPOOptions(listPO);
-                resetAddPOForm(addPOForm);
+                if (name == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Name cannot be left blank, please try again!");
+                } else if (!name.includes('PO')) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Name is invalid, please try again!");
+                } else {                    
+                    errorShow.css('display', 'none');
+                    let listPO = getListPOFromLocalStorage();
+                    const description = descriptionPONode.value;
+                    listPO.push({
+                        name: name,
+                        description: description
+                    });
+                    console.log({name, description});
+                    renderListPO(listPO, addPOForm);
+                    localStorage.setItem("list_po", JSON.stringify(listPO));
+                    updatePLOMapPOOptions(listPO);
+                    resetAddPOForm(addPOForm);
+                }
             }
 
             function handleAddPLO() {
                 const addPLOForm = document.getElementById('add-plo-form');
-
                 const namePLONode = addPLOForm.querySelector("#ploName");
                 const descriptionPLONode = addPLOForm.querySelector("#ploDescription");
                 const mapToPONode = $("#mapToPO option:selected");
-
+                const name = namePLONode.value;
+                const description = descriptionPLONode.value;
+                const mapToPO = mapToPONode.text();
+                var errorShow = $('#plo-error');
                 if (!namePLONode || !descriptionPLONode || !mapToPONode) {
                     throw new Error("Missing value");
                 }
 
-                let listPLO = getListPLOFromLocalStorage();
-
-                const name = namePLONode.value;
-                const description = descriptionPLONode.value;
-                const mapToPO = mapToPONode.text();
-
-                listPLO.push({
-                    name: name,
-                    description: description,
-                    mapToPO: mapToPO
-                })
-                console.log({name, description, mapToPO});
-
-                renderListPLO(listPLO, addPLOForm);
-                localStorage.setItem("list_plo", JSON.stringify(listPLO));
-                resetAddPLOForm(addPLOForm);
+                if (name == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Name cannot be left blank, please try again!");
+                } else if (!name.includes('PLO')) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Name is invalid, please try again!");
+                } else if (mapToPO == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Please create a new PO before!");
+                } else {
+                    errorShow.css('display', 'none');
+                    let listPLO = getListPLOFromLocalStorage();
+                    listPLO.push({
+                        name: name,
+                        description: description,
+                        mapToPO: mapToPO
+                    })
+                    console.log({name, description, mapToPO});
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                    resetAddPLOForm(addPLOForm);
+                }
             }
 
             function handleEditPO(oldName, newName, newDescription) {
                 const addPOForm = document.getElementById('add-po-form');
-
                 let listPO = getListPOFromLocalStorage();
                 let poElement = listPO.find(po => po.name === oldName);
                 poElement.name = newName;
                 poElement.description = newDescription;
-
                 renderListPO(listPO, addPOForm);
                 localStorage.setItem("list_po", JSON.stringify(listPO));
                 updatePLOMapPOOptions(listPO)
@@ -522,13 +497,11 @@
 
             function handleEditPLO(oldName, newName, newDescription, newMapToPO) {
                 const addPLOForm = document.getElementById('add-plo-form');
-
                 let listPLO = getListPLOFromLocalStorage();
                 let ploElement = listPLO.find(plo => plo.name === oldName);
                 ploElement.name = newName;
                 ploElement.description = newDescription;
                 ploElement.mapToPO = newMapToPO;
-
                 renderListPLO(listPLO, addPLOForm);
                 localStorage.setItem("list_plo", JSON.stringify(listPLO));
             }
@@ -540,7 +513,6 @@
                 const htmls = listPO.map((po, index) => `
                      <option value="\${po.name}">\${po.name}</option>
                 `).join("");
-
                 selectNode.innerHTML = htmls;
             }
 
@@ -559,7 +531,6 @@
                         </td>
                     </tr>
                 `).join("");
-
                 POTableBody.parentNode.style.display = 'block';
                 POTableBody.innerHTML = htmls;
             }
@@ -580,15 +551,52 @@
                         </td>
                     </tr>
                 `).join("");
-
                 PLOTableBody.parentNode.style.display = 'block';
                 PLOTableBody.innerHTML = htmls;
+            }
+
+            function renderBasicInf() {
+                var basicCode = localStorage.getItem("basicCode");
+                var basicSlug = localStorage.getItem("basicSlug");
+                var basicEnglishName = localStorage.getItem("basicEnglishName");
+                var basicVietnameseName = localStorage.getItem("basicVietnameseName");
+                var basicDescription = localStorage.getItem("basicDescription");
+                var basicDecisionNo = localStorage.getItem("basicDecisionNo");
+                if (basicCode == null) {
+                    $('#code').val('');
+                } else {
+                    $('#code').val(JSON.parse(basicCode));
+                }
+                if (basicSlug == null) {
+                    $('#slug').val('');
+                } else {
+                    $('#slug').val(JSON.parse(basicSlug));
+                }
+                if (basicEnglishName == null) {
+                    $('#englishName').val('');
+                } else {
+                    $('#englishName').val(JSON.parse(basicEnglishName));
+                }
+                if (basicVietnameseName == null) {
+                    $('#vietnameseName').val('');
+                } else {
+                    $('#vietnameseName').val(JSON.parse(basicVietnameseName));
+                }
+                if (basicDescription == null) {
+                    $('#description').val('');
+                } else {
+                    $('#description').val(JSON.parse(basicDescription));
+                }
+                if (basicDecisionNo == null) {
+                    $('#decisionNo').val('');
+                } else {
+                    $('#decisionNo').val(JSON.parse(basicDecisionNo));
+                }
             }
 
             function resetAddPOForm(POFormNode) {
                 const nameNode = POFormNode.querySelector("#poName");
                 const descriptionNode = POFormNode.querySelector("#poDescription");
-
                 nameNode.value = "";
                 descriptionNode.value = "";
             }
@@ -596,42 +604,77 @@
             function resetAddPLOForm(PLOFormNode) {
                 const nameNode = PLOFormNode.querySelector("#ploName");
                 const descriptionNode = PLOFormNode.querySelector("#ploDescription");
-
                 nameNode.value = "";
                 descriptionNode.value = "";
             }
 
-            // \${pageContext.request.servletContext.contextPath}/dashboard/....
+            function resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo) {
+                localStorage.setItem("basicCode", JSON.stringify(basicCode));
+                localStorage.setItem("basicEnglishName", JSON.stringify(basicEnglishName));
+                localStorage.setItem("basicVietnameseName", JSON.stringify(basicVietnameseName));
+                localStorage.setItem("basicDescription", JSON.stringify(basicDescription));
+                localStorage.setItem("basicDecisionNo", JSON.stringify(basicDecisionNo));
+                localStorage.setItem("basicSlug", JSON.stringify(basicSlug));
+            }
 
-            function handleConfirm() {
-                const basicCode = $('#code').val();
-                const basicSlug = $('#slug').val();
-                const basicEnglishName = $('#englishName').val();
-                const basicVietnameseName = $('#vietnameseName').val();
-                const basicDescription = $('#description').val();
-                const basicDecisionNo = $('#decisionNo').val();
-
+            async function handleSubmit() {
+                var basicCode = $('#code').val();
+                var basicSlug = $('#slug').val();
+                var basicEnglishName = $('#englishName').val();
+                var basicVietnameseName = $('#vietnameseName').val();
+                var basicDescription = $('#description').val();
+                var basicDecisionNo = $('#decisionNo').val();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
+                var errorShow = $('#basic-error');
+                var errorShowSubmit = $('#submit-error');
+                var invalid = 0;
 
-                const jsonSubmit = JSON.stringify({
-                    code: basicCode,
-                    name: basicEnglishName,
-                    description: basicDescription,
-                    decisionNo: basicDecisionNo,
-                    vName: basicVietnameseName,
-                    poList: listPO,
-                    ploList: listPLO
-                });
+                resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo);
 
-                var currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/add';
-                var options = {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: jsonSubmit
-                };
+                if (basicCode == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Code cannot be left blank, please try again!");
+                    invalid++;
+                } else {
+                    errorShow.css('display', 'none');
+                }
+                
+                if (listPO.length == 0 || listPLO.length == 0) {
+                    errorShowSubmit.css('display', 'block');
+                    errorShowSubmit.text("Please create a new PO and PLO before!");
+                    invalid++;
+                } else {
+                    errorShowSubmit.css('display', 'none');
+                }
 
-                fetch(currAPI, options);
+                if (invalid == 0) {
+                    const jsonSubmit = JSON.stringify({
+                        code: basicCode,
+                        name: basicEnglishName,
+                        description: basicDescription,
+                        decisionNo: basicDecisionNo,
+                        viName: basicVietnameseName,
+                        poList: listPO,
+                        ploList: listPLO
+                    });
+
+                    var currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/add';
+
+                    var options = {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: jsonSubmit
+                    };
+
+                    try {
+                        await fetch(currAPI, options);
+                        localStorage.clear();
+                        window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                    } catch (e) {
+                        console.log('error when add new cur');
+                    }
+                }
             }
 
         </script>

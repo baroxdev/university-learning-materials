@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.jdt.core.compiler.InvalidInputException;
+import java.util.stream.Collectors;
 import utils.DBUtils;
 import utils.DataUtils;
 
@@ -49,7 +49,7 @@ public class CurriculumDao {
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
                 System.out.println("AFter convert " + DataUtils.getBoolean(rs.getInt("active")));
-                curriculum.setActive(DataUtils.getBoolean(rs.getInt("active")));
+                curriculum.setActive(rs.getBoolean("active"));
             }
 
             con.close();
@@ -80,6 +80,7 @@ public class CurriculumDao {
                 curriculum.setViName(rs.getString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
+                curriculum.setActive(rs.getBoolean("active"));
                 list.add(curriculum);
             }
             con.close();
@@ -108,6 +109,7 @@ public class CurriculumDao {
                 curriculum.setViName(rs.getString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
+                curriculum.setActive(rs.getBoolean("active"));
                 list.add(curriculum);
             }
             con.close();
@@ -135,7 +137,7 @@ public class CurriculumDao {
                 curriculum.setViName(rs.getString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
-                curriculum.setActive(DataUtils.getBoolean(rs.getInt("active")));
+                curriculum.setActive(rs.getBoolean("active"));
                 list.add(curriculum);
             }
             con.close();
@@ -170,9 +172,11 @@ public class CurriculumDao {
     }
 
     //Add new curriculum(+po,plo) to db
-    public static Integer add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
+    public static void add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
         Connection con = null;
         Integer curId = null;
+        Integer poId = null;
+        Integer ploId = null;
         try {
             con = DBUtils.makeConnection();
             con.setAutoCommit(false);
@@ -185,18 +189,18 @@ public class CurriculumDao {
             }
 
             curId = add(con, curriculum);
-            con.commit();
 
             for (ProgramObjective po : poList) {
-                PODao.add(con, po);
-                PODao.link(con, curId, po.getId());
+                poId = PODao.add(con, po);
+                po.setId(poId);
+                PODao.link(con, curId, poId);
             }
             for (ProgramLearningObjective plo : ploList) {
-                PLODao.add(con, plo);
-                PLODao.link(con, curId, plo.getId());
+                ploId = PLODao.add(con, plo);
+                PLODao.link(con, curId, ploId);
                 for (ProgramObjective po : poList) {
                     if (plo.getMapToPO().equals(po.getName())) {
-                        PLODao.linkToPO(con, po.getId(), plo.getId());
+                        PLODao.linkToPO(con, po.getId(), ploId);
                     }
                 }
             }
@@ -220,20 +224,20 @@ public class CurriculumDao {
                 e.printStackTrace();
             }
         }
-        return curId;
     }
 
     //Add new curriculum to db
     public static Integer add(Connection con, Curriculum curriculum) throws Exception {
         Integer id = -1;
-        String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
+        String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?,?)";
         PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         pre.setString(1, curriculum.getCode());
-        pre.setString(2, curriculum.getViName());
+        pre.setNString(2, curriculum.getViName());
         pre.setString(3, curriculum.getName());
         pre.setString(4, curriculum.getDescription());
-        pre.setString(5, curriculum.getDecisionNo());
+        pre.setNString(5, curriculum.getDecisionNo());
         pre.setString(6, null);
+        pre.setBoolean(7, true);
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
@@ -248,43 +252,128 @@ public class CurriculumDao {
         return id;
     }
 
-    //Update existing curiculum in db
-    public static void update(Curriculum curriculum) throws Exception {
-        try {
-            String query = "update Curriculum set code = ?, viName = ?, name = ?, description = ?, decisionNo = ?, active = ?, updatedAt = cast(GETDATE() as date) where id = ?";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curriculum.getCode());
-            pre.setNString(2, curriculum.getViName());
-            pre.setString(3, curriculum.getName());
-            pre.setString(4, curriculum.getDescription());
-            pre.setNString(5, curriculum.getDecisionNo());
-            pre.setInt(6, DataUtils.getInteger(curriculum.getActive()));
-            pre.setInt(7, curriculum.getId());
-            System.out.println("after convert in dao " + DataUtils.getInteger(curriculum.getActive()));
+    //Update curriculum(+po,plo) to db
+//    public static void update(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramObjective> poListOld, List<ProgramLearningObjective> ploList, List<ProgramLearningObjective> ploListOld) throws Exception {
+//        Connection con = null;
+//        Integer curId = curriculum.getId();
+//        Integer poId = null;
+//        Integer ploId = null;
+//        List<ProgramObjective> poAddList = poList.stream().filter(po -> (Integer) po.getId() == null).collect(Collectors.toList());
+//        List<ProgramObjective> poRemoveList = poListOld.stream().filter(po -> !poList.contains(po)).collect(Collectors.toList());
+//        List<ProgramObjective> poUpdateList = poList.stream().filter(poListOld::contains).collect(Collectors.toList());
+//        List<ProgramLearningObjective> ploAddList = ploList.stream().filter(plo -> (Integer) plo.getId() == null).collect(Collectors.toList());
+//        List<ProgramLearningObjective> ploRemoveList = ploListOld.stream().filter(plo -> !ploList.contains(plo)).collect(Collectors.toList());
+//        List<ProgramLearningObjective> ploUpdateList = ploList.stream().filter(ploListOld::contains).collect(Collectors.toList());
+//        try {
+//            con = DBUtils.makeConnection();
+//            con.setAutoCommit(false);
+//
+//            if (poList.isEmpty()) {
+//                throw new IllegalArgumentException("Atleast one PO must be add.");
+//            }
+//            if (ploList.isEmpty()) {
+//                throw new IllegalArgumentException("Atleast one PLO must be add.");
+//            }
+//
+//            update(con, curriculum);
+//
+//            for (ProgramObjective po : poAddList) {
+//                poId = PODao.add(con, po);
+//                PODao.link(con, curId, poId);
+//            }
+//            for (ProgramObjective po : poRemoveList) {
+//                PODao.delete(con, po);
+//                PODao.deleteLink(con, po);
+//            }
+//            for (ProgramObjective po : poUpdateList) {
+//                PODao.update(con, po);
+//            }
+//            
+//            for (ProgramLearningObjective plo : poAddList) {
+//                poId = PODao.add(con, po);
+//                PODao.link(con, curId, poId);
+//            }
+//            for (ProgramLearningObjective po : poRemoveList) {
+//                PODao.delete(con, po);
+//                PODao.deleteLink(con, po);
+//            }
+//            for (ProgramLearningObjective po : poUpdateList) {
+//                PODao.update(con, po);
+//            }
+//
+//            for (ProgramObjective po : poList) {
+//                if ((Integer) po.getId() == null) {
+//
+//                } else {
+//                    poId = po.getId();
+//                    PODao.update(con, po);
+//                }
+//            }
+//            for (ProgramLearningObjective plo : ploList) {
+//                if ((Integer) plo.getId() == null) {
+//                    ploId = PLODao.add(con, plo);
+//                    PLODao.link(con, curId, ploId);
+//                    for (ProgramObjective po : poList) {
+//                        if (plo.getMapToPO().equals(po.getName())) {
+//                            PLODao.linkToPO(con, poId, ploId);
+//                        }
+//                    }
+//                } else {
+//                    ploId = plo.getId();
+//                    PLODao.update(con, plo);
+//
+//                }
+//            }
+//
+//            con.commit();
+//        } catch (Exception e) {
+//            if (con != null) {
+//                try {
+//                    con.rollback();
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//            throw e;
+//        } finally {
+//            try {
+//                if (con != null) {
+//                    con.close();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-            pre.executeUpdate();
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CurriculumException("Something went wrong in update curriculum progress.");
+    //Update existing curiculum in db
+    public static void update(Connection con, Curriculum curriculum) throws Exception {
+        String query = "update Curriculum set code = ?, viName = ?, name = ?, description = ?, decisionNo = ?, active = ?, updatedAt = cast(GETDATE() as date) where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, curriculum.getCode());
+        pre.setNString(2, curriculum.getViName());
+        pre.setString(3, curriculum.getName());
+        pre.setString(4, curriculum.getDescription());
+        pre.setNString(5, curriculum.getDecisionNo());
+        pre.setBoolean(6, curriculum.getActive());
+        pre.setInt(7, curriculum.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Update curriculum failed, no rows affected.");
         }
     }
 
     //check exist code
     public static boolean isExist(String curCode) throws Exception {
-        try {
-            String query = "select * from Curriculum where upper(code) = upper(?)";
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, curCode);
-            ResultSet rs = pre.executeQuery();
-            boolean isExist = rs.wasNull();
+        String query = "select * from Curriculum where upper(code) = upper(?)";
+        Connection con = DBUtils.makeConnection();
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, curCode);
+        ResultSet rs = pre.executeQuery();
+        boolean isExist = rs.wasNull();
 
-            con.close();
-            return isExist;
-        } catch (Exception e) {
-            throw new CurriculumException("Something went wrong in get curriculum progress.");
-        }
+        con.close();
+        return isExist;
     }
 }

@@ -20,7 +20,7 @@
     <body>
         <%@include file="/components/common/header.jspf" %>
         <%
-            //List<Explore> expList = (List) request.getAttribute("nam");
+            List<Explore> expList = (List) request.getAttribute(AppConfig.EXPLORE_LIST);
             Boolean isForceUpdate = (Boolean) request.getSession().getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
             User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
 

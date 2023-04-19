@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author quocb
  */
-@WebServlet(urlPatterns = {"/"})
+@WebServlet(urlPatterns = { "/", ""})
 public class RootController extends HttpServlet {
 
     /**
@@ -38,7 +38,15 @@ public class RootController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            try {
+                List<Explore> expList = ExploreList.getExpList();
+                request.setAttribute(AppConfig.EXPLORE_LIST, expList);
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
