@@ -46,22 +46,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="syllabus" items="<%= lsSyllabus%>">
-                            <tr>
-                                <th scope="row">
-                                    <input type="checkbox" />
-                                </th>
-                                <td>${syllabus.id}</td>
-                                <td>${syllabus.name}</td>
-                                <td>${syllabus.credit}</td>
-                                <td>${syllabus.description}</td>
-                                <td>${syllabus.tasks}</td>
-                                <td>${syllabus.scoringScale}</td>
-                                <td>${syllabus.status}</td>
-                                <td>${syllabus.minScore}</td>
-                                <td>${syllabus.createdAt}</td>
-                                <td>${syllabus.updatedAt}</td>
-                                <td>${syllabus.isApproved}</td>
+                        <c:forEach var="syl" items="<%= lsSyllabus%>">
+                                <td>${syl.id}</td>
+                                <td>${syl.name}</td>
+                                <td>${syl.credit}</td>
+                                <td>${syl.description}</td>
+                                <td>${syl.task}</td>
+                                <td>${syl.scoringScale}</td>
+                                <td>${syl.status}</td>
+                                <td>${syl.minScore}</td>
+                                <td>${syl.createdAt}</td>
+                                <td>${syl.updatedAt}</td>
+                                <td>${syl.isApproved}</td>
                                 <td>
                                     <div class="d-flex gap-2">
                                         <button type="button" class="btn btn-outline-success btn-sm">Publish</button>

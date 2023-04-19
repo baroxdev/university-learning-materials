@@ -20,17 +20,16 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
-public class ViewListSyllabus implements Action{
+public class ViewListSyllabus implements Action {
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             try {
                 ArrayList<Syllabus> lsSyllabus = SyllabusDao.readSyllabusFullList();
                 request.setAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST, lsSyllabus);
-                request.getRequestDispatcher("/pages/dashboard/viewSyllabus.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/dashboard/viewCurriculums.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 request.getRequestDispatcher("/pages/not-found.jsp").forward(request, response);
@@ -41,4 +40,5 @@ public class ViewListSyllabus implements Action{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 }

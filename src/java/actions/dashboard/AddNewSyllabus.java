@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
+
 public class AddNewSyllabus implements Action{
 
     @Override
@@ -29,5 +30,4 @@ public class AddNewSyllabus implements Action{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
 }
