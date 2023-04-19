@@ -299,18 +299,18 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script>
-           
+
             $(document).ready(function () {
                 var oldName;
                 var oldDescription;
-                
+
 //                var basicCode;
 //                var basicSlug;
 //                var basicEngName;
 //                var basicViName;
 //                var basicDescription;
 //                var basicDescriptionNo;
-                
+
 //                $("button").click(function () {
 //                    basicCode = $(".basicIn").find("input, textarea").eq(0).val();
 //                    basicSlug = $(".basicIn").find("input, textarea").eq(1).val();
@@ -412,6 +412,39 @@
 
             });
 
+            var curriculumAPI = 'https://jsonplaceholder.typicode.com/posts';
+
+            function start() {
+                getCurriculums(function (cur) {
+                    console.log(cur);
+                });
+            }
+
+            start();
+
+            //Functions
+
+            function getCurriculums(callback) {
+                fetch(curriculumAPI)
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(callback);
+            }
+
+
+
+            function renderCourse(course){
+                var listCoursesBlock = document.querySelector('#list-course');
+                var htmls = course.map(function(course){
+                   return '<li>\n\
+                                <h4>${course.name}</h4>\n\
+                                <p>${course.description}</p>\n\
+                            </li>'; 
+                });
+                listCoursesBlock.innerHTML = htmls.join('');
+            }
+            
         </script>
     </body>
 

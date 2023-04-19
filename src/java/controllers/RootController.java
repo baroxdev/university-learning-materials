@@ -4,9 +4,14 @@ package controllers;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
+import config.AppConfig;
+import entities.Explore;
+import entities.ExploreList;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +37,8 @@ public class RootController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-          request.getRequestDispatcher("/index.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
     }
 
