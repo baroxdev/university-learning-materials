@@ -58,7 +58,7 @@
                     <main class="row">
                         <div class="xxx row ms-1">
                             <legend>Add Curriculum</legend>
-                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />">
+                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
 
                                 <!-- Basic Infomation -->
                                 <span>Basic Infomation</span>
@@ -108,7 +108,7 @@
                                                style="font-size: 16px;">Description</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                        <textarea class="form-control" name="description" required=""></textarea>
+                                        <textarea class="form-control" id="description" name="description" required=""></textarea>
                                     </div>
                                 </div>
 
@@ -145,7 +145,8 @@
                                                 <td>
                                                     <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
                                                     <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                    <a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>
+                                                        <%--<a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>--%>
+                                                    <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             <tr style="height: 18px;"></tr>
@@ -170,7 +171,7 @@
                                                           ></textarea>
                                             </div>
                                             <div style="margin-top: 16px;">
-                                                <button type="button" class="btn btn-primary" id="btn-add" name="op" value="add_po">Add</button>
+                                                <button type="button" class="btn btn-primary" id="btn-add-po" name="op" value="add_po">Add</button>
                                                 <button type="button" class="btn btn-secondary" value="">Cancel</button>
                                             </div>
                                         </div>
@@ -200,36 +201,35 @@
                                     style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Program
                                     Program Learning Objectives (PLO)</span>
 
-                                <c:if test="${ploList != null}">
-                                    <table id="ploTbl" style="width: 96%; margin-bottom: 32px;">
-                                        <thead>
+                                <table id="ploTbl" style="width: 96%; margin-bottom: 32px; display:none;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 7.6%;">Name</th>
+                                            <th style="width: 65%">Description</th>
+                                            <th style="width: 22%; text-align: right;">Map to PO</th>
+                                            <th style="width: 5.4%;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="plo" items="${ploList}" >
                                             <tr>
-                                                <th style="width: 7.6%;">Name</th>
-                                                <th style="width: 65%">Description</th>
-                                                <th style="width: 22%; text-align: right;">Map to PO</th>
-                                                <th style="width: 5.4%;"></th>
+                                                <td style="color: #495057;">${plo.name}</td>
+                                                <td>${plo.description}</td>
+                                                <td style="text-align: right;">${plo.mapToPO}</td>
+                                                <td>
+                                                    <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                                    <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                                        <%--<a href="<c:url value="/dashboard/curriculums/add?op=remove_plo&nameToDelete=${plo.name}" />"><i class="fa-solid fa-trash"></i></a>--%>
+                                                    <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="plo" items="${ploList}" >
-                                                <tr>
-                                                    <td style="color: #495057;">${plo.name}</td>
-                                                    <td>${plo.description}</td>
-                                                    <td style="text-align: right;">${plo.mapToPO}</td>
-                                                    <td>
-                                                        <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                        <a href="<c:url value="/dashboard/curriculums/add?op=remove_plo&nameToDelete=${plo.name}" />"><i class="fa-solid fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr style="height: 66px;"></tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </c:if>
+                                            <tr style="height: 66px;"></tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
 
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="row col-4">
+                                <div class="row g-3 align-items-center mt-1" id="add-plo-form"> 
+                                    <div class="row col-4" >
                                         <div class="col-12">
                                             <label for="ploName" class="col-form-label" style="font-size: 16px;">Name</label>
                                         </div>
@@ -265,21 +265,20 @@
                                             </label>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-12">
-                                        <label for="ploDescription" class="col-form-label"
-                                               style="font-size: 16px;">Description</label>
+                                    <div class="row g-3 align-items-center mt-1">
+                                        <div class="col-12">
+                                            <label for="ploDescription" class="col-form-label"
+                                                   style="font-size: 16px;">Description</label>
+                                        </div>
+                                        <div class="col-12" style="width: 751px; margin-top: 8px;">
+                                            <textarea id="ploDescription" class="form-control" name="ploDescription"
+                                                      ></textarea>
+                                        </div>
                                     </div>
-                                    <div class="col-12" style="width: 751px; margin-top: 8px;">
-                                        <textarea id="ploDescription" class="form-control" name="ploDescription"
-                                                  placeholder="Mastering professional skills and soft skills of 21st century citizens (thinking skills, work skills, skills in using work tools, life skills in a global society.)"></textarea>
+                                    <div style="margin-top: 16px;">
+                                        <button type="button" id="btn-add-plo" class="btn btn-primary" name="op" value="add_plo">Add</button>
+                                        <button type="submit" class="btn btn-secondary" value="">Cancel</button>
                                     </div>
-                                </div>
-                                <div style="margin-top: 16px;">
-                                    <button type="submit" class="btn btn-primary" name="op" value="add_plo">Add</button>
-                                    <button type="submit" class="btn btn-secondary" value="">Cancel</button>
                                 </div>
                                 <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
                                     PLO_ERROR_MESSAGE
@@ -288,7 +287,7 @@
                                 <span
                                     style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
 
-                                <button type="submit" class="btn btn-primary" name="confirm" value="yes">Confirm</button>  
+                                <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Submit</button>  
                             </form>
                         </div>
                     </main>
@@ -326,7 +325,27 @@
 //                    $(".basicIn").find("input, texarea").eq(5).attr('value', basicDescriptionNo);
 //                });
 
+                $("#btn-submit").click(function () {
+                    handleConfirm();
+                });
+
                 $("#poTbl").on("click", "[name='editBtn']", function () {
+                    oldName = $(this).closest("tr").find("td").eq(0).text();
+                    oldDescription = $(this).closest("tr").find("td").eq(1).text();
+//                    var tdList = $(this).closest("tr");
+                    var tdList = $(this).closest("tr").find("td");
+                    tdList.each(function (index, element) {
+                        if (index != tdList.length - 1) {
+                            $(this).attr("contenteditable", "true");
+                        }
+                    });
+                    $(this).eq(0).attr("name", "saveBtn");
+                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
+                    $(this).closest("tr").find("#btn-delete-po").eq(0).css("display", "none");
+                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                });
+
+                $("#ploTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
                     var tdList = $(this).closest("tr").find("td");
@@ -337,32 +356,18 @@
                     });
                     $(this).eq(0).attr("name", "saveBtn");
                     $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-                    $(this).closest("tr").find("a").eq(0).css("display", "none");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
-                });
-
-                $("#ploTbl").on("click", "[name='editBtn']", function () {
-                    oldName = $(this).closest("tr").find("td").eq(0).text();
-                    oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                    var tdList = $(this).closest("tr").find("td:gt(0)");
-                    tdList.each(function (index, element) {
-                        if (index != tdList.length - 1) {
-                            $(this).attr("contenteditable", "true");
-                        }
-                    });
-                    $(this).eq(0).attr("name", "saveBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-                    $(this).closest("tr").find("a").eq(0).css("display", "none");
+                    $(this).closest("tr").find("#btn-delete-plo").eq(0).css("display", "none");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
                 });
 
                 $("table").on("click", "[name='saveBtn']", function () {
                     var newName = $(this).closest("tr").find("td").eq(0).text();
                     var newDescription = $(this).closest("tr").find("td").eq(1).text();
+                    var newMapToPO;
 
                     $(this).eq(0).attr("name", "editBtn");
                     $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("a").eq(0).css("display", "inline");
+                    $(this).closest("tr").find("#btn-delete-po, #btn-delete-plo").eq(0).css("display", "block");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
 
                     $(this).closest("tr").find("td:gt(0)").each(function () {
@@ -370,28 +375,12 @@
                     });
 
                     if (newName.includes('PO')) {
-                        $.ajax({
-                            url: '/university-learning-materials/dashboard/curriculums/add?op=edit_po',
-                            data: {
-                                newName: newName,
-                                newDescription: newDescription,
-                                nameToEdit: oldName
-                            },
-                            type: 'GET'
-                        });
+                        handleEditPO(oldName, newName, newDescription);
                     } else {
-                        $.ajax({
-                            url: '/university-learning-materials/dashboard/curriculums/add?op=edit_plo',
-                            data: {
-                                newName: newName,
-                                newDescription: newDescription,
-                                nameToEdit: oldName
-                            },
-                            type: 'GET'
-                        });
+                        newMapToPO = $(this).closest("tr").find("td").eq(2).text();
+                        console.log(newMapToPO);
+                        handleEditPLO(oldName, newName, newDescription, newMapToPO);
                     }
-
-
 
                 }
                 );
@@ -405,18 +394,42 @@
                     $(this).closest("tr").find("[name='saveBtn']").find("i").eq(0).attr("class", "fa-solid fa-pencil");
                     $(this).closest("tr").find("[name='saveBtn']").eq(0).attr("name", "editBtn");
 //                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("a").eq(0).css("display", "inline");
+                    $(this).closest("tr").find("#btn-delete-po, #btn-delete-plo").eq(0).css("display", "block");
                     $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
                 });
 
             });
 
+            $('table').on("click", "#btn-delete-po", function () {
+                const addPOForm = $('#add-po-form');
+                const name = $(this).closest("tr").find("td").eq(0).text();
+                let listPO = getListPOFromLocalStorage();
+                listPO = listPO.filter(po => po.name != name);
+
+                renderListPO(listPO, addPOForm);
+                localStorage.setItem("list_po", JSON.stringify(listPO));
+                updatePLOMapPOOptions(listPO)
+            });
+
+            $('table').on("click", "#btn-delete-plo", function () {
+                const addPLOForm = $('#add-po-form');
+                const name = $(this).closest("tr").find("td").eq(0).text();
+                let listPLO = getListPLOFromLocalStorage();
+                listPLO = listPLO.filter(plo => plo.name != name);
+
+                renderListPLO(listPLO, addPLOForm);
+                localStorage.setItem("list_plo", JSON.stringify(listPLO));
+            });
+
             window.addEventListener("load", () => {
                 let listPO = getListPOFromLocalStorage();
+                let listPLO = getListPLOFromLocalStorage();
                 renderListPO(listPO);
+                renderListPLO(listPLO);
                 updatePLOMapPOOptions(listPO);
             });
-            document.getElementById("btn-add").addEventListener("click", handleAddPO);
+            document.getElementById("btn-add-po").addEventListener("click", handleAddPO);
+            document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
 
             function getListPOFromLocalStorage() {
                 let listPO = JSON.parse(localStorage.getItem("list_po"));
@@ -428,13 +441,23 @@
                 return listPO;
             }
 
+            function getListPLOFromLocalStorage() {
+                let listPLO = JSON.parse(localStorage.getItem("list_plo"));
+
+                if (listPLO === null) {
+                    listPLO = [];
+                }
+
+                return listPLO;
+            }
+
             function handleAddPO() {
                 const addPOForm = document.getElementById('add-po-form');
 
                 const namePONode = addPOForm.querySelector("#poName");
                 const descriptionPONode = addPOForm.querySelector("#poDescription");
 
-                if (!namePONode || !namePONode) {
+                if (!namePONode || !descriptionPONode) {
                     throw new Error("Missing value");
                 }
 
@@ -446,12 +469,68 @@
                 listPO.push({
                     name: name,
                     description: description
-                })
+                });
                 console.log({name, description});
 
-                renderListPO(listPO);
+                renderListPO(listPO, addPOForm);
+                localStorage.setItem("list_po", JSON.stringify(listPO));
+                updatePLOMapPOOptions(listPO);
+                resetAddPOForm(addPOForm);
+            }
+
+            function handleAddPLO() {
+                const addPLOForm = document.getElementById('add-plo-form');
+
+                const namePLONode = addPLOForm.querySelector("#ploName");
+                const descriptionPLONode = addPLOForm.querySelector("#ploDescription");
+                const mapToPONode = $("#mapToPO option:selected");
+
+                if (!namePLONode || !descriptionPLONode || !mapToPONode) {
+                    throw new Error("Missing value");
+                }
+
+                let listPLO = getListPLOFromLocalStorage();
+
+                const name = namePLONode.value;
+                const description = descriptionPLONode.value;
+                const mapToPO = mapToPONode.text();
+
+                listPLO.push({
+                    name: name,
+                    description: description,
+                    mapToPO: mapToPO
+                })
+                console.log({name, description, mapToPO});
+
+                renderListPLO(listPLO, addPLOForm);
+                localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                resetAddPLOForm(addPLOForm);
+            }
+
+            function handleEditPO(oldName, newName, newDescription) {
+                const addPOForm = document.getElementById('add-po-form');
+
+                let listPO = getListPOFromLocalStorage();
+                let poElement = listPO.find(po => po.name === oldName);
+                poElement.name = newName;
+                poElement.description = newDescription;
+
+                renderListPO(listPO, addPOForm);
                 localStorage.setItem("list_po", JSON.stringify(listPO));
                 updatePLOMapPOOptions(listPO)
+            }
+
+            function handleEditPLO(oldName, newName, newDescription, newMapToPO) {
+                const addPLOForm = document.getElementById('add-plo-form');
+
+                let listPLO = getListPLOFromLocalStorage();
+                let ploElement = listPLO.find(plo => plo.name === oldName);
+                ploElement.name = newName;
+                ploElement.description = newDescription;
+                ploElement.mapToPO = newMapToPO;
+
+                renderListPLO(listPLO, addPLOForm);
+                localStorage.setItem("list_plo", JSON.stringify(listPLO));
             }
 
             function updatePLOMapPOOptions(listPO) {
@@ -461,11 +540,11 @@
                 const htmls = listPO.map((po, index) => `
                      <option value="\${po.name}">\${po.name}</option>
                 `).join("");
-                
+
                 selectNode.innerHTML = htmls;
             }
-            
-            function renderListPO(listPO) {
+
+            function renderListPO(listPO, POFormNode) {
                 if (!listPO)
                     throw new Error("Cannot render list PO");
                 const POTableBody = document.querySelector("#poTbl tbody");
@@ -476,13 +555,34 @@
                         <td>
                             <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
                             <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                            <a href="/dashboard/curriculums/add?op=remove_po&nameToDelete=\${po.name}"><i class="fa-solid fa-trash"></i></a>
+                            <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join("");
 
                 POTableBody.parentNode.style.display = 'block';
                 POTableBody.innerHTML = htmls;
+            }
+
+            function renderListPLO(listPLO, PLOFormNode) {
+                if (!listPLO)
+                    throw new Error("Cannot render list PLO");
+                const PLOTableBody = document.querySelector("#ploTbl tbody");
+                const htmls = listPLO.map((plo, index) => `
+                     <tr>
+                        <td style="color: #495057;">\${plo?.name}</td>
+                        <td>\${plo?.description}</td>
+                        <td style="text-align: right;">\${plo?.mapToPO}</td>
+                        <td>
+                            <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                            <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                            <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join("");
+
+                PLOTableBody.parentNode.style.display = 'block';
+                PLOTableBody.innerHTML = htmls;
             }
 
             function resetAddPOForm(POFormNode) {
@@ -492,7 +592,47 @@
                 nameNode.value = "";
                 descriptionNode.value = "";
             }
+
+            function resetAddPLOForm(PLOFormNode) {
+                const nameNode = PLOFormNode.querySelector("#ploName");
+                const descriptionNode = PLOFormNode.querySelector("#ploDescription");
+
+                nameNode.value = "";
+                descriptionNode.value = "";
+            }
+
             // \${pageContext.request.servletContext.contextPath}/dashboard/....
+
+            function handleConfirm() {
+                const basicCode = $('#code').val();
+                const basicSlug = $('#slug').val();
+                const basicEnglishName = $('#englishName').val();
+                const basicVietnameseName = $('#vietnameseName').val();
+                const basicDescription = $('#description').val();
+                const basicDecisionNo = $('#decisionNo').val();
+
+                let listPO = getListPOFromLocalStorage();
+                let listPLO = getListPLOFromLocalStorage();
+
+                const jsonSubmit = JSON.stringify({
+                    code: basicCode,
+                    name: basicEnglishName,
+                    description: basicDescription,
+                    decisionNo: basicDecisionNo,
+                    vName: basicVietnameseName,
+                    poList: listPO,
+                    ploList: listPLO
+                });
+
+                var currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/add';
+                var options = {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: jsonSubmit
+                };
+
+                fetch(currAPI, options);
+            }
 
         </script>
     </body>
