@@ -483,3 +483,8 @@ input[type="file"] {
 .fixed-footer .btn-group {
     margin-left: auto;
 }
+
+#add-curriculum-page td {
+    padding: 12px 0;
+    padding-right: 20px;
+}
