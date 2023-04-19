@@ -169,6 +169,8 @@ public class CurriculumDao {
     public static void add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
         Connection con = null;
         Integer curId = null;
+        Integer poId = null;
+        Integer ploId = null;
         try {
             con = DBUtils.makeConnection();
             con.setAutoCommit(false);
@@ -181,18 +183,17 @@ public class CurriculumDao {
             }
 
             curId = add(con, curriculum);
-            con.commit();
 
             for (ProgramObjective po : poList) {
-                PODao.add(con, po);
-                PODao.link(con, curId, po.getId());
+                poId = PODao.add(con, po);
+                PODao.link(con, curId, poId);
             }
             for (ProgramLearningObjective plo : ploList) {
-                PLODao.add(con, plo);
-                PLODao.link(con, curId, plo.getId());
+                ploId = PLODao.add(con, plo);
+                PLODao.link(con, curId, ploId);
                 for (ProgramObjective po : poList) {
                     if (plo.getMapToPO().equals(po.getName())) {
-                        PLODao.linkToPO(con, po.getId(), plo.getId());
+                        PLODao.linkToPO(con, poId, ploId);
                     }
                 }
             }
@@ -221,7 +222,7 @@ public class CurriculumDao {
     //Add new curriculum to db
     public static Integer add(Connection con, Curriculum curriculum) throws Exception {
         Integer id = -1;
-        String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?)";
+        String query = "insert Curriculum values(?,?,?,?,?,cast(GETDATE() as date),?,?)";
         PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         pre.setString(1, curriculum.getCode());
         pre.setString(2, curriculum.getViName());
@@ -229,6 +230,7 @@ public class CurriculumDao {
         pre.setString(4, curriculum.getDescription());
         pre.setString(5, curriculum.getDecisionNo());
         pre.setString(6, null);
+        pre.setBoolean(7, true);
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {

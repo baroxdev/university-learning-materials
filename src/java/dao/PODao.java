@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -60,9 +61,10 @@ public class PODao {
     }
 
     //Add new po to db
-    public static void add(Connection con, ProgramObjective po) throws Exception {
+    public static Integer add(Connection con, ProgramObjective po) throws Exception {
+        Integer id = -1;
         String query = "insert Program_Objective values(?,?,GETDATE(),?)";
-        PreparedStatement pre = con.prepareStatement(query);
+        PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         pre.setString(1, po.getName());
         pre.setString(2, po.getDescription());
         pre.setString(3, null);
@@ -71,5 +73,12 @@ public class PODao {
         if (affectedRows == 0) {
             throw new SQLException("Add PO failed, no rows affected.");
         }
+        ResultSet generatedId = pre.getGeneratedKeys();
+        if (generatedId.next()) {
+            id = generatedId.getInt(1);
+        } else {
+            throw new SQLException("Inserting PO failed, no ID obtained.");
+        }
+        return id;
     }
 }
