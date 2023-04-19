@@ -7,6 +7,7 @@ package actions.dashboard;
 
 import actions.Action;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,9 @@ public class AddNewSyllabus implements Action{
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try (PrintWriter out = response.getWriter()) {
+            request.getRequestDispatcher("/pages/dashboard/viewSyllabus.jsp").forward(request, response);
+        }
     }
 
     @Override

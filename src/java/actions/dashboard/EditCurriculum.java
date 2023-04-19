@@ -66,7 +66,7 @@ public class EditCurriculum implements Action {
                 cur.setCode(request.getParameter("code"));
                 cur.setDecisionNo(request.getParameter("decisionNo"));
                 cur.setDescription(request.getParameter("description"));
-                CurriculumDao.update(cur);
+//                CurriculumDao.update(cur);
                 response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
             } catch (Exception e) {
                 e.printStackTrace();
