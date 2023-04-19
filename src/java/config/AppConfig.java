@@ -59,6 +59,11 @@ public class AppConfig {
 
 //    Dashboard
     public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
+<<<<<<< Updated upstream
+=======
+    public final static String DASHBOARD_CURRICULUM_TARGET = "curriculum";
+    public final static String DASHBOARD_SYLLABUS_TARGET = "syllabus";
+>>>>>>> Stashed changes
     public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
 
 //    ERRORS
