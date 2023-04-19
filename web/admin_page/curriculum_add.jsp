@@ -141,19 +141,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="po" items="${poList}">
+                                        <%--<c:forEach var="po" items="${poList}">
                                             <tr>
                                                 <td style="color: #495057;">${po.name}</td>
                                                 <td>${po.description}</td>
                                                 <td>
                                                     <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
                                                     <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                        <%--<a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>--%>
                                                     <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             <tr style="height: 18px;"></tr>
-                                        </c:forEach>
+                                        </c:forEach>--%>
                                     </tbody>
                                 </table>
                                 <div class="row g-3 align-items-center mt-1">
@@ -214,7 +213,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="plo" items="${ploList}" >
+                                        <%--<c:forEach var="plo" items="${ploList}" >
                                             <tr>
                                                 <td style="color: #495057;">${plo.name}</td>
                                                 <td>${plo.description}</td>
@@ -222,12 +221,11 @@
                                                 <td>
                                                     <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
                                                     <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                        <%--<a href="<c:url value="/dashboard/curriculums/add?op=remove_plo&nameToDelete=${plo.name}" />"><i class="fa-solid fa-trash"></i></a>--%>
                                                     <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             <tr style="height: 66px;"></tr>
-                                        </c:forEach>
+                                        </c:forEach>--%>
                                     </tbody>
                                 </table>
 
@@ -309,74 +307,148 @@
                 $("#btn-submit").click(function () {
                     handleSubmit();
                 });
+
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
 //                    var tdList = $(this).closest("tr");
-                    var tdList = $(this).closest("tr").find("td");
+//                    var tdList = $(this).closest("tr").find("td");
+//                    tdList.each(function (index, element) {
+//                        if (index != tdList.length - 1) {
+//                            $(this).attr("contenteditable", "true");
+//                        }
+//                    });
+
+                    var row = $(this).closest('tr');
+                    var form = $('<tr>');
+                    var tdList = row.find('td');
+
                     tdList.each(function (index, element) {
                         if (index != tdList.length - 1) {
-                            $(this).attr("contenteditable", "true");
+                            if (index == 0) {
+                                var input = $('<td><input class="form-control" type="text" /></td>')
+                                input.find('input').attr('value', oldName);
+                            } else {
+                                var input = $('<td><textarea class="form-control"></textarea></td>');
+                                input.find('textarea').text(oldDescription);
+                            }
+
+                            form.append(input);
+                        } else {
+                            var input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                                                <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
+                                                <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
+                            form.append(input);
                         }
                     });
-                    $(this).eq(0).attr("name", "saveBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-                    $(this).closest("tr").find("#btn-delete-po").eq(0).css("display", "none");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                    form.append('</tr>');
+                    row.replaceWith(form);
+
+//                    $(this).eq(0).attr("name", "saveBtn");
+//                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
+//                    $(this).closest("tr").find("#btn-delete-po").eq(0).css("display", "none");
+//                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
                 });
+
                 $("#ploTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                    var tdList = $(this).closest("tr").find("td");
+
+//                    var tdList = $(this).closest("tr").find("td");
+//                    tdList.each(function (index, element) {
+//                        if (index != tdList.length - 1) {
+//                            $(this).attr("contenteditable", "true");
+//                        }
+//                    });
+
+                    var row = $(this).closest('tr');
+                    var form = $('<tr>');
+                    var tdList = row.find('td');
+
                     tdList.each(function (index, element) {
                         if (index != tdList.length - 1) {
-                            $(this).attr("contenteditable", "true");
+                            if (index == 0) {
+                                var input = $('<td><input class="form-control" type="text" /></td>');
+                                input.find('input').attr('value', oldName);
+                            } else if (index == 1) {
+                                var input = $('<td><textarea class="form-control"></textarea></td>');
+                                input.find('textarea').text(oldDescription);
+                            } else {
+                                var input = $('<td><select style="color: #495057;" name="mapToPO" id="" class="form-select"></select></td>');
+                                let poList = getListPOFromLocalStorage();
+                                poList.forEach(function (item) {
+                                    input.find('select').append($('<option>', {value: item.name, text: item.name}));
+                                })
+                            }
+
+                            form.append(input);
+                        } else {
+                            var input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                                                <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
+                                                <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
+                            form.append(input);
                         }
                     });
-                    $(this).eq(0).attr("name", "saveBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-                    $(this).closest("tr").find("#btn-delete-plo").eq(0).css("display", "none");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                    form.append('</tr>');
+                    row.replaceWith(form);
                 });
+
                 $("table").on("click", "[name='saveBtn']", function () {
-                    var newName = $(this).closest("tr").find("td").eq(0).text();
-                    var newDescription = $(this).closest("tr").find("td").eq(1).text();
+                    var newName = $(this).closest("tr").find("td").find('input').val();
+                    var newDescription = $(this).closest("tr").find("td").find('textarea').val();
                     var newMapToPO;
-                    $(this).eq(0).attr("name", "editBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("#btn-delete-po, #btn-delete-plo").eq(0).css("display", "block");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
-                    $(this).closest("tr").find("td:gt(0)").each(function () {
-                        $(this).attr("contenteditable", "false");
-                    });
+                    var tblIDCheck = $(this).closest('table').attr('id');
+
                     if (newName.includes('PO')) {
                         handleEditPO(oldName, newName, newDescription);
-                    } else {
-                        newMapToPO = $(this).closest("tr").find("td").eq(2).text();
+                    } else if (newName.includes('PLO')) {
+                        newMapToPO = $(this).closest("tr").find("td").find('select option:selected').text();
                         handleEditPLO(oldName, newName, newDescription, newMapToPO);
+                    } else {
+                        if (tblIDCheck.includes('plo')) {
+                            var errorShow = $('#plo-error');
+                            errorShow.css('display', 'block');
+                            errorShow.text("PLO Name is invalid, please try again!");
+                        } else {
+                            var errorShow = $('#po-error');
+                            errorShow.css('display', 'block');
+                            errorShow.text("PO Name is invalid, please try again!");
+                        }
                     }
                 }
                 );
                 $("table").on("click", "[name='cancelBtn']", function () {
-                    $(this).closest("tr").find("td").eq(0).text(oldName);
-                    $(this).closest("tr").find("td").eq(1).text(oldDescription);
-                    $(this).closest("tr").find("td:gt(0)").each(function () {
-                        $(this).attr("contenteditable", "false");
-                    });
-                    $(this).closest("tr").find("[name='saveBtn']").find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("[name='saveBtn']").eq(0).attr("name", "editBtn");
-//                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("#btn-delete-po, #btn-delete-plo").eq(0).css("display", "block");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
+                    var str = $(this).closest('tr').find('td').find('input').val();
+                    if (str.includes('PO')) {
+                        let listPO = getListPOFromLocalStorage();
+                        renderListPO(listPO);
+                    } else {
+                        let listPLO = getListPLOFromLocalStorage();
+                        renderListPLO(listPLO);
+                    }
+                    updatePLOMapPOOptions(listPO);
                 });
                 $('table').on("click", "#btn-delete-po", function () {
                     const addPOForm = $('#add-po-form');
                     const name = $(this).closest("tr").find("td").eq(0).text();
-                    let listPO = getListPOFromLocalStorage();
-                    listPO = listPO.filter(po => po.name != name);
-                    renderListPO(listPO, addPOForm);
-                    localStorage.setItem("list_po", JSON.stringify(listPO));
-                    updatePLOMapPOOptions(listPO)
+                    var mappedCheck = 0;
+                    let listPLO = getListPLOFromLocalStorage();
+                    listPLO.forEach(function (item) {
+                        if (name == item.mapToPO)
+                            mappedCheck = 1;
+                        var errorShow = $('#po-error');
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PO is mapped to PLOs, please delete these PLO before!");
+                    });
+                    if (mappedCheck == 0) {
+                        var errorShow = $('#po-error');
+                        errorShow.css('display', 'none');
+                        let listPO = getListPOFromLocalStorage();
+                        listPO = listPO.filter(po => po.name != name);
+                        renderListPO(listPO, addPOForm);
+                        localStorage.setItem("list_po", JSON.stringify(listPO));
+                        updatePLOMapPOOptions(listPO);
+                    }
                 });
                 $('table').on("click", "#btn-delete-plo", function () {
                     const addPLOForm = $('#add-po-form');
@@ -386,7 +458,8 @@
                     renderListPLO(listPLO, addPLOForm);
                     localStorage.setItem("list_plo", JSON.stringify(listPLO));
                 });
-            });
+            }
+            );
             window.addEventListener("load", () => {
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
@@ -430,8 +503,8 @@
                     errorShow.text("Name cannot be left blank, please try again!");
                 } else if (!name.includes('PO')) {
                     errorShow.css('display', 'block');
-                    errorShow.text("Name is invalid, please try again!");
-                } else {                    
+                    errorShow.text("PO Name is invalid, please try again!");
+                } else {
                     errorShow.css('display', 'none');
                     let listPO = getListPOFromLocalStorage();
                     const description = descriptionPONode.value;
@@ -465,7 +538,7 @@
                     errorShow.text("Name cannot be left blank, please try again!");
                 } else if (!name.includes('PLO')) {
                     errorShow.css('display', 'block');
-                    errorShow.text("Name is invalid, please try again!");
+                    errorShow.text("PLO Name is invalid, please try again!");
                 } else if (mapToPO == '') {
                     errorShow.css('display', 'block');
                     errorShow.text("Please create a new PO before!");
@@ -639,7 +712,7 @@
                 } else {
                     errorShow.css('display', 'none');
                 }
-                
+
                 if (listPO.length == 0 || listPLO.length == 0) {
                     errorShowSubmit.css('display', 'block');
                     errorShowSubmit.text("Please create a new PO and PLO before!");
