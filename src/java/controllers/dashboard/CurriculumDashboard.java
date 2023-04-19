@@ -5,15 +5,13 @@
 package controllers.dashboard;
 
 import actions.Action;
-import actions.curriculumns.GetCurriculumnByID;
 import actions.dashboard.AddNewCurriculum;
+import actions.dashboard.EditCurriculum;
 import actions.dashboard.ViewListCurriculum;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +28,9 @@ public class CurriculumDashboard extends HttpServlet {
     @Override
     public void init() {
         actionMap.put("/curriculums", new ViewListCurriculum());
+        actionMap.put("/curriculums/", new ViewListCurriculum());
         actionMap.put("/curriculums/add", new AddNewCurriculum());
+        actionMap.put("/curriculums/edit", new EditCurriculum());
     }
 
     /**

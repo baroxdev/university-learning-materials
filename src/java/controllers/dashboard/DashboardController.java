@@ -5,10 +5,8 @@
 package controllers.dashboard;
 
 import actions.Action;
-import actions.curriculumns.GetCurriculumnByID;
 import actions.dashboard.ViewDashboard;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -30,6 +28,7 @@ public class DashboardController extends HttpServlet {
     @Override
     public void init() {
         controllerMap.put("curriculums", new CurriculumDashboard());
+        controllerMap.put("syllabus", new SyllabusDashboard());
     }
 
     /**

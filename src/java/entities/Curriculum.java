@@ -19,6 +19,7 @@ public class Curriculum {
     private String viName;
     private String createdAt;
     private String updatedAt;
+    private Boolean active;
 
     public Curriculum() {
     }
@@ -32,6 +33,18 @@ public class Curriculum {
         this.viName = viName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public Curriculum(int id, String code, String name, String description, String decisionNo, String viName, String createdAt, String updatedAt, Boolean active) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.description = description;
+        this.decisionNo = decisionNo;
+        this.viName = viName;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.active = active;
     }
 
     public int getId() {
@@ -98,4 +111,12 @@ public class Curriculum {
         this.updatedAt = updatedAt;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+    
 }
