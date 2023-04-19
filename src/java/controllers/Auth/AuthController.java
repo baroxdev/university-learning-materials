@@ -25,7 +25,9 @@ import actions.Action;
 @WebServlet(name = "UserController", urlPatterns = {"/login", "/logout"})
 public class AuthController extends HttpServlet {
 
-    private Map<String, Action> actionMap = new HashMap<>();
+    private final Map<String, Action> actionMap = new HashMap<>();
+
+    @Override
     public void init() {
         actionMap.put("/login", new Login());
         actionMap.put("/logout", new Logout());
@@ -43,7 +45,7 @@ public class AuthController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
