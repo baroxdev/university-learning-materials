@@ -7,7 +7,6 @@ package controllers.dashboard;
 
 import actions.Action;
 import actions.dashboard.AddNewSyllabus;
-import actions.dashboard.GetListSubjectInSyllabus;
 import actions.dashboard.ViewListSyllabus;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,18 +22,14 @@ import javax.servlet.http.HttpServletResponse;
  * @author admin
  */
 @WebServlet(name = "SyllabusDashboard", urlPatterns = {"/syllabus"})
-public class SyllabusDashboard extends HttpServlet {
+public class SubjectDashboard extends HttpServlet {
 
     private final Map<String, Action> actionMap = new HashMap<>();
 
     @Override
     public void init() {
-        actionMap.put("/syllabus", new ViewListSyllabus());
-        actionMap.put("/syllabus/", new ViewListSyllabus());
-        actionMap.put("/syllabus/add", new AddNewSyllabus());
-        actionMap.put("/syllabus/add/", new AddNewSyllabus());
-        actionMap.put("/syllabus/get-subjects", new GetListSubjectInSyllabus());
-        actionMap.put("/syllabus/get-subjects/", new GetListSubjectInSyllabus());
+        actionMap.put("/subjects", new ViewListSyllabus());
+        actionMap.put("/subjects/", new ViewListSyllabus());
     }
 
     /**

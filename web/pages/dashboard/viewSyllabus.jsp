@@ -51,7 +51,7 @@
                                 <td>${syl.name}</td>
                                 <td>${syl.credit}</td>
                                 <td>${syl.description}</td>
-                                <td>${syl.task}</td>
+                                <td>${syl.tasks}</td>
                                 <td>${syl.scoringScale}</td>
                                 <td>${syl.status}</td>
                                 <td>${syl.minScore}</td>

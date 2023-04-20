@@ -18,11 +18,22 @@ public class Subject {
     private String createdAt;
     private String updatedAt;
     private String preRequisite;
+    private String slug;
     private int semester;
     private int credit;
     private int knowlegdeCategoryID;
 
     public Subject() {
+    }
+
+    public Subject(String id, String name, String createdAt, String updatedAt, int semester, int credit, String slug) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.semester = semester;
+        this.credit = credit;
+        this.slug = slug;
     }
 
     public Subject(String id, String name, String createdAt, String updatedAt, String preRequisite, int semester, int credit, int knowlegdeCategoryID) {
@@ -99,4 +110,14 @@ public class Subject {
     public void setKnowlegdeCategoryID(int knowlegdeCategoryID) {
         this.knowlegdeCategoryID = knowlegdeCategoryID;
     }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+    
+    
 }

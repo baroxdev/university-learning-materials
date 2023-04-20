@@ -29,7 +29,7 @@ public class ViewListSyllabus implements Action {
             try {
                 ArrayList<Syllabus> lsSyllabus = SyllabusDao.readSyllabusFullList();
                 request.setAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST, lsSyllabus);
-                request.getRequestDispatcher("/pages/dashboard/viewCurriculums.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/dashboard/viewSyllabus.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 request.getRequestDispatcher("/pages/not-found.jsp").forward(request, response);

@@ -30,6 +30,15 @@ public class Syllabus {
     public Syllabus() {
     }
 
+    public Syllabus(String subjectID, int credit, String description, String tasks, int scoringScale, int minScore) {
+        this.subjectID = subjectID;
+        this.credit = credit;
+        this.description = description;
+        this.tasks = tasks;
+        this.scoringScale = scoringScale;
+        this.minScore = minScore;
+    }
+
     public Syllabus(int id, String name, int credit, String description, String tasks, int scoringScale, boolean status, int minScore, String createdAt, String updatedAt, boolean isApproved, String subjectID) {
         this.id = id;
         this.name = name;

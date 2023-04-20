@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author quocb
  */
-@WebServlet(urlPatterns = { "/", ""})
+@WebServlet(urlPatterns = { "/", "" })
 public class RootController extends HttpServlet {
 
     /**
