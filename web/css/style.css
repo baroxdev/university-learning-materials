@@ -55,6 +55,10 @@ form {
     margin-bottom: 24px;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 label, a {
     font-weight: 400;
     font-size: 16px;
@@ -461,11 +465,6 @@ table td a{
     display: inline-block;
     margin-left: 100%;
 }
-
-input[type="file"] {
-    display: none;
-}
-
 
 .fixed-footer {
     position: fixed;

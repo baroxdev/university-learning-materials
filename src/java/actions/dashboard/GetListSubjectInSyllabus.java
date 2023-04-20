@@ -18,44 +18,38 @@ import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
+import utils.ResponseUtils;
 
 /**
  *
  * @author admin
  */
-public class AddNewSyllabus implements Action {
+public class GetListSubjectInSyllabus implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try ( PrintWriter out = response.getWriter()) {
+            JSONObject resJson = new JSONObject();
             try {
-                ArrayList<Curriculum> lsCur = (ArrayList<Curriculum>) CurriculumDao.readCurriculumFullList();
-                request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_LIST, lsCur);
-                request.getRequestDispatcher("/pages/dashboard/addSyllabus.jsp").forward(request, response);
+                String curId = request.getParameter("curId");
+                ArrayList<Subject> lsSubjects = (ArrayList<Subject>) SubjectDao.readSubjectList(curId);
+
+                JSONArray results = new JSONArray(lsSubjects);
+                resJson.put("data", results);
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, resJson);
             } catch (Exception e) {
                 e.printStackTrace();
-                request.getRequestDispatcher("/pages/not-found.jsp").forward(request, response);
+                resJson.put("message", "Cannot get subject list.");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, resJson);
             }
         }
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try ( PrintWriter out = response.getWriter()) {
-            try {
-                JSONObject json = JsonUtils.getRequestJson(request);
-                String subjectID = json.getString("subject");
-                Integer credit = Integer.valueOf(json.getString("credit"));
-                String description = json.getString("description");
-                String tasks = json.getString("tasks");
-                Integer scoringScale = Integer.valueOf(json.getString("maxScore"));
-                Integer minScore = Integer.valueOf(json.getString("minScore"));
 
-                Syllabus syllabus = new Syllabus();
-            } catch (Exception e) {
-            }
-        }
     }
 }

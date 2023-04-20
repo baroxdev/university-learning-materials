@@ -52,7 +52,7 @@ public class SubjectDao {
     //lấy list môn theo curriculumId
     //cần junction table giữa Subject và Curiculum để chạy
     public static List<Subject> readSubjectList(String curId) throws Exception {
-        String query = "select distinct [id], [name], [createdAt], [updatedAt], [preRequisite], [semester], [credit], [knowlegdeCategoryID] from Subject join Subject_to_Cur on id = sub_ID where cur_ID = ?";
+        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], [credit], slug from Subject join Curr_to_Subject on id = subjectID where curriculumID = ?";
         List<Subject> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
@@ -65,10 +65,9 @@ public class SubjectDao {
                 subject.setName(rs.getString("name"));
                 subject.setCreatedAt(rs.getDate("createdAt").toString());
                 subject.setUpdatedAt(rs.getDate("updatedAt").toString());
-                subject.setPreRequisite(rs.getString("preRequisite"));
                 subject.setSemester(rs.getInt("semester"));
                 subject.setCredit(rs.getInt("credit"));
-                subject.setKnowlegdeCategoryID(rs.getInt("knowlegdeCategoryID"));
+                subject.setSlug(rs.getString("slug"));
                 list.add(subject);
             }
             con.close();

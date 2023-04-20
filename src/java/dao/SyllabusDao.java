@@ -8,6 +8,7 @@ package dao;
 import config.AppConfig;
 import entities.SearchResult;
 import entities.Syllabus;
+import exceptions.AddNewSyllabusException;
 import exceptions.SyllabusException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,6 +22,26 @@ import utils.DBUtils;
  * @author giahu
  */
 public class SyllabusDao {
+
+    public static void create(Syllabus syllabus) throws AddNewSyllabusException {
+        String query = "INSERT INTO Syllabus "
+                + "(subjectID, credit, [description], tasks, scoringScale, [status], minScore, isApproved) "
+                + "values(?, ?, ?, ?, ?, 1, ?, 0)";
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement ppstm = con.prepareCall(query);
+            ppstm.setString(1, syllabus.getSubjectID());
+            ppstm.setInt(2, syllabus.getCredit());
+            ppstm.setString(3, syllabus.getDescription());
+            ppstm.setString(4, syllabus.getTasks());
+            ppstm.setInt(5, syllabus.getScoringScale());
+            ppstm.setInt(6, syllabus.getMinScore());
+            int affectedRows = ppstm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AddNewSyllabusException("Something went wrong. So we cannot create syllabys now. Try again.");
+        }
+    }
 
     //lấy syllabus theo id(syllabus detail)
     public static Syllabus getSyllabusById(String id) throws Exception {
@@ -47,7 +68,7 @@ public class SyllabusDao {
                 syllabus.setIsApproved(rs.getBoolean("isApproved"));
                 syllabus.setSubjectID(rs.getString("subjectID"));
             }
-            
+
             con.close();
         } catch (Exception e) {
             throw new SyllabusException("Something went wrong in get syllabus progress.");
@@ -150,7 +171,7 @@ public class SyllabusDao {
         }
         return list;
     }
-    
+
     public static List<SearchResult> searchBySubId(String subjectID) throws Exception {
         System.out.println(subjectID);
         String query = "select * from Syllabus where subjectID like ?";
@@ -165,7 +186,7 @@ public class SyllabusDao {
                 searchResult.setId(rs.getInt("id"));
                 System.out.println("id sy" + rs.getInt("id"));
                 // name trong syllus de trong
-               searchResult.setName(rs.getString("subjectID"));
+                searchResult.setName(rs.getString("subjectID"));
                 searchResult.setSlug(String.valueOf(rs.getInt("id")));
                 searchResult.setRoot_slug(AppConfig.SYLLABUS_ROOT_SLUG);
                 list.add(searchResult);
