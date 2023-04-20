@@ -195,7 +195,8 @@ header h3 {
 
 /* Posts Section */
 
-.posts-section {}
+.posts-section {
+}
 
 .posts-section+.posts-section {
     margin-bottom: 30px;
@@ -487,4 +488,12 @@ table td a{
 #add-curriculum-page td, th {
     padding: 12px 0;
     padding-right: 20px;
+}
+
+.form-add-po {
+    background: #f3f7ff;
+    padding: 24px 12px;
+    border-radius: 12px;
+    border: 1px solid hsl(0deg 0% 64.57% / 10%);
+    width: fit-content;
 }

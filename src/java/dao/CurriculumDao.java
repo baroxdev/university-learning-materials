@@ -238,7 +238,7 @@ public class CurriculumDao {
         pre.setString(4, curriculum.getDescription());
         pre.setNString(5, curriculum.getDecisionNo());
         pre.setString(6, null);
-        pre.setBoolean(7, true);
+        pre.setBoolean(7, true); 
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
