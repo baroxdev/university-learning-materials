@@ -31,10 +31,10 @@ public abstract class ExploreList implements List {
                 ex.setCode(curr.getCode());
                 if (curr.getCreatedAt() != null) {
                     ex.setCreatedAt(sdf.parse(curr.getCreatedAt()));
-                } 
+                }
                 if (curr.getUpdatedAt() != null) {
                     ex.setUpdatedAt(sdf.parse(curr.getUpdatedAt()));
-                } 
+                }
                 ex.setController("curriculums");
                 ex.setType("Curriculum");
                 exList.add(ex);
@@ -44,24 +44,27 @@ public abstract class ExploreList implements List {
                 Explore ex = new Explore();
                 ex.setId(syll.getId());
                 ex.setCode(syll.getSubjectID());
+
                 if (syll.getCreatedAt() != null) {
                     ex.setCreatedAt(sdf.parse(syll.getCreatedAt()));
-                } 
+                }
+
                 if (syll.getUpdatedAt() != null) {
                     ex.setUpdatedAt(sdf.parse(syll.getUpdatedAt()));
-                } 
+                }
+
                 ex.setController("syllabus");
                 ex.setType("Syllabus");
                 exList.add(ex);
             }
-
+            
             Collections.sort(exList, (Explore o1, Explore o2) -> {
                 if (o1.getUpdatedAt() != null && o2.getUpdatedAt() != null) {
                     return o2.getUpdatedAt().compareTo(o1.getUpdatedAt());
                 } else if (o1.getUpdatedAt() != null && o2.getUpdatedAt() == null) {
-                    return o2.getUpdatedAt().compareTo(o1.getCreatedAt());
-                } else if (o1.getUpdatedAt() == null && o2.getUpdatedAt() != null) {
                     return o2.getCreatedAt().compareTo(o1.getUpdatedAt());
+                } else if (o1.getUpdatedAt() == null && o2.getUpdatedAt() != null) {
+                    return o2.getUpdatedAt().compareTo(o1.getCreatedAt());
                 } else {
                     if (o1.getCreatedAt().compareTo(o2.getCreatedAt()) == 0) {
                         return o1.getCode().compareTo(o2.getCode());

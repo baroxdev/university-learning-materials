@@ -282,25 +282,25 @@ public class CurriculumDao {
 //                poId = PODao.add(con, po);
 //                PODao.link(con, curId, poId);
 //            }
-////            for (ProgramObjective po : poRemoveList) {
-////                PODao.delete(con, po);
-////                PODao.deleteLink(con, po);
-////            }
-////            for (ProgramObjective po : poUpdateList) {
-////                PODao.update(con, po);
-////            }
-////            
-////            for (ProgramLearningObjective plo : poAddList) {
-////                poId = PODao.add(con, po);
-////                PODao.link(con, curId, poId);
-////            }
-////            for (ProgramLearningObjective po : poRemoveList) {
-////                PODao.delete(con, po);
-////                PODao.deleteLink(con, po);
-////            }
-////            for (ProgramLearningObjective po : poUpdateList) {
-////                PODao.update(con, po);
-////            }
+//            for (ProgramObjective po : poRemoveList) {
+//                PODao.delete(con, po);
+//                PODao.deleteLink(con, po);
+//            }
+//            for (ProgramObjective po : poUpdateList) {
+//                PODao.update(con, po);
+//            }
+//            
+//            for (ProgramLearningObjective plo : poAddList) {
+//                poId = PODao.add(con, po);
+//                PODao.link(con, curId, poId);
+//            }
+//            for (ProgramLearningObjective po : poRemoveList) {
+//                PODao.delete(con, po);
+//                PODao.deleteLink(con, po);
+//            }
+//            for (ProgramLearningObjective po : poUpdateList) {
+//                PODao.update(con, po);
+//            }
 //
 //            for (ProgramObjective po : poList) {
 //                if ((Integer) po.getId() == null) {

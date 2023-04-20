@@ -455,6 +455,7 @@ span {
 }
 
 table{
+    table-layout: fixed;
     font-size: 16px;
 }
 
@@ -483,7 +484,7 @@ table td a{
     margin-left: auto;
 }
 
-#add-curriculum-page td {
+#add-curriculum-page td, th {
     padding: 12px 0;
     padding-right: 20px;
 }
