@@ -20,7 +20,7 @@
     <body>
         <%@include file="/components/common/header.jspf" %>
         <%
-            List<Explore> exList = (List) ExploreList.getExpList();
+            List<Explore> expList = (List) request.getAttribute(AppConfig.EXPLORE_LIST);
             Boolean isForceUpdate = (Boolean) request.getSession().getAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD);
             User user = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
 
@@ -166,7 +166,7 @@
             <section class="posts-section">
                 <p class="posts-section_heading">Explore</h3>
                 <div class="posts-grid">
-                    <c:forEach var="ex" items="<%= exList%>">
+                    <c:forEach var="ex" items="<%= expList%>">
                         <article class="post-card">
                             <div class="post-card__header">
                                 <a href="${pageContext.request.servletContext.contextPath}/${ex.controller}/${ex.id}" class="post-card__title">
