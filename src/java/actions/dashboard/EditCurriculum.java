@@ -34,7 +34,7 @@ public class EditCurriculum implements Action {
                 String curId = request.getParameter("id");
                 //lấy list từ session
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
-                System.out.println("id " + cur.getId());
+//                System.out.println("id " + cur.getId());
                 request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET, cur);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
