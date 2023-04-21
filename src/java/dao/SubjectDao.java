@@ -64,7 +64,7 @@ public class SubjectDao {
                 subject.setId(rs.getString("id"));
                 subject.setName(rs.getString("name"));
                 subject.setCreatedAt(rs.getDate("createdAt").toString());
-                subject.setUpdatedAt(rs.getDate("updatedAt").toString());
+                subject.setUpdatedAt(rs.getDate("updatedAt") != null ? rs.getDate("updatedAt").toString() : null);
                 subject.setSemester(rs.getInt("semester"));
                 subject.setCredit(rs.getInt("credit"));
                 subject.setSlug(rs.getString("slug"));
@@ -72,6 +72,7 @@ public class SubjectDao {
             }
             con.close();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SubjectException("Something went wrong in read subject progress.");
         }
         return list;

@@ -95,7 +95,7 @@ public class Syllabus {
     }
 
     public String getDescription() {
-        return description;
+        return description.replaceAll("\"", "");
     }
 
     public void setDescription(String description) {
