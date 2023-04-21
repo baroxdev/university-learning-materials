@@ -84,7 +84,7 @@
                             </div>
                             <h4 class="page-title">Description</h4>
                             <div class="d-flex align-items-center gap-5 mt-3">
-                                <p><%= syl.getDescription()%></p>
+                                <c:out value="<%=syl.getDescription().trim()%>" escapeXml="false"/>
                             </div>
                         </div>
 

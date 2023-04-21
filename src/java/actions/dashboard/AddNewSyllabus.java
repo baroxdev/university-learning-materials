@@ -9,17 +9,24 @@ import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
 import dao.SubjectDao;
+import dao.SyllabusDao;
 import entities.Curriculum;
 import entities.Subject;
 import entities.Syllabus;
+import exceptions.AddNewSyllabusException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
 import org.json.JSONObject;
 import utils.JsonUtils;
+import utils.ResponseUtils;
 
 /**
  *
@@ -44,6 +51,7 @@ public class AddNewSyllabus implements Action {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try ( PrintWriter out = response.getWriter()) {
+            JSONObject resJson = new JSONObject();
             try {
                 JSONObject json = JsonUtils.getRequestJson(request);
                 String subjectID = json.getString("subject");
@@ -53,8 +61,35 @@ public class AddNewSyllabus implements Action {
                 Integer scoringScale = Integer.valueOf(json.getString("maxScore"));
                 Integer minScore = Integer.valueOf(json.getString("minScore"));
 
-                Syllabus syllabus = new Syllabus();
-            } catch (Exception e) {
+                Syllabus syllabus = new Syllabus(subjectID, credit, description, tasks, scoringScale, minScore);
+                SyllabusDao.create(syllabus);
+                resJson.put("message", "Create syllabus successfully.");
+                resJson.put("redirectUrl", request.getContextPath() + "/dashboard/syllabus");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, resJson);
+            } catch (NumberFormatException numberError) {
+                numberError.printStackTrace();
+                resJson.put("message", "Invalid format.");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, resJson);
+            } catch (AddNewSyllabusException | SQLException addErr) {
+                String errorMessage = addErr.getMessage();
+                if (errorMessage.contains("UNIQUE KEY")) {
+                    errorMessage = "Syllabus is exist.";
+                }
+
+                resJson.put("message", errorMessage);
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, resJson);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                resJson.put("message", "Cannot create new syllabus.");
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, resJson);
+            } catch (Exception ex) {
+                String errorMessage = ex.getMessage();
+                if (errorMessage.contains("UNIQUE KEY")) {
+                    errorMessage = "Syllabus are exist.";
+                }
+
+                resJson.put("message", errorMessage);
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, resJson);
             }
         }
     }

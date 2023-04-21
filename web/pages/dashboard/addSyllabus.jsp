@@ -59,8 +59,8 @@
                                             <label for="curriculum" class="col-form-label" style="font-size: 16px;">
                                                 Curriculum
                                             </label>
-                                            <select style="color: #495057;" name="curriculum" id="curriculum" class="form-select">
-                                                <option selected>Select Curriculum</option>
+                                            <select style="color: #495057;" name="curriculum" id="curriculum" class="form-select" required>
+                                                <option value="null" selected>Select Curriculum</option>
                                                 <c:forEach var="cur" items="<%= lsCur%>">
                                                     <option value="${cur.id}">${cur.code}</option>
                                                 </c:forEach>
@@ -70,7 +70,7 @@
                                             <label for="subject" class="col-form-label" style="font-size: 16px;">
                                                 Subject
                                             </label>
-                                            <select style="color: #495057;" name="subject" id="subject" class="form-select">
+                                            <select style="color: #495057;" name="subject" id="subject" class="form-select" disabled>
                                                 <option selected>Select Subject</option>
                                             </select>
                                         </div>
@@ -78,21 +78,22 @@
                                             <label for="degreeLevel" class="col-form-label" style="font-size: 16px;">
                                                 Degree Level
                                             </label>
-                                            <select style="color: #495057;" name="subject" id="subject" class="form-select">
-                                                <option selected>Select degree level</option>
+                                            <select style="color: #495057;" name="degreeLevel" id="degreeLevel" class="form-select">
+                                                <option selected>Bachelor</option>
+                                                Bachelor
                                             </select>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="timeAllocation" class="col-form-label" style="font-size: 16px;">
                                                 Time allocation
                                             </label>
-                                            <input type="text" id="timeAllocation" name="timeAllocation" class="form-control"/>
+                                            <input type="text" id="timeAllocation" name="timeAllocation" class="form-control" required/>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="decisionNo" class="col-form-label" style="font-size: 16px;">
                                                 Decision No
                                             </label>
-                                            <input type="text" id="decisionNo" name="decisionNo" class="form-control"/>
+                                            <input type="text" id="decisionNo" name="decisionNo" class="form-control" required/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -101,7 +102,7 @@
                                             <label for="credit" class="col-form-label" style="font-size: 16px;">
                                                 Number of Credit
                                             </label>
-                                            <input type="number" value="1" min="1" max="15" step="1" id="credit" name="credit" class="form-control"/>
+                                            <input type="number" value="1" min="1" max="15" step="1" id="credit" name="credit" class="form-control" required/>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="minScore" class="col-form-label" style="font-size: 16px;">
@@ -113,14 +114,14 @@
                                             <label for="maxScore" class="col-form-label" style="font-size: 16px;">
                                                 Max score
                                             </label>
-                                            <input type="number" value="0" min="0" max="10" step="0.25" id="maxScore" name="maxScore" class="form-control"/>
+                                            <input type="number" min="0" max="10" step="0.25" id="maxScore" name="maxScore" class="form-control" required/>
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="preRequisite" class="col-form-label" style="font-size: 16px;">
                                                 Pre-Requisite
                                             </label>
                                             <select style="color: #495057;" name="preRequisite" id="preRequisite" class="form-select">
-                                                <option selected>Select prerequisite subject</option>
+                                                <option value="none">None</option>
                                             </select>
                                         </div>
                                     </div>
@@ -345,12 +346,25 @@
                 });
 
                 document.getElementById("curriculum").addEventListener("change", async (e) => {
-                    const curId = e.target.value;
-                    const subjects = await getSubjects(curId);
-                    console.log({subjects});
+                    try {
+                        const curId = e.target.value;
+                        const subjects = await getSubjects(curId);
+                        if (!subjects) throw new Error('');
+                        const subjectSelectNode = document.getElementById('subject');
+                        const preRequisiteSelectNode = document.getElementById('preRequisite');
+                        
+                        const htmls = subjects?.data?.map((s) => `
+                              <option value="\${s.id.trim()}">\${s.id.trim()} - \${s.name}</option>
+                        `).join('');
+                        subjectSelectNode.innerHTML = htmls
+                        subjectSelectNode.disabled = false;
+                        preRequisiteSelectNode.innerHTML = '<option value="none">None</option>' + htmls;
+                    } catch (e) {
+                        alert('Cannot load subjects from this curriculum');
+                    }
                 })
 
-                document.getElementById("addSyllabusForm").addEventListener("submit", (e) => {
+                document.getElementById("addSyllabusForm").addEventListener("submit", async (e) => {
                     e.preventDefault();
                     const descriptionInput = document.getElementById("description");
                     descriptionInput.value = JSON.stringify(descriptionEditor.root.innerHTML);
@@ -359,22 +373,31 @@
                     for (const [key, value] of formData) {
                         submitData[key] = value
                     }
-
-                    console.log({submitData})
+                    
+                    console.log({submitData});
+                    try {
+                        const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/add', {
+                            method: 'POST',
+                            body: JSON.stringify(submitData)
+                        });
+                        const responseData = await res.json();
+                        console.log({res})
+                        
+                        if (!res.ok) {
+                            throw new Error(responseData.message)
+                        }
+                        
+                            window.location.href= responseData.redirectUrl;
+                    }
+                    catch (e)  {
+                        console.error("Error is " + e.message)
+                    }
+                    
                 })
 
                 async function getSubjects(curId) {
-                    if (!curId)
-                        throw new Erro("You must choose curriculum first");
-                    try {
-                        const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/get-subjects?curId=' + curId);
-                        if (!res.ok) throw new Error()
-                        const result = await res.json();
-                        return result;
-                    } catch (e) {
-                        alert("Cannot get subject list");
-                    }
-
+                    const promise = fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/get-subjects?curId=' + curId);
+                    return (await promise).json();
                 }
             </script>
     </body>
