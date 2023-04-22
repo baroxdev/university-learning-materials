@@ -25,8 +25,18 @@ public class Syllabus {
     private String updatedAt;
     private boolean isApproved;
     private String subjectID;
+    private boolean active;
 
     public Syllabus() {
+    }
+
+    public Syllabus(String subjectID, int credit, String description, String tasks, int scoringScale, int minScore) {
+        this.subjectID = subjectID;
+        this.credit = credit;
+        this.description = description;
+        this.tasks = tasks;
+        this.scoringScale = scoringScale;
+        this.minScore = minScore;
     }
 
     public Syllabus(int id, String name, int credit, String description, String tasks, int scoringScale, boolean status, int minScore, String createdAt, String updatedAt, boolean isApproved, String subjectID) {
@@ -42,6 +52,22 @@ public class Syllabus {
         this.updatedAt = updatedAt;
         this.isApproved = isApproved;
         this.subjectID = subjectID;
+    }
+
+    public Syllabus(int id, String name, int credit, String description, String tasks, int scoringScale, boolean status, int minScore, String createdAt, String updatedAt, boolean isApproved, String subjectID, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.credit = credit;
+        this.description = description;
+        this.tasks = tasks;
+        this.scoringScale = scoringScale;
+        this.status = status;
+        this.minScore = minScore;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.isApproved = isApproved;
+        this.subjectID = subjectID;
+        this.active = active;
     }
 
     public int getId() {
@@ -69,7 +95,7 @@ public class Syllabus {
     }
 
     public String getDescription() {
-        return description;
+        return description.replaceAll("\"", "");
     }
 
     public void setDescription(String description) {
@@ -139,4 +165,13 @@ public class Syllabus {
     public void setSubjectID(String subjectID) {
         this.subjectID = subjectID;
     }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
 }

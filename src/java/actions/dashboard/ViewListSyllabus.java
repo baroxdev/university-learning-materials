@@ -20,11 +20,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
-public class ViewListSyllabus implements Action{
+public class ViewListSyllabus implements Action {
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             try {
@@ -41,4 +40,5 @@ public class ViewListSyllabus implements Action{
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 }

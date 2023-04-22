@@ -55,8 +55,8 @@
                         </div>
                     </header>
                     <hr />
-                    <main class="row">
-                        <div class="xxx row ms-1">
+                    <main>
+                        <div class="container" style="margin: 0 auto">
                             <legend>Add Curriculum</legend>
                             <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
 
@@ -67,7 +67,7 @@
                                         <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="code" id="code" class="form-control" placeholder="BIT_SE_K16C">
+                                        <input type="text" name="code" id="code" class="form-control">
                                     </div>
                                 </div>
 
@@ -76,7 +76,7 @@
                                         <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-se-k16c">
+                                        <input type="text" name="splug" id="slug" class="form-control" readonly disabled>
                                     </div>
                                 </div>
 
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="englishName" name="englishName" class="form-control"
-                                               placeholder="Bachelor Program of Information Technology, Software Engineering Major">
+                                               >
                                     </div>
                                 </div>
 
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                         <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                               placeholder="Chương trình cử nhân Công nghệ thông tin, chuyên ngành Kỹ thuật phần mềm">
+                                               >
                                     </div>
                                 </div>
 
@@ -135,56 +135,38 @@
                                 <table id="poTbl" style="width: 96%; margin-bottom: 32px; display:none;">
                                     <thead>
                                         <tr>
-                                            <th style="width: 7.6%;">Name</th>
+                                            <th style="width: 10%;">Name</th>
                                             <th style="width: 72%">Description</th>
                                             <th style="width: 20.4%;"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%--<c:forEach var="po" items="${poList}">
-                                            <tr>
-                                                <td style="color: #495057;">${po.name}</td>
-                                                <td>${po.description}</td>
-                                                <td>
-                                                    <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                                    <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                    <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr style="height: 18px;"></tr>
-                                        </c:forEach>--%>
                                     </tbody>
                                 </table>
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="row col-7" id="add-po-form">
-                                        <div class="col-12">
+                                <div class="form-add-po row g-3 align-items-center mt-1">
+                                    <div class="row col-6" id="add-po-form">
+                                        <div>
                                             <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
+                                        <input type="text" id="poName" name="poName" class="form-control">
                                         </div>
-                                        <div class="col-12" style="width: 356px;">
-                                            <input type="text" id="poName" name="poName" class="form-control" placeholder="PO3">
+                                        <div class="">
+                                            <label for="poDescription" class="col-form-label"
+                                                   style="font-size: 16px;">Description</label>
+                                            <textarea id="poDescription" class="form-control" name="poDescription"
+                                                      ></textarea>
                                         </div>
-                                        <div class="row g-3 align-items-center mt-1">
-                                            <div class="col-12">
-                                                <label for="poDescription" class="col-form-label"
-                                                       style="font-size: 16px;">Description</label>
-                                            </div>
-                                            <div class="col-12" style="width: 751px; margin-top: 8px;">
-                                                <textarea id="poDescription" class="form-control" name="poDescription"
-                                                          ></textarea>
-                                            </div>
-                                            <div style="margin-top: 16px;">
+                                         <div style="margin-top: 16px;">
                                                 <button type="button" class="btn btn-primary" id="btn-add-po" name="op" value="add_po">Add</button>
-                                                <button type="button" class="btn btn-secondary" value="">Cancel</button>
+                                                <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
                                             </div>
-                                        </div>
                                     </div>
-                                    <div class="row col-3">
+                                    <div class="row col-4">
                                         <div class="col-12">
                                             <label for="POList" class="col-form-label" style="font-size: 16px;">List
                                                 of PO</label>
                                         </div>
                                         <div class="col-12">
-                                            <label id="POList" class="btn btn-secondary">
+                                            <label id="POList" class="btn btn-outline-secondary">
                                                 <input type="file" />
                                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                             </label>
@@ -260,7 +242,7 @@
                                                 of PLO</label>
                                         </div>
                                         <div class="col-12">
-                                            <label id="PLOList" class="btn btn-secondary">
+                                            <label id="PLOList" class="btn btn-outline-secondary">
                                                 <input type="file" />
                                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                             </label>
@@ -278,7 +260,7 @@
                                     </div>
                                     <div style="margin-top: 16px;">
                                         <button type="button" id="btn-add-plo" class="btn btn-primary" name="op" value="add_plo">Add</button>
-                                        <button type="submit" class="btn btn-secondary" value="">Cancel</button>
+                                        <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
                                     </div>
                                 </div>
                                 <div class="alert alert-danger" id="plo-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
@@ -287,7 +269,12 @@
                                 <!-- Subject -->
                                 <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
                                 <br/>
-                                <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Submit</button>  
+                                <div class="fixed-footer">
+                                    <div class="" style="margin-left: auto">
+                                        <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Publish</button>  
+                                        <button id="btn-save" type="button" class="btn btn-secondary" name="save">Save as Draft</button>  
+                                    </div>
+                                </div>
                                 <div class="alert alert-danger" id="submit-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
                                     PLO_ERROR_MESSAGE
                                 </div>
@@ -299,6 +286,7 @@
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
         <script>
 
             $(document).ready(function () {
@@ -412,7 +400,7 @@
                         } else {
                             var errorShow = $('#po-error');
                             errorShow.css('display', 'block');
-                            errorShow.text("PO Name is invalid, please try again!");
+                            errorShow.text("PO name must follow format POxx, please try again!");
                         }
                     }
                 }
@@ -470,6 +458,13 @@
             });
             document.getElementById("btn-add-po").addEventListener("click", handleAddPO);
             document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
+            document.getElementById("code").addEventListener("change", handleCodeChange);
+
+            function handleCodeChange(e) {
+                const code = e.target.value;
+                const slugInput = document.getElementById("slug").value = slugify(code.toLowerCase().replaceAll('_', '- '));
+            }
+
             function getListPOFromLocalStorage() {
                 let listPO = JSON.parse(localStorage.getItem("list_po"));
                 if (listPO === null) {
@@ -741,9 +736,12 @@
                     };
 
                     try {
-                        await fetch(currAPI, options);
-                        localStorage.clear();
+                        const res = await fetch(currAPI, options);
+                        if (res.ok) {
+                                                    localStorage.clear();
                         window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+
+                        }
                     } catch (e) {
                         console.log('error when add new cur');
                     }

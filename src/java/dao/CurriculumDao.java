@@ -19,6 +19,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import utils.DBUtils;
 import utils.DataUtils;
 
@@ -237,7 +238,7 @@ public class CurriculumDao {
         pre.setString(4, curriculum.getDescription());
         pre.setNString(5, curriculum.getDecisionNo());
         pre.setString(6, null);
-        pre.setBoolean(7, true);
+        pre.setBoolean(7, true); 
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
