@@ -37,10 +37,14 @@
                     </div>
                     <button class="btn-primary btn btn-block col-md-12 col-12 d-flex align-items-center gap-2 justify-content-center" id="btn-continue" type="button" onclick="handleSubmit()">Continue
                     </button>
+                    <div class="alert alert-danger mt-3" id="login-fail-mess" role="alert" style="padding: 6px 12px; display: none;"> 
+                        LOGIN_FAIL_MESSAGE
+                    </div>
                 </form>
+
             </div>
         </div>
-    </div>
+    </body>
     <script>
         window.addEventListener("keydown", function (e) {
             if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
@@ -50,7 +54,7 @@
                 }
             }
         });
-        
+
         function showLoadingOnButton() {
             const buttonNode = document.getElementById("btn-continue");
             buttonNode.disabled = true;
@@ -58,26 +62,28 @@
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Loading...`
         }
-        
+
         function resetSubmitButton() {
             const buttonNode = document.getElementById("btn-continue");
             buttonNode.disabled = false;
             buttonNode.innerHTML = `
                 Continue<i class="fa-solid fa-arrow-right-long"></i>`
         }
-        
+
         function changeSubmitButtonState(state) {
             switch (state) {
-                case "loading": {
+                case "loading":
+                {
                     showLoadingOnButton()
                     break;
                 }
-                default: {
+                default:
+                {
                     resetSubmitButton();
                 }
             }
         }
-        
+
         async function handleSubmit() {
             const usernameNode = document.getElementById("studentID");
             const passwordNode = document.getElementById("password");
@@ -97,16 +103,19 @@
                 method: "POST",
                 body: JSON.stringify(params)
             })
-            
+
             const json = await res.json()
 
             if (json.step == 2) {
                 changeSubmitButtonState("reset")
                 renderPasswordInput();
             }
-            
+
             if (json?.redirectUrl) {
                 document.location.pathname = json?.redirectUrl
+            } else if (json?.message) {
+                showError(json?.message);
+                changeSubmitButtonState("reset");
             }
         }
 
@@ -116,6 +125,11 @@
                     <label class="mb-2" for="paSsword">Pasword</label>
                     <input type="password" name="paSsword" id="password" class="form-control">
                         </div>`;
+        }
+
+        function showError(message) {
+            $('#login-fail-mess').css('display','block');
+            $('#login-fail-mess').text(message);
         }
     </script>
 </body>
