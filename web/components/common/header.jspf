@@ -4,7 +4,7 @@
     <div class="d-flex align-items-center justify-content-between container h-100">
         <a href="<%=request.getContextPath()+"/"%>"><h3>ULM</h3></a>
         <div class="d-flex align-items-center gap-3">
-            <button type="button" class="btn btn-search-trigger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#searchModal">
+            <button type="button" class="btn btn-search-trigger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#searchModal" onclick="showSearchModal()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                 </svg>
@@ -34,7 +34,7 @@
                             </button>
                         </div>
                         <div class="search-box__input">
-                            <input type="text" name="q" placeholder="Search..." class="form-control"/>
+                            <input type="text" name="q" placeholder="Search..." id="search-input" class="form-control"/>
                         </div>
                         <div class="search-box__dropdown">
                             <select class="form-select" id="inputGroupSelect01" name="c">
@@ -44,7 +44,7 @@
                         </div>
                     </form>
                     <div class="search-results">
-                        <div class="search-results__item">
+                        <div class="search-results__item" style="display:none; overflow: auto">
 <!--                            <a class="search-results__item-container" href="${pageContext.request.contextPath}/syllabuses/prf192">
                                 <p class="title">PRF192</p>
                                 <span class="badge text-bg-primary">Syllabus</span>
@@ -53,6 +53,12 @@
                     </div>
                 </div>
                 <script>
+                    
+                    function showSearchModal() {
+                            
+                             setTimeout(function() { $("#search-input").focus(); }, 600);
+                    }
+                    
                     function renderSpinner(location) {
                     location.innerHTML = `
                                 <div class="text-center fluid-center">
@@ -88,6 +94,7 @@
                                     </div>
                                     `, '');
                     resultNode.innerHTML = htmls;
+                    resultNode.style.display = 'block';
                     } else {
                         resultNode.innerHTML = `   <div class="text-center fluid-center">
                                 Not found
