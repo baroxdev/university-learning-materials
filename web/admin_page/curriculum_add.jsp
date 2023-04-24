@@ -143,11 +143,11 @@
                                     <tbody>
                                     </tbody>
                                 </table>
-                                <div class="form-add-po row g-3 align-items-center mt-1">
+                                <div class="form-add row g-3 align-items-center mt-1">
                                     <div class="row col-6" id="add-po-form">
                                         <div>
                                             <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
-                                        <input type="text" id="poName" name="poName" class="form-control">
+                                            <input type="text" id="poName" name="poName" class="form-control">
                                         </div>
                                         <div class="">
                                             <label for="poDescription" class="col-form-label"
@@ -155,10 +155,10 @@
                                             <textarea id="poDescription" class="form-control" name="poDescription"
                                                       ></textarea>
                                         </div>
-                                         <div style="margin-top: 16px;">
-                                                <button type="button" class="btn btn-primary" id="btn-add-po" name="op" value="add_po">Add</button>
-                                                <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
-                                            </div>
+                                        <div style="margin-top: 16px;">
+                                            <button type="button" class="btn btn-primary" id="btn-add-po" name="op" value="add_po">Add</button>
+                                            <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
+                                        </div>
                                     </div>
                                     <div class="row col-4">
                                         <div class="col-12">
@@ -173,8 +173,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
 
                                 <div class="alert alert-danger" id="po-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;">
                                     PO_ERROR_MESSAGE
@@ -211,32 +209,33 @@
                                     </tbody>
                                 </table>
 
-                                <div class="row g-3 align-items-center mt-1" id="add-plo-form"> 
-                                    <div class="row col-4" >
-                                        <div class="col-12">
-                                            <label for="ploName" class="col-form-label" style="font-size: 16px;">Name</label>
+                                <div class="form-add row g-3 align-items-center mt-1"> 
+                                    <div class="row col-6" id="add-plo-form">
+                                        <div class="row" style="padding-right: 0">
+                                            <div class="col-6">
+                                                <label for="ploName" class="col-form-label" style="font-size: 16px;">Name</label>
+                                                <input type="text" id="ploName" name="ploName" class="form-control">
+                                            </div>
+                                            <div class="col-6" style="padding-right: 0">
+                                                <label for="mapToPO" class="col-form-label" style="font-size: 16px;">Map to
+                                                    PO</label>
+                                                <select style="color: #495057;" name="mapToPO" id="mapToPO" class="form-select">
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="col-12" style="width: 356px;">
-                                            <input type="text" id="ploName" name="ploName" class="form-control" placeholder="PLO3">
+                                        <div class="">
+                                            <label for="ploDescription" class="col-form-label"
+                                                   style="font-size: 16px;">Description</label>
+                                            <textarea id="ploDescription" class="form-control" name="ploDescription"
+                                                      ></textarea>
+                                        </div>
+                                        <div style="margin-top: 16px;">
+                                            <button type="button" id="btn-add-plo" class="btn btn-primary" name="op" value="add_plo">Add</button>
+                                            <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
                                         </div>
                                     </div>
+
                                     <div class="row col-4">
-                                        <div class="col-12">
-                                            <label for="mapToPO" class="col-form-label" style="font-size: 16px;">Map to
-                                                PO</label>
-                                        </div>
-                                        <div class="col-12" style="width: 356px;">
-                                            <select style="color: #495057;" name="mapToPO" id="mapToPO" class="form-select">
-                                                <c:if test="${empty poList}" >
-                                                    <option selected>Please select</option>
-                                                </c:if>
-                                                <c:forEach var="po" items="${poList}">
-                                                    <option value="${po.name}" >${po.name}</option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row col-2">
                                         <div class="col-12">
                                             <label for="PLOList" class="col-form-label" style="font-size: 16px;">List
                                                 of PLO</label>
@@ -248,21 +247,8 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="row g-3 align-items-center mt-1">
-                                        <div class="col-12">
-                                            <label for="ploDescription" class="col-form-label"
-                                                   style="font-size: 16px;">Description</label>
-                                        </div>
-                                        <div class="col-12" style="width: 751px; margin-top: 8px;">
-                                            <textarea id="ploDescription" class="form-control" name="ploDescription"
-                                                      ></textarea>
-                                        </div>
-                                    </div>
-                                    <div style="margin-top: 16px;">
-                                        <button type="button" id="btn-add-plo" class="btn btn-primary" name="op" value="add_plo">Add</button>
-                                        <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
-                                    </div>
                                 </div>
+                                    
                                 <div class="alert alert-danger" id="plo-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
                                     PLO_ERROR_MESSAGE
                                 </div>
@@ -299,14 +285,6 @@
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
-//                    var tdList = $(this).closest("tr");
-//                    var tdList = $(this).closest("tr").find("td");
-//                    tdList.each(function (index, element) {
-//                        if (index != tdList.length - 1) {
-//                            $(this).attr("contenteditable", "true");
-//                        }
-//                    });
-
                     var row = $(this).closest('tr');
                     var form = $('<tr>');
                     var tdList = row.find('td');
@@ -331,23 +309,11 @@
                     });
                     form.append('</tr>');
                     row.replaceWith(form);
-
-//                    $(this).eq(0).attr("name", "saveBtn");
-//                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-//                    $(this).closest("tr").find("#btn-delete-po").eq(0).css("display", "none");
-//                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
                 });
 
                 $("#ploTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
-
-//                    var tdList = $(this).closest("tr").find("td");
-//                    tdList.each(function (index, element) {
-//                        if (index != tdList.length - 1) {
-//                            $(this).attr("contenteditable", "true");
-//                        }
-//                    });
 
                     var row = $(this).closest('tr');
                     var form = $('<tr>');
@@ -395,26 +361,47 @@
                     } else {
                         if (tblIDCheck.includes('plo')) {
                             var errorShow = $('#plo-error');
-                            errorShow.css('display', 'block');
-                            errorShow.text("PLO Name is invalid, please try again!");
+                            if (newName == '') {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PLO name cannot be left blank, please try again!");
+                            } else {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PLO name must follow format PLOxx, please try again!");
+                            }
                         } else {
                             var errorShow = $('#po-error');
-                            errorShow.css('display', 'block');
-                            errorShow.text("PO name must follow format POxx, please try again!");
+                            if (newName == '') {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PO name cannot be left blank, please try again!");
+                            } else {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PO name must follow format POxx, please try again!");
+                            }
                         }
                     }
                 }
                 );
                 $("table").on("click", "[name='cancelBtn']", function () {
                     var str = $(this).closest('tr').find('td').find('input').val();
+                    var errorPOShow = $('#po-error');
+                    var errorPLOShow = $('#plo-error');
+                    let listPO = getListPOFromLocalStorage();
+                    let listPLO = getListPLOFromLocalStorage();
+
                     if (str.includes('PO')) {
-                        let listPO = getListPOFromLocalStorage();
+                        errorPOShow.css('display', 'none');
                         renderListPO(listPO);
+                        updatePLOMapPOOptions(listPO);
+                    } else if (str.includes('PLO')) {
+                        errorPLOShow.css('display', 'none');
+                        renderListPLO(listPLO);
                     } else {
-                        let listPLO = getListPLOFromLocalStorage();
+                        errorPOShow.css('display', 'none');
+                        errorPLOShow.css('display', 'none');
+                        renderListPO(listPO);
                         renderListPLO(listPLO);
                     }
-                    updatePLOMapPOOptions(listPO);
+
                 });
                 $('table').on("click", "#btn-delete-po", function () {
                     const addPOForm = $('#add-po-form');
@@ -488,6 +475,7 @@
                 const namePONode = addPOForm.querySelector("#poName");
                 const descriptionPONode = addPOForm.querySelector("#poDescription");
                 const name = namePONode.value;
+                let listPO = getListPOFromLocalStorage();
                 var errorShow = $('#po-error');
                 if (!namePONode) {
                     throw new Error("Missing value");
@@ -495,23 +483,34 @@
 
                 if (name == '') {
                     errorShow.css('display', 'block');
-                    errorShow.text("Name cannot be left blank, please try again!");
+                    errorShow.text("PO name cannot be left blank, please try again!");
                 } else if (!name.includes('PO')) {
                     errorShow.css('display', 'block');
-                    errorShow.text("PO Name is invalid, please try again!");
+                    errorShow.text("PO name must follow format POxx, please try again!");
                 } else {
-                    errorShow.css('display', 'none');
-                    let listPO = getListPOFromLocalStorage();
-                    const description = descriptionPONode.value;
-                    listPO.push({
-                        name: name,
-                        description: description
-                    });
-                    console.log({name, description});
-                    renderListPO(listPO, addPOForm);
-                    localStorage.setItem("list_po", JSON.stringify(listPO));
-                    updatePLOMapPOOptions(listPO);
-                    resetAddPOForm(addPOForm);
+                    var poRepeatCheck = 0;
+                    if (listPO.length > 0) {
+                        listPO.find(function (poElement) {
+                            if (poElement.name == name) {
+                                poRepeatCheck = 1;
+                            }
+                        });
+                    }
+                    if (poRepeatCheck == 1) {
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PO name was created, please try another!");
+                    } else {
+                        errorShow.css('display', 'none');
+                        const description = descriptionPONode.value;
+                        listPO.push({
+                            name: name,
+                            description: description
+                        });
+                        renderListPO(listPO, addPOForm);
+                        localStorage.setItem("list_po", JSON.stringify(listPO));
+                        updatePLOMapPOOptions(listPO);
+                        resetAddPOForm(addPOForm);
+                    }
                 }
             }
 
@@ -523,6 +522,7 @@
                 const name = namePLONode.value;
                 const description = descriptionPLONode.value;
                 const mapToPO = mapToPONode.text();
+                let listPLO = getListPLOFromLocalStorage();
                 var errorShow = $('#plo-error');
                 if (!namePLONode || !descriptionPLONode || !mapToPONode) {
                     throw new Error("Missing value");
@@ -530,48 +530,88 @@
 
                 if (name == '') {
                     errorShow.css('display', 'block');
-                    errorShow.text("Name cannot be left blank, please try again!");
+                    errorShow.text("PLO name cannot be left blank, please try again!");
                 } else if (!name.includes('PLO')) {
                     errorShow.css('display', 'block');
-                    errorShow.text("PLO Name is invalid, please try again!");
+                    errorShow.text("PLO name must follow format PLOxx, please try again!");
                 } else if (mapToPO == '') {
                     errorShow.css('display', 'block');
                     errorShow.text("Please create a new PO before!");
                 } else {
-                    errorShow.css('display', 'none');
-                    let listPLO = getListPLOFromLocalStorage();
-                    listPLO.push({
-                        name: name,
-                        description: description,
-                        mapToPO: mapToPO
-                    })
-                    console.log({name, description, mapToPO});
-                    renderListPLO(listPLO, addPLOForm);
-                    localStorage.setItem("list_plo", JSON.stringify(listPLO));
-                    resetAddPLOForm(addPLOForm);
+                    var ploRepeatCheck = 0;
+                    if (listPLO.length > 0) {
+                        listPLO.find(function (ploElement) {
+                            if (ploElement.name == name) {
+                                ploRepeatCheck = 1;
+                            }
+                        });
+                    }
+                    if (ploRepeatCheck == 1) {
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PLO name was created, please try another!");
+                    } else {
+                        errorShow.css('display', 'none');
+                        let listPLO = getListPLOFromLocalStorage();
+                        listPLO.push({
+                            name: name,
+                            description: description,
+                            mapToPO: mapToPO
+                        })
+                        renderListPLO(listPLO, addPLOForm);
+                        localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                        resetAddPLOForm(addPLOForm);
+                    }
                 }
             }
 
             function handleEditPO(oldName, newName, newDescription) {
                 const addPOForm = document.getElementById('add-po-form');
                 let listPO = getListPOFromLocalStorage();
-                let poElement = listPO.find(po => po.name === oldName);
-                poElement.name = newName;
-                poElement.description = newDescription;
-                renderListPO(listPO, addPOForm);
-                localStorage.setItem("list_po", JSON.stringify(listPO));
-                updatePLOMapPOOptions(listPO)
+                var errorShow = $('#po-error');
+                var poRepeatCheck = 0;
+                listPO.find(function (poElement) {
+                    if (poElement.name == newName && poElement.name != oldName) {
+                        poRepeatCheck = 1;
+                    }
+                });
+                if (poRepeatCheck == 1) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("This PO name was created, please try another!");
+                    return;
+                } else {
+                    errorShow.css('display', 'none');
+                    let poElement = listPO.find(po => po.name === oldName);
+                    poElement.name = newName;
+                    poElement.description = newDescription;
+                    renderListPO(listPO, addPOForm);
+                    localStorage.setItem("list_po", JSON.stringify(listPO));
+                    updatePLOMapPOOptions(listPO)
+                }
             }
 
             function handleEditPLO(oldName, newName, newDescription, newMapToPO) {
                 const addPLOForm = document.getElementById('add-plo-form');
+                var errorShow = $('#plo-error');
                 let listPLO = getListPLOFromLocalStorage();
-                let ploElement = listPLO.find(plo => plo.name === oldName);
-                ploElement.name = newName;
-                ploElement.description = newDescription;
-                ploElement.mapToPO = newMapToPO;
-                renderListPLO(listPLO, addPLOForm);
-                localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                var ploRepeatCheck = 0;
+                listPLO.find(function (ploElement) {
+                    if (ploElement.name == newName && ploElement.name != oldName) {
+                        ploRepeatCheck = 1;
+                    }
+                });
+                if (ploRepeatCheck == 1) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("This PLO name was created, please try another!");
+                    return;
+                } else {
+                    errorShow.css('display', 'none');
+                    let ploElement = listPLO.find(plo => plo.name === oldName);
+                    ploElement.name = newName;
+                    ploElement.description = newDescription;
+                    ploElement.mapToPO = newMapToPO;
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                }
             }
 
             function updatePLOMapPOOptions(listPO) {
@@ -738,9 +778,8 @@
                     try {
                         const res = await fetch(currAPI, options);
                         if (res.ok) {
-                                                    localStorage.clear();
-                        window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
-
+                            localStorage.clear();
+                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
                         }
                     } catch (e) {
                         console.log('error when add new cur');
