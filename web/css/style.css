@@ -65,13 +65,13 @@ label, a {
     line-height: 150%;
 }
 
-.show {
+/*.show {
     float: right;
     margin-right: 13px;
     margin-top: -25px;
     position: relative;
     z-index: 2;
-}
+}*/
 
 header {
     height: 50px;

@@ -32,13 +32,10 @@
                                 <input type="checkbox" />
                             </th>
                             <th scope="col">ID</th>
+                            <th scope="col">Subject Code</th>
                             <th scope="col">Name</th>
                             <th scope="col">Credit</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Task</th>
-                            <th scope="col">ScoringScale</th>
                             <th scope="col">Status</th>
-                            <th scope="col">MinScore</th>
                             <th scope="col">CreatedAt</th>
                             <th scope="col">UpdatedAt</th>
                             <th scope="col">isApproved</th>
@@ -47,26 +44,23 @@
                     </thead>
                     <tbody>
                         <c:forEach var="syl" items="<%= lsSyllabus%>">
-                                <td>${syl.id}</td>
-                                <td>${syl.name}</td>
-                                <td>${syl.credit}</td>
-                                <td>${syl.description}</td>
-                                <td>${syl.tasks}</td>
-                                <td>${syl.scoringScale}</td>
-                                <td>${syl.status}</td>
-                                <td>${syl.minScore}</td>
-                                <td>${syl.createdAt}</td>
-                                <td>${syl.updatedAt}</td>
-                                <td>${syl.isApproved}</td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <td>${syl.id}</td>
+                        <td>${syl.subjectID}</td>
+                        <td>${syl.name}</td>
+                        <td>${syl.credit}</td>
+                        <td>${syl.status}</td>
+                        <td>${syl.createdAt}</td>
+                        <td>${syl.updatedAt}</td>
+                        <td>${syl.isApproved}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
+                            </div>
+                        </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
