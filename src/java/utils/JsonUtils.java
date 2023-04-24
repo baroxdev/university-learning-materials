@@ -7,6 +7,7 @@ package utils;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 /**
@@ -19,6 +20,10 @@ public class JsonUtils {
         String jsonString = request.getReader().lines().collect(Collectors.joining());
         JSONObject json = new JSONObject(jsonString);
         return json;
+    }
+
+    public static void setResponseJson(JSONObject json, HttpServletResponse response) throws IOException {
+        response.getWriter().write(json.toString());
     }
 
     public static JSONObject generateErrorJson(String message) {
