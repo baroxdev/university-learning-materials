@@ -60,7 +60,8 @@
                                         </h2>
                                         <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                                <div class="row">
+                                                <div id="basic-information-form">
+                                                    <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group mb-3">
                                                             <label for="curriculum" class="col-form-label" style="font-size: 16px;">
@@ -152,6 +153,7 @@
                                                         <label for="tools" class="col-form-label" style="font-size: 16px;">Tools</label>
                                                         <textarea class="form-control" name="tools"></textarea>
                                                     </div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -418,8 +420,8 @@
                                 <textarea id="cloDescription" class="form-control" name="cloDescription">
                                 </textarea>
                                 <div class="mt-4">
-                                    <button type="button" id="btn-add-plo" class="btn btn-primary" name="op" value="add_plo">Save</button>
-                                    <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
+                                    <button type="button" id="btn-update-clo" class="btn btn-primary">Save</button>
+                                    <button type="button" id="btn-cancel-update" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas" aria-label="Cancel">Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -434,52 +436,37 @@
                 theme: 'snow'
                 });
                 $('#btn-add-plo').on('click', handleAddCLO)
-                        $(document).ready(() => {
-                const listCLO = cloUtils.getListFromLocalStorage();
-                renderListCLO(listCLO)
+                
+                $(document).ready(() => {
+                    const listCLO = cloUtils.getListFromLocalStorage();
+                    const myForm = document.querySelector("#basic-information-form");
+                    renderListCLO(listCLO)
+                    initForm(myForm);
+                    const curID = myForm.querySelector('select#curriculum')?.value
+                    const loadedDataLocalStorage = JSON.parse(localStorage.getItem('syllabus.loaded_data'));
+                    handleLoadData(null, curID, loadedDataLocalStorage)
                 })
 
-                        $("#cloTbl").on("click", "[name='editBtn']", renderUpdateCLOForm);
+                $("#cloTbl").on("click", "[name='editBtn']", renderUpdateCLOForm);
                 $("#cloTbl").on("click", "[name='saveBtn']", handleSaveEdit);
-                document.getElementById("curriculum").addEventListener("change", async (e) => {
-                try {
-                const curId = e.target.value;
-                const subjects = await getSubjects(curId);
-                if (!subjects) throw new Error('');
-                const subjectSelectNode = document.getElementById('subject');
-                const ploSelectNode = document.querySelector('select#mapToPLO');
-                const preRequisiteSelectNode = document.getElementById('preRequisite');
-                const htmls = subjects?.subjects?.map((s) => `
-                                      <option value="\${s.id.trim()}">\${s.id.trim()} - \${s.name}</option>
-                                `).join('');
-                const ploOptionHtmls = subjects?.list_plo?.map((p) => `
-                                      <option value="\${p.id}"  title="\${p.description}">\${p.name}</option>
-                                `).join('');
-                localStorage.setItem('list_plo_syllabus', JSON.stringify(subjects?.list_plo))
-                        subjectSelectNode.innerHTML = htmls
-                        subjectSelectNode.disabled = false;
-                ploSelectNode.innerHTML = '<option value="none">None</option>' + ploOptionHtmls;
-                ploSelectNode.disabled = false;
-                preRequisiteSelectNode.innerHTML = '<option value="none">None</option>' + htmls;
-                } catch (e) {
-                console.error(e);
-                alert('Cannot load subjects from this curriculum');
-                }
-                })
+                $("#btn-update-clo").on("click", handleUpdateCLO);
+                
+                document.getElementById("curriculum").addEventListener("change", e => handleLoadData(e));
 
-                        document.getElementById("addSyllabusForm").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                const descriptionInput = document.getElementById("description");
-                const materialInput = document.getElementById("material-input-file");
-                descriptionInput.value = JSON.stringify(descriptionEditor.root.innerHTML);
-                const formData = new FormData(document.forms.addSyllabusForm);
-                formData.append('material', materialInput.files[0]);
-                const submitData = {}
-                for (const [key, value] of formData) {
-                submitData[key] = value
-                }
+                document.getElementById("addSyllabusForm").addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const descriptionInput = document.getElementById("description");
+                    const materialInput = document.getElementById("material-input-file");
+                    descriptionInput.value = JSON.stringify(descriptionEditor.root.innerHTML);
+                    const formData = new FormData(document.forms.addSyllabusForm);
+                    formData.append('material', materialInput.files[0]);
+                    const submitData = {}
+                    for (const [key, value] of formData) {
+                    submitData[key] = value
+                    }
 
-                console.log({submitData});
+
+                    console.log({submitData});
 //                    try {
 //                        const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/add', {
 //                            method: 'POST',
@@ -498,6 +485,59 @@
 //                        console.error("Error is " + e.message)
 //                    }
                 })
+                
+                function initForm(formNode) {
+                    // Retrieve saved form data from localStorage
+                    const formKey = 'syllabus.'+ formNode.id
+                    const formData = JSON.parse(localStorage.getItem(formKey));
+
+                    // Loop through form input elements
+                    const formInputs = formNode.querySelectorAll("input, select, textarea");
+                    formInputs.forEach((input) => {
+                      // Load saved value for input if available
+                      if (formData && formData[input.name]) {
+                        input.value = formData[input.name];
+                      }
+
+                      // Listen for changes to input and save to localStorage
+                      input.addEventListener("change", () => {
+                        const inputValues = {};
+                        formInputs.forEach((input) => {
+                          inputValues[input.name] = input?.value;
+                        });
+                        localStorage.setItem(formKey, JSON.stringify(inputValues));
+                      });
+                    });
+                  }
+                
+                 async function handleLoadData(e, initialCurId, loadedData) {
+                    try {
+                        const curId = e != null ? e?.target?.value : initialCurId;
+                        if (!curId) throw new Error('Invalid Curriculum ID.');
+                        const data = loadedData ? loadedData : await getSubjects(curId);
+                        if (!data) throw new Error('');
+                        const subjectSelectNode = document.getElementById('subject');
+                        const ploSelectNode = document.querySelector('select#mapToPLO');
+                        const preRequisiteSelectNode = document.getElementById('preRequisite');
+                        const htmls = data?.subjects?.map((s) => `
+                                              <option value="\${s.id.trim()}">\${s.id.trim()} - \${s.name}</option>
+                                        `).join('');
+                        const ploOptionHtmls = data?.list_plo?.map((p) => `
+                                              <option value="\${p.id}"  title="\${p.description}">\${p.name}</option>
+                                        `).join('');
+                        localStorage.setItem('syllabus.list_plo', JSON.stringify(data?.list_plo))
+                        localStorage.setItem('syllabus.loaded_data', JSON.stringify(data))
+                        
+                        subjectSelectNode.innerHTML = htmls
+                        subjectSelectNode.disabled = false;
+                        ploSelectNode.innerHTML = '<option value="none">None</option>' + ploOptionHtmls;
+                        ploSelectNode.disabled = false;
+                        preRequisiteSelectNode.innerHTML = '<option value="none">None</option>' + htmls;
+                    } catch (e) {
+                        console.error(e);
+                        alert('Cannot load subjects from this curriculum');
+                    }
+                }
 
                         async function getSubjects(curId) {
                         const promise = fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/get-subjects?curId=' + curId);
@@ -505,71 +545,117 @@
                         }
 
                 function getListPLOFromLocalSyllabus() {
-                return JSON.parse(localStorage.getItem('list_plo_syllabus')) || [];
+                    return JSON.parse(localStorage.getItem('syllabus.list_plo')) || [];
                 }
 
                 const cloUtils = {
-                getListFromLocalStorage: () => {
-                return JSON.parse(localStorage.getItem("list_clo")) || [];
-                }
+                    getListFromLocalStorage: () => {
+                        return JSON.parse(localStorage.getItem("syllabus.list_clo")) || [];
+                    },
+                    saveToLocalStorage: (newList) => {
+                        localStorage.setItem('syllabus.list_clo', JSON.stringify(newList));
+                    }
                 }
 
                 function showError(message) {
-                const errorShowNode = $('#clo-error');
-                errorShowNode.css('display', 'block')
+                    const errorShowNode = $('#clo-error');
+                    errorShowNode.css('display', 'block')
                         errorShowNode.text(message);
                 }
 
                 function hideError() {
-                const errorShowNode = $('#clo-error');
-                errorShowNode.css('display', 'none');
+                    const errorShowNode = $('#clo-error');
+                    errorShowNode.css('display', 'none');
+                }
+                
+                function handleUpdateCLO() {
+                    const editForm = document.getElementById("edit-clo-form");
+                    const index = editForm.querySelector("#cloID").value
+                    const name = editForm.querySelector("#cloName").value
+                    const description = editForm.querySelector("#cloDescription").value
+                    const ploValue = editForm.querySelector("select#mapToPLO").value
+                    const ploName = $("#edit-clo-form select#mapToPLO option:selected").text();
+                    const listCLO = cloUtils.getListFromLocalStorage();
+                    
+                    try {
+                        validateCLO('edit', listCLO, {currentIndex: index, name, description, ploName});
+                        
+                        const newCLO = {
+                            index,
+                            name,
+                            description,
+                            plo: {
+                                name: ploName,
+                                value: ploValue
+                            }
+                        }
+                        listCLO[index] = newCLO
+                        cloUtils.saveToLocalStorage(listCLO);
+                        renderListCLO(listCLO)
+                        $('#btn-cancel-update').click();
+                    } catch (e) {
+                        showError(e.message);
+                    }
+                }
+                
+                function validateCLO(action = 'add', list, inputs) {
+                    const {name, description, ploName, currentIndex} = inputs;
+                    
+                    if (!name || name.trim() === '') {
+                        throw new Error("CLO name cannot be left blank, please try again!");
+                    }
+                    if (!name.startsWith('CLO')) {
+                        throw new Error("CLO name must follow format CLOxx, please try again!");
+                    }
+
+                    if (ploName.trim() == '') {
+                        throw new Error("You must select PLO. Remember to select Curriculum first.!");
+                    }
+                    
+                    let isExist = list.findIndex((c, index) => action === 'add' && c.name === name && index != Number.parseInt(currentIndex || -1));
+                    if (isExist != -1) {
+                        throw new Error(name + " is exist, please try another!");
+                    }
+                    
+                    return true;
                 }
 
                 function handleAddCLO() {
-                const addCLOForm = document.getElementById('add-clo-form');
-                const nameCLONode = addCLOForm.querySelector("#cloName");
-                const descriptionCLONode = addCLOForm.querySelector("#cloDescription");
-                const mapToPLONode = $("select#mapToPLO option:selected");
-                const mapToPLOValue = mapToPLONode.text();
-                console.log({mapToPLOValue})
-                        const name = nameCLONode.value;
-                let listCLO = cloUtils.getListFromLocalStorage();
-                if (!nameCLONode || !descriptionCLONode || !mapToPLONode) {
-                showError("Missing value");
-                throw new Error("Missing value");
-                }
+                    const addCLOForm = document.getElementById('add-clo-form');
+                    const nameCLONode = addCLOForm.querySelector("#cloName");
+                    const descriptionCLONode = addCLOForm.querySelector("#cloDescription");
+                    const mapToPLONode = $("#add-clo-form select#mapToPLO option:selected");
+                    
+                    const name = nameCLONode.value;
+                    const description = descriptionCLONode.value;
+                    const ploName = mapToPLONode.text();
+                    console.log({ploName})
+                    const ploValue = $("select#mapToPLO").val();
 
-                if (!name || name.trim() == '') {
-
-                showError("CLO name cannot be left blank, please try again!");
-                } else if (!name.startsWith('CLO')) {
-                showError("CLO name must follow format CLOxx, please try again!");
-                } else if (mapToPLOValue == '') {
-                showError("You must select PLO. Remember to select Curriculum first.!");
-                } else {
-                let isExist = 0;
-                if (listCLO.length > 0) {
-                listCLO.find(function (clo) {
-                if (clo?.name === name) {
-                isExist = 1;
-                }
-                });
-                }
-                if (isExist == 1) {
-                showError(name + " is exist, please try another!");
-                } else {
-                hideError()
-                        const description = descriptionCLONode.value;
-                listCLO.push({
-                name: name,
-                        description: description,
-                        mapToPLO: mapToPLOValue
-                });
-                renderListCLO(listCLO);
-                localStorage.setItem("list_clo", JSON.stringify(listCLO));
-                resetForm(addCLOForm);
-                }
-                }
+                    let listCLO = cloUtils.getListFromLocalStorage();
+                    if (!nameCLONode || !descriptionCLONode || !mapToPLONode) {
+                        showError("Missing value");
+                        throw new Error("Missing value");
+                    }
+              
+                    try {
+                        validateCLO('add', listCLO, {name, description, ploName })
+                        listCLO.push({
+                            name: name,
+                            description: description,
+                            plo: {
+                                name: ploName,
+                                value: ploValue
+                            }
+                        });
+                        renderListCLO(listCLO);
+                        localStorage.setItem("syllabus.list_clo", JSON.stringify(listCLO));
+                        resetForm(addCLOForm);
+                    }catch (e) {
+                        showError(e.message);
+                    }
+                    
+                    
                 }
 
                 function renderListCLO(listCLO) {
@@ -579,7 +665,7 @@
                      <tr data-index="\${index}">
                         <td scope="row" style="color: #495057;">\${clo?.name}</td>
                         <td>\${clo?.description}</td>
-                        <td>\${clo?.mapToPLO}</td>
+                        <td>\${clo?.plo?.name}</td>
                         <td>
                             <button name="editBtn" type="button" style="border: none; background: none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i class="fa-solid fa-pencil"></i></button>
                             <button name="cancelBtn" type="button" style="border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
@@ -661,8 +747,6 @@
                 formElements[i].checked = formElements[i].defaultChecked;
                 }
                 }
-
-                form.reset();
                 }
             </script>
     </body>
