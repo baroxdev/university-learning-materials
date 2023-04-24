@@ -19,7 +19,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
@@ -68,17 +67,18 @@ public class AddNewCurriculum implements Action {
                 //tạo liên kết với po, plo...
                 //thêm vào db
                 CurriculumDao.add(cur, poList, ploList);
-
-            } catch (InvalidInputException | IllegalArgumentException ie) {
-                ie.printStackTrace();
-                request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
+                //if no error
+                request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
+            } catch (CurriculumException ce) {
+                JSONObject json = new JSONObject();
+                json.put(AppConfig.ERROR_MESSAGE, ce.getMessage());
+                System.out.println("json: " + json.toString());
+                JsonUtils.setResponseJson(json, response);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
-                request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
-            } finally {
-                request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
             }
+            request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
         }
     }
 
@@ -104,5 +104,17 @@ public class AddNewCurriculum implements Action {
             }
         }
         return list;
+    }
+
+    public void doSomething() {
+//        InputStream inp = new FileInputStream("workbook.xlsx");
+//        Workbook wb = WorkbookFactory.create(inp);
+//        Sheet sheet = wb.getSheetAt(0);
+//        for (Row row : sheet) {
+//            for (Cell cell : row) {
+//                System.out.print(cell.getStringCellValue() + " ");
+//            }
+//            System.out.println();
+//        }
     }
 }
