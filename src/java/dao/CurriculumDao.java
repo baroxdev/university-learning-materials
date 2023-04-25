@@ -17,8 +17,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import utils.DBUtils;
 import utils.DataUtils;
@@ -191,6 +191,9 @@ public class CurriculumDao {
 
             curId = add(con, curriculum);
 
+            poList.sort(Comparator.comparing(po -> po.getName()));
+            ploList.sort(Comparator.comparing(plo -> plo.getName()));
+
             for (ProgramObjective po : poList) {
                 poId = PODao.add(con, po);
                 po.setId(poId);
@@ -238,7 +241,7 @@ public class CurriculumDao {
         pre.setString(4, curriculum.getDescription());
         pre.setNString(5, curriculum.getDecisionNo());
         pre.setString(6, null);
-        pre.setBoolean(7, true); 
+        pre.setBoolean(7, true);
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
@@ -346,7 +349,6 @@ public class CurriculumDao {
 //            }
 //        }
 //    }
-
     //Update existing curiculum in db
     public static void update(Connection con, Curriculum curriculum) throws Exception {
         String query = "update Curriculum set code = ?, viName = ?, name = ?, description = ?, decisionNo = ?, active = ?, updatedAt = cast(GETDATE() as date) where id = ?";
@@ -372,7 +374,7 @@ public class CurriculumDao {
         PreparedStatement pre = con.prepareStatement(query);
         pre.setString(1, curCode);
         ResultSet rs = pre.executeQuery();
-        boolean isExist = rs.wasNull();
+        boolean isExist = rs.next();
 
         con.close();
         return isExist;
