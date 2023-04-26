@@ -8,8 +8,10 @@ package actions.dashboard;
 import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
+import dao.PLODao;
 import dao.SubjectDao;
 import entities.Curriculum;
+import entities.ProgramLearningObjective;
 import entities.Subject;
 import entities.Syllabus;
 import java.io.IOException;
@@ -36,9 +38,11 @@ public class GetListSubjectInSyllabus implements Action {
             try {
                 String curId = request.getParameter("curId");
                 ArrayList<Subject> lsSubjects = (ArrayList<Subject>) SubjectDao.readSubjectList(curId);
-
+                ArrayList<ProgramLearningObjective> lsPLO = (ArrayList<ProgramLearningObjective>) PLODao.readPLOList(curId);
                 JSONArray results = new JSONArray(lsSubjects);
-                resJson.put("data", results);
+                JSONArray listPLOJSON = new JSONArray(lsPLO);
+                resJson.put("subjects", results);
+                resJson.put("list_plo",listPLOJSON);
                 ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, resJson);
             } catch (Exception e) {
                 e.printStackTrace();
