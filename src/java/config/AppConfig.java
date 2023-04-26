@@ -16,7 +16,8 @@ public class AppConfig {
 //    AUTHENTICATION
     public final static String AUTH_USER = "USER";
     public final static String AUTH_FORCE_UPDATE_PASSWORD = "FORCE_UPDATE_PASSWORD";
-    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register", "/Test"));
+    public final static String AUTH_PERMITTED_PATHS = "PERMITTED_PATHS";
+    public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register", "/Test", "/logout"));
 
 //    REQUISITE
     public final static String REQUISITE_ITEM = "REQUISITE";

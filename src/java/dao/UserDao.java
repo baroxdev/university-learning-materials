@@ -37,7 +37,7 @@ public class UserDao {
                     user.setFullname(rs.getString("fullname"));
                     user.setEmail(rs.getString("email"));
                     user.setEducationlevel(rs.getString("educationlevel"));
-                    user.setRoleid(rs.getString("roleid"));
+                    user.setRoleid(rs.getString("roleID"));
                 }
                 con.close();
             }
