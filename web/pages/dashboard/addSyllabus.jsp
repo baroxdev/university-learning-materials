@@ -419,6 +419,9 @@
                                        style="font-size: 16px;">Description</label>
                                 <textarea id="cloDescription" class="form-control" name="cloDescription">
                                 </textarea>
+                                 <div class="alert alert-danger" id="clo-update-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                                    CLO_ERROR_MESSAGE
+                                                </div>
                                 <div class="mt-4">
                                     <button type="button" id="btn-update-clo" class="btn btn-primary">Save</button>
                                     <button type="button" id="btn-cancel-update" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas" aria-label="Cancel">Cancel</button>
@@ -435,8 +438,8 @@
                 const descriptionEditor = new Quill('#descriptionEditor', {
                 theme: 'snow'
                 });
-                $('#btn-add-plo').on('click', handleAddCLO)
                 
+                $('#btn-add-plo').on('click', handleAddCLO)
                 $(document).ready(() => {
                     const listCLO = cloUtils.getListFromLocalStorage();
                     const myForm = document.querySelector("#basic-information-form");
