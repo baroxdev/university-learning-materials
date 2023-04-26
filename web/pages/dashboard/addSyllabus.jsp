@@ -11,7 +11,7 @@
         <%@include file="/components/common/head.jspf" %>
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
+        <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <title>Add Syllabus</title>
     </head>
     <body>
@@ -256,22 +256,22 @@
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
-                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
-                                                            <i class="fa-regular fa-square-plus"></i> Add</button>
+                                                        <!--                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
+                                                                                                                    <i class="fa-regular fa-square-plus"></i> Add</button>-->
                                                         <label id="" class="btn btn-secondary" style="background: #6C757D;">
-                                                            <input type="file" />
+                                                            <input type="file" id="file-input" accept=".xlsx">
                                                             <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="dashboard-container">
+                                                <div class="container-x1">
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">
+                                                                <th style="width: 30px;" scope="col">
                                                                     <input type="checkbox" />
                                                                 </th>
-                                                                <th scope="col">No</th>
+                                                                <th style="width: 50px;" scope="col">No</th>
                                                                 <th scope="col">Topic</th>
                                                                 <th scope="col">Learning Type</th>
                                                                 <th scope="col">LO</th>
@@ -281,7 +281,7 @@
                                                                 <th scope="col">Edit</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="excel-table-sessions">
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -298,22 +298,22 @@
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
-                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
-                                                            <i class="fa-regular fa-square-plus"></i> Add</button>
+                                                        <!--                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
+                                                                                                                    <i class="fa-regular fa-square-plus"></i> Add</button>-->
                                                         <label id="" class="btn btn-secondary" style="background: #6C757D;">
-                                                            <input type="file" />
+                                                            <input type="file" id="file-input2" accept=".xlsx"/>
                                                             <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="dashboard-container">
-                                                    <table class="table">
+                                                <div class="container-x1">
+                                                    <table class="table table-striped">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">
+                                                                <th style="width: 30px;" scope="col">
                                                                     <input type="checkbox" />
                                                                 </th>
-                                                                <th scope="col">No</th>
+                                                                <th style="width: 50px;" scope="col">No</th>
                                                                 <th scope="col">Category</th>
                                                                 <th scope="col">Type</th>
                                                                 <th scope="col">Part</th>
@@ -323,7 +323,7 @@
                                                                 <th scope="col">Edit</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="excel-table-questions">
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -340,22 +340,22 @@
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
-                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
-                                                            <i class="fa-regular fa-square-plus"></i> Add</button>
+                                                        <!--                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
+                                                                                                                    <i class="fa-regular fa-square-plus"></i> Add</button>-->
                                                         <label id="" class="btn btn-secondary" style="background: #6C757D;">
-                                                            <input type="file" />
+                                                            <input type="file" id="file-input3"/>
                                                             <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="dashboard-container">
+                                                <div class="container-x1">
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">
+                                                                <th style="width: 30px;" scope="col">
                                                                     <input type="checkbox" />
                                                                 </th>
-                                                                <th scope="col">No</th>
+                                                                <th style="width: 50px;" scope="col">No</th>
                                                                 <th scope="col">Category</th>
                                                                 <th scope="col">Type</th>
                                                                 <th scope="col">Part</th>
@@ -365,7 +365,7 @@
                                                                 <th scope="col">Edit</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="excel-table-assessments">
 
                                                         </tbody>
                                                     </table>
@@ -678,22 +678,22 @@
                 }
 
                 function renderUpdateCLOForm() {
-                    
-                    const oldName = $(this).closest("tr").find("td").eq(0).text();
-                    const oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                    const oldMapToPLO = $(this).closest("tr").find("td").eq(2).text();
-                    const index = $(this).closest("tr").data("index");
-                    const editForm = document.getElementById('edit-clo-form');
-                    console.log({index, editForm})
-                    const idInput = editForm.querySelector("#cloID")
-                    const nameInput = editForm.querySelector("#cloName")
-                    const selectPLOInput = editForm.querySelector("select#mapToPLO");
-                    const cloDescriptionInput = editForm.querySelector("#cloDescription");
-                    const lisPLO = getListPLOFromLocalSyllabus();
-                    idInput.value = index;
-                    nameInput.value = oldName;
-                    cloDescriptionInput.value = oldDescription;
-                    const  optionsHtmls = lisPLO.map((p, i) => `
+
+                const oldName = $(this).closest("tr").find("td").eq(0).text();
+                const oldDescription = $(this).closest("tr").find("td").eq(1).text();
+                const oldMapToPLO = $(this).closest("tr").find("td").eq(2).text();
+                const index = $(this).closest("tr").data("index");
+                const editForm = document.getElementById('edit-clo-form');
+                console.log({index, editForm})
+                        const idInput = editForm.querySelector("#cloID")
+                        const nameInput = editForm.querySelector("#cloName")
+                        const selectPLOInput = editForm.querySelector("select#mapToPLO");
+                const cloDescriptionInput = editForm.querySelector("#cloDescription");
+                const lisPLO = getListPLOFromLocalSyllabus();
+                idInput.value = index;
+                nameInput.value = oldName;
+                cloDescriptionInput.value = oldDescription;
+                const  optionsHtmls = lisPLO.map((p, i) => `
                         <option value="\${p.id}"  title="\${p.description}" \${p.name === oldMapToPLO && 'selected'}>\${p.name}</option>
                     `).join('')
                         selectPLOInput.innerHTML = optionsHtmls
@@ -748,6 +748,194 @@
                 }
                 }
                 }
+
+
+                // handle sessions-questions-assessments
+                const input = document.getElementById("file-input");
+                const input2 = document.getElementById("file-input2");
+                const input3 = document.getElementById("file-input3");
+                const sessionsTable = document.getElementById("excel-table-sessions");
+                const questionsTable = document.getElementById("excel-table-questions");
+                const assessmentsTable = document.getElementById("excel-table-assessments");
+                input.addEventListener("change", handleFileUpload);
+                input2.addEventListener("change", handleFileUpload);
+                input3.addEventListener("change", handleFileUpload);
+                function handleFileUpload(event){
+                const file = event.target.files[0];
+                console.log(file);
+                const sessionsMap = {
+                'No': 'no',
+                        'Topic': 'topic',
+                        'Learning Type': 'learningType',
+                        'LO': 'lo',
+                        'ITU': 'itu',
+                        'Material': 'material',
+                        'Included': 'included',
+                        'Edit': 'edit'
+                };
+                const questionsMap = {
+                'No': 'no',
+                        'Category': 'category',
+                        'Type': 'type',
+                        'Part': 'part',
+                        'Weight': 'weight',
+                        'Complement': 'complement',
+                        'Duration': 'duration',
+                        'Edit': 'edit'
+                };
+                const assessmentsMap = {
+                'No': 'no',
+                        'Category': 'category',
+                        'Type': 'type',
+                        'Part': 'part',
+                        'Weight': 'weight',
+                        'Complement': 'complement',
+                        'Duration': 'duration',
+                        'Edit': 'edit'
+                };
+                readXlsxFile(file, { sheet: "S1", map: sessionsMap }).then(({ rows }) => {
+                const jsonData = JSON.stringify(rows);
+                console.log(jsonData);
+                console.log(rows);
+                if (rows) {
+                rows.forEach((row) => {
+                const tr = document.createElement("tr");
+                const tdCheckbox = document.createElement("td");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                tdCheckbox.appendChild(checkbox);
+                tr.appendChild(tdCheckbox);
+                const tdNo = document.createElement("td");
+                tdNo.textContent = row.no;
+                tr.appendChild(tdNo);
+                const tdTopic = document.createElement("td");
+                tdTopic.textContent = row.topic;
+                tr.appendChild(tdTopic);
+                const tdLearningType = document.createElement("td");
+                tdLearningType.textContent = row.learningType;
+                tr.appendChild(tdLearningType);
+                const tdLO = document.createElement("td");
+                tdLO.textContent = row.lo;
+                tr.appendChild(tdLO);
+                const tdITU = document.createElement("td");
+                tdITU.textContent = row.itu;
+                tr.appendChild(tdITU);
+                const tdMaterial = document.createElement("td");
+                tdMaterial.textContent = row.material;
+                tr.appendChild(tdMaterial);
+                const tdIncluded = document.createElement("td");
+                tdIncluded.textContent = row.included;
+                tr.appendChild(tdIncluded);
+                const tdEdit = document.createElement("td");
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.classList.add("btn", "btn-sm", "btn-primary");
+                tdEdit.appendChild(editButton);
+                tr.appendChild(tdEdit);
+                sessionsTable.appendChild(tr);
+                });
+                }
+                }).catch((error) => {
+                console.log('Error:', error);
+                });
+                
+                
+                readXlsxFile(file, { sheet : "S3", map : assessmentsMap }).then(({rows}) => {
+                const jsonData = JSON.stringify(rows);
+                console.log(jsonData);
+                console.log(rows);
+                if (rows) {
+                rows.forEach((row) => {
+                const tr = document.createElement("tr");
+                const tdCheckbox = document.createElement("td");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                tdCheckbox.appendChild(checkbox);
+                tr.appendChild(tdCheckbox);
+                const tdNo = document.createElement("td");
+                tdNo.textContent = row.no;
+                tr.appendChild(tdNo);
+                const tdCategory = document.createElement("td");
+                tdCategory.textContent = row.category;
+                tr.appendChild(tdCategory);
+                const tdType = document.createElement("td");
+                tdType.textContent = row.type;
+                tr.appendChild(tdType);
+                const tdPart = document.createElement("td");
+                tdPart.textContent = row.part;
+                tr.appendChild(tdPart);
+                const tdWeight = document.createElement("td");
+                tdWeight.textContent = row.weight;
+                tr.appendChild(tdWeight);
+                const tdComplement = document.createElement("td");
+                tdComplement.textContent = row.complement;
+                tr.appendChild(tdComplement);
+                const tdDuration = document.createElement("td");
+                tdDuration.textContent = row.duration;
+                tr.appendChild(tdDuration);
+                const tdEdit = document.createElement("td");
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.classList.add("btn", "btn-sm", "btn-primary");
+                tdEdit.appendChild(editButton);
+                tr.appendChild(tdEdit);
+                questionsTable.appendChild(tr);
+                });
+                }
+                }).catch((error) => {
+                console.log('Error:', error);
+                });
+                
+                readXlsxFile(file, { sheet : "S2", map : questionsMap }).then(({rows}) => {
+                const jsonData = JSON.stringify(rows);
+                console.log(jsonData);
+                console.log(rows);
+                if (rows) {
+                rows.forEach((row) => {
+                const tr = document.createElement("tr");
+                const tdCheckbox = document.createElement("td");
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                tdCheckbox.appendChild(checkbox);
+                tr.appendChild(tdCheckbox);
+                const tdNo = document.createElement("td");
+                tdNo.textContent = row.no;
+                tr.appendChild(tdNo);
+                const tdCategory = document.createElement("td");
+                tdCategory.textContent = row.category;
+                tr.appendChild(tdCategory);
+                const tdType = document.createElement("td");
+                tdType.textContent = row.type;
+                tr.appendChild(tdType);
+                const tdPart = document.createElement("td");
+                tdPart.textContent = row.part;
+                tr.appendChild(tdPart);
+                const tdWeight = document.createElement("td");
+                tdWeight.textContent = row.weight;
+                tr.appendChild(tdWeight);
+                const tdComplement = document.createElement("td");
+                tdComplement.textContent = row.complement;
+                tr.appendChild(tdComplement);
+                const tdDuration = document.createElement("td");
+                tdDuration.textContent = row.duration;
+                tr.appendChild(tdDuration);
+                const tdEdit = document.createElement("td");
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.classList.add("btn", "btn-sm", "btn-primary");
+                tdEdit.appendChild(editButton);
+                tr.appendChild(tdEdit);
+                assessmentsTable.appendChild(tr);
+                });
+                }
+                }).catch((error) => {
+                console.log('Error:', error);
+                });
+                };
+
             </script>
     </body>
 </html>
