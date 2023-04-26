@@ -22,7 +22,8 @@ public class Logout implements Action {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.invalidate();
-        response.sendRedirect("./");
+        System.out.println("logout...");
+        response.sendRedirect("./login");
     }
 
     @Override

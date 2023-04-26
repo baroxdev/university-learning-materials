@@ -496,23 +496,23 @@
                     console.log({
                         submitData,
                     });
-                    //                    try {
-                    //                        const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/add', {
-                    //                            method: 'POST',
-                    //                            body: JSON.stringify(submitData)
-                    //                        });
-                    //                        const responseData = await res.json();
-                    //                        console.log({res})
-                    //                        
-                    //                        if (!res.ok) {
-                    //                            throw new Error(responseData.message)
-                    //                        }
-                    //                        
-                    //                            window.location.href= responseData.redirectUrl;
-                    //                    }
-                    //                    catch (e)  {
-                    //                        console.error("Error is " + e.message)
-                    //                    }
+                try {
+                    const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/add', {
+                        method: 'POST',
+                        body: JSON.stringify(submitData)
+                    });
+                    const responseData = await res.json();
+                    console.log({res})
+
+                    if (!res.ok) {
+                        throw new Error(responseData.message)
+                    }
+
+//                        window.location.href= responseData.redirectUrl;
+                }
+                catch (e)  {
+                    console.error("Error is " + e.message)
+                }
                 }
 
                 function initForm(formNode) {

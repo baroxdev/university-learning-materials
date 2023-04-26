@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import utils.JsonUtils;
 import utils.ResponseUtils;
 import actions.Action;
+import dao.PermissionDao;
+import java.util.ArrayList;
 
 /**
  *
@@ -38,7 +40,6 @@ public class Login implements Action {
         try ( PrintWriter out = response.getWriter()) {
             JSONObject json = JsonUtils.getRequestJson(request);
             String username = json.getString("studentID");
-            System.out.println("username  " + username);
             Integer step = json.getInt("step");
             User user = UserDao.getUserById(username);
             JSONObject jsonResponse = new JSONObject();
@@ -59,6 +60,8 @@ public class Login implements Action {
                     case 2: {
                         String password = json.getString("password");
                         if (password != null && password.equals(user.getPassword())) {
+                            ArrayList<String> permittedPaths = PermissionDao.getByRoleId(user.getRoleid());
+                            request.getSession().setAttribute(AppConfig.AUTH_PERMITTED_PATHS, permittedPaths);
                             request.getSession().setAttribute(AppConfig.AUTH_USER, user);
                             if (user.getRoleid().equals("ADM")) {
                                 jsonResponse.put("redirectUrl", request.getContextPath() + "/dashboard");

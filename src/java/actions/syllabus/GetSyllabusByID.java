@@ -16,6 +16,7 @@ import entities.Material;
 import entities.Session;
 import entities.Syllabus;
 import exceptions.NotFoundException;
+import exceptions.SyllabusException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -37,6 +38,9 @@ public class GetSyllabusByID implements Action {
                 sylId = sylId.replace("/", "");
 
                 Syllabus syl = SyllabusDao.getSyllabusById(sylId);
+                
+                if (syl == null) throw new SyllabusException("Syllabus is not found.");
+                
                 List<String> preRequisiteSubNameList = PreRequisiteDao.getPreRequisiteListBySubjectId(syl.getSubjectID());
                 List<CourseLearningObjective> cloList = CLODao.readCourseLearningObjectiveListBySylId(sylId);
                 List<Material> mtList = MaterialDao.readMaterialListBySylId(sylId);
