@@ -73,6 +73,18 @@ label, a {
     z-index: 2;
 }*/
 
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 header {
     height: 50px;
     display: flex;
@@ -466,6 +478,12 @@ table td a{
     color: #212529;
     display: inline-block;
     margin-left: 100%;
+}
+
+.table-heading {
+        margin-top: 64px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .fixed-footer {
