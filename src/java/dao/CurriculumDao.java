@@ -183,10 +183,10 @@ public class CurriculumDao {
             con.setAutoCommit(false);
 
             if (poList.isEmpty()) {
-                throw new IllegalArgumentException("Atleast one PO must be add.");
+                throw new IllegalArgumentException("PO List is empty.");
             }
             if (ploList.isEmpty()) {
-                throw new IllegalArgumentException("Atleast one PLO must be add.");
+                throw new IllegalArgumentException("PLO List is empty.");
             }
 
             curId = add(con, curriculum);
@@ -372,8 +372,7 @@ public class CurriculumDao {
         PreparedStatement pre = con.prepareStatement(query);
         pre.setString(1, curCode);
         ResultSet rs = pre.executeQuery();
-        boolean isExist = rs.wasNull();
-
+        boolean isExist = rs.next();
         con.close();
         return isExist;
     }
