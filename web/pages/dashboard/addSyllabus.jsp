@@ -11,7 +11,7 @@
         <%@include file="/components/common/head.jspf" %>
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
+        <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <title>Add Syllabus</title>
     </head>
     <body>
@@ -62,98 +62,98 @@
                                             <div class="accordion-body">
                                                 <div id="basic-information-form">
                                                     <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group mb-3">
-                                                            <label for="curriculum" class="col-form-label" style="font-size: 16px;">
-                                                                Curriculum
-                                                            </label>
-                                                            <select style="color: #495057;" name="curriculum" id="curriculum" class="form-select" required>
-                                                                <option value="null" selected>Select Curriculum</option>
-                                                                <c:forEach var="cur" items="<%= lsCur%>">
-                                                                    <option value="${cur.id}">${cur.code}</option>
-                                                                </c:forEach>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="subject" class="col-form-label" style="font-size: 16px;">
-                                                                Subject
-                                                            </label>
-                                                            <select style="color: #495057;" name="subject" id="subject" class="form-select" disabled>
-                                                                <option selected>Select Subject</option>
-                                                            </select>
-                                                            <div id="mapToPLO" class="form-text">
-                                                                Please select Curriculum first.
+                                                        <div class="col-md-6">
+                                                            <div class="form-group mb-3">
+                                                                <label for="curriculum" class="col-form-label" style="font-size: 16px;">
+                                                                    Curriculum
+                                                                </label>
+                                                                <select style="color: #495057;" name="curriculum" id="curriculum" class="form-select" required>
+                                                                    <option value="null" selected>Select Curriculum</option>
+                                                                    <c:forEach var="cur" items="<%= lsCur%>">
+                                                                        <option value="${cur.id}">${cur.code}</option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="subject" class="col-form-label" style="font-size: 16px;">
+                                                                    Subject
+                                                                </label>
+                                                                <select style="color: #495057;" name="subject" id="subject" class="form-select" disabled>
+                                                                    <option selected>Select Subject</option>
+                                                                </select>
+                                                                <div id="mapToPLO" class="form-text">
+                                                                    Please select Curriculum first.
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="degreeLevel" class="col-form-label" style="font-size: 16px;">
+                                                                    Degree Level
+                                                                </label>
+                                                                <select style="color: #495057;" name="degreeLevel" id="degreeLevel" class="form-select">
+                                                                    <option selected>Bachelor</option>
+                                                                    Bachelor
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="timeAllocation" class="col-form-label" style="font-size: 16px;">
+                                                                    Time allocation
+                                                                </label>
+                                                                <input type="text" id="timeAllocation" name="timeAllocation" class="form-control" required/>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="decisionNo" class="col-form-label" style="font-size: 16px;">
+                                                                    Decision No
+                                                                </label>
+                                                                <input type="text" id="decisionNo" name="decisionNo" class="form-control" required/>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="degreeLevel" class="col-form-label" style="font-size: 16px;">
-                                                                Degree Level
-                                                            </label>
-                                                            <select style="color: #495057;" name="degreeLevel" id="degreeLevel" class="form-select">
-                                                                <option selected>Bachelor</option>
-                                                                Bachelor
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="timeAllocation" class="col-form-label" style="font-size: 16px;">
-                                                                Time allocation
-                                                            </label>
-                                                            <input type="text" id="timeAllocation" name="timeAllocation" class="form-control" required/>
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="decisionNo" class="col-form-label" style="font-size: 16px;">
-                                                                Decision No
-                                                            </label>
-                                                            <input type="text" id="decisionNo" name="decisionNo" class="form-control" required/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group mb-3">
-                                                            <label for="credit" class="col-form-label" style="font-size: 16px;">
-                                                                Number of Credit
-                                                            </label>
-                                                            <input type="number" value="1" min="1" max="15" step="1" id="credit" name="credit" class="form-control" required/>
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="minScore" class="col-form-label" style="font-size: 16px;">
-                                                                Min score
-                                                            </label>
-                                                            <input type="number" value="0" min="0" max="10" step="0.25" id="minScore" name="minScore" class="form-control"/>
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="maxScore" class="col-form-label" style="font-size: 16px;">
-                                                                Max score
-                                                            </label>
-                                                            <input type="number" min="0" max="10" step="0.25" id="maxScore" name="maxScore" class="form-control" required/>
-                                                        </div>
-                                                        <div class="form-group mb-3">
-                                                            <label for="preRequisite" class="col-form-label" style="font-size: 16px;">
-                                                                Pre-Requisite
-                                                            </label>
-                                                            <select style="color: #495057;" name="preRequisite" id="preRequisite" class="form-select">
-                                                                <option value="none">None</option>
-                                                            </select>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group mb-3">
+                                                                <label for="credit" class="col-form-label" style="font-size: 16px;">
+                                                                    Number of Credit
+                                                                </label>
+                                                                <input type="number" value="1" min="1" max="15" step="1" id="credit" name="credit" class="form-control" required/>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="minScore" class="col-form-label" style="font-size: 16px;">
+                                                                    Min score
+                                                                </label>
+                                                                <input type="number" value="0" min="0" max="10" step="0.25" id="minScore" name="minScore" class="form-control"/>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="maxScore" class="col-form-label" style="font-size: 16px;">
+                                                                    Max score
+                                                                </label>
+                                                                <input type="number" min="0" max="10" step="0.25" id="maxScore" name="maxScore" class="form-control" required/>
+                                                            </div>
+                                                            <div class="form-group mb-3">
+                                                                <label for="preRequisite" class="col-form-label" style="font-size: 16px;">
+                                                                    Pre-Requisite
+                                                                </label>
+                                                                <select style="color: #495057;" name="preRequisite" id="preRequisite" class="form-select">
+                                                                    <option value="none">None</option>
+                                                                </select>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="description" class="col-form-label" style="font-size: 16px;">Description</label>
-                                                    <input type="hidden" name="description" id="description"/>
-                                                    <div id="descriptionEditor"></div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-md-6">
-                                                        <label for="tasks" class="col-form-label" style="font-size: 16px;">Student
-                                                            Tasks</label>
-                                                        <textarea class="form-control" name="tasks"></textarea>
-                                                        <label for="note" class="col-form-label" style="font-size: 16px;">Note</label>
-                                                        <textarea class="form-control" name="note"></textarea>
+                                                    <div class="mb-3">
+                                                        <label for="description" class="col-form-label" style="font-size: 16px;">Description</label>
+                                                        <input type="hidden" name="description" id="description"/>
+                                                        <div id="descriptionEditor"></div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label for="tools" class="col-form-label" style="font-size: 16px;">Tools</label>
-                                                        <textarea class="form-control" name="tools"></textarea>
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-6">
+                                                            <label for="tasks" class="col-form-label" style="font-size: 16px;">Student
+                                                                Tasks</label>
+                                                            <textarea class="form-control" name="tasks"></textarea>
+                                                            <label for="note" class="col-form-label" style="font-size: 16px;">Note</label>
+                                                            <textarea class="form-control" name="note"></textarea>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="tools" class="col-form-label" style="font-size: 16px;">Tools</label>
+                                                            <textarea class="form-control" name="tools"></textarea>
+                                                        </div>
                                                     </div>
-                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -249,46 +249,89 @@
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                                Sessions
+                                                Sessions, Questions & Assessments
                                             </button>
                                         </h2>
                                         <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
-                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
-                                                            <i class="fa-regular fa-square-plus"></i> Add</button>
+                                                        <!--                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
+                                                                                                                    <i class="fa-regular fa-square-plus"></i> Add</button>-->
                                                         <label id="" class="btn btn-secondary" style="background: #6C757D;">
-                                                            <input type="file" />
+                                                            <input type="file" id="file-input" accept=".xlsx">
                                                             <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="dashboard-container">
+                                                <div class="container-x1">
+                                                    <h3 class="table-heading">Sessions</h3>
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th scope="col">
+                                                                <th style="width: 30px;" scope="col">
                                                                     <input type="checkbox" />
                                                                 </th>
-                                                                <th scope="col">No</th>
+                                                                <th style="width: 50px;" scope="col">No</th>
                                                                 <th scope="col">Topic</th>
                                                                 <th scope="col">Learning Type</th>
                                                                 <th scope="col">LO</th>
                                                                 <th scope="col">ITU</th>
                                                                 <th scope="col">Material</th>
-                                                                <th scope="col">Included</th>
+                                                                <th  class="text-right">Edit</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="excel-table-sessions">
+                                                        </tbody>
+                                                    </table>
+                                                    <h3 class="table-heading">Questions</h3>
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 30px;" scope="col">
+                                                                    <input type="checkbox" />
+                                                                </th>
+                                                                <th style="width: 50px;" scope="col">No</th>
+                                                                <th scope="col">SessionNo</th>
+                                                                <th scope="col">Name</th>
+                                                                <th colspan="3">Details</th>
+                                                                <th class="text-right">Edit</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="excel-table-questions">
+                                                        </tbody>
+                                                    </table>
+                                                    <h3 class="table-heading">Assessments</h3>
+                                                     <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 30px;" scope="col">
+                                                                    <input type="checkbox" />
+                                                                </th>
+                                                                <th style="width: 50px;" scope="col">No</th>
+                                                                <th scope="col">Category</th>
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Part</th>
+                                                                <th scope="col">Weight</th>
+                                                                <th scope="col">Completion Citerial</th>
+                                                                <th scope="col">Duration</th>
+                                                                <th scope="col">CLO</th>
+                                                                <th scope="col">Question Type</th>
+                                                                <th scope="col">Total Quetions</th>
+                                                                <th scope="col">Knowledge and Skills</th>
+                                                                <th scope="col">Grading Guide</th>
                                                                 <th scope="col">Edit</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="excel-table-assessments">
+
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="accordion-item">
+<!--                                    <div class="accordion-item">
                                         <h2 class="accordion-header">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                                 Questions
@@ -298,34 +341,16 @@
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
-                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
-                                                            <i class="fa-regular fa-square-plus"></i> Add</button>
+                                                                                                                <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
+                                                                                                                    <i class="fa-regular fa-square-plus"></i> Add</button>
                                                         <label id="" class="btn btn-secondary" style="background: #6C757D;">
-                                                            <input type="file" />
+                                                            <input type="file" id="file-input2" accept=".xlsx"/>
                                                             <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="dashboard-container">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">
-                                                                    <input type="checkbox" />
-                                                                </th>
-                                                                <th scope="col">No</th>
-                                                                <th scope="col">Category</th>
-                                                                <th scope="col">Type</th>
-                                                                <th scope="col">Part</th>
-                                                                <th scope="col">Weight</th>
-                                                                <th scope="col">Completion Citerial</th>
-                                                                <th scope="col">Duration</th>
-                                                                <th scope="col">Edit</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
+                                                <div class="container-x1">
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -340,57 +365,21 @@
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
-                                                        <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
-                                                            <i class="fa-regular fa-square-plus"></i> Add</button>
+                                                                                                                <button type="submit" class="btn btn-primary" style="background: #0D6EFD;">
+                                                                                                                    <i class="fa-regular fa-square-plus"></i> Add</button>
                                                         <label id="" class="btn btn-secondary" style="background: #6C757D;">
-                                                            <input type="file" />
+                                                            <input type="file" id="file-input3"/>
                                                             <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <div class="dashboard-container">
-                                                    <table class="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">
-                                                                    <input type="checkbox" />
-                                                                </th>
-                                                                <th scope="col">No</th>
-                                                                <th scope="col">Category</th>
-                                                                <th scope="col">Type</th>
-                                                                <th scope="col">Part</th>
-                                                                <th scope="col">Weight</th>
-                                                                <th scope="col">Completion Citerial</th>
-                                                                <th scope="col">Duration</th>
-                                                                <th scope="col">Edit</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-
-                                                        </tbody>
-                                                    </table>
+                                                <div class="container-x1">
+                                                   
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
-                                <!--Basic information-->
-
-
-                                <!--Materials-->
-
-                                <!-- Objectives -->
-
-                                <!-- Objectives / Course Learning Objectives (CLO)-->
-
-
-                                <!--Sessions Table-->
-
-
-                                <!--Questions Table-->
-
-                                <!--Assessents Table-->
-
 
                                 <!--Send to preview-->
                                 <div class="fixed-footer">
@@ -419,6 +408,9 @@
                                        style="font-size: 16px;">Description</label>
                                 <textarea id="cloDescription" class="form-control" name="cloDescription">
                                 </textarea>
+                                <div class="alert alert-danger" id="clo-update-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                    CLO_ERROR_MESSAGE
+                                </div>
                                 <div class="mt-4">
                                     <button type="button" id="btn-update-clo" class="btn btn-primary">Save</button>
                                     <button type="button" id="btn-cancel-update" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas" aria-label="Cancel">Cancel</button>
@@ -428,89 +420,140 @@
                     </main>
                 </div>
             </div>
-
-
             <script>
-
+                const app = {
+                    localStorage: {
+                        syllabus: {
+                            sessions: 'syllabus.sessions',
+                            questions: 'syllabus.questions',
+                            assessments: 'syllabus.assessments',
+                            list_clo: 'syllabus.list_clo'
+                        }
+                    }
+                }
+                
                 const descriptionEditor = new Quill('#descriptionEditor', {
-                theme: 'snow'
+                    theme: 'snow'
                 });
-                $('#btn-add-plo').on('click', handleAddCLO)
                 
                 $(document).ready(() => {
-                    const listCLO = cloUtils.getListFromLocalStorage();
+                    startLoading();
                     const myForm = document.querySelector("#basic-information-form");
-                    renderListCLO(listCLO)
-                    initForm(myForm);
                     const curID = myForm.querySelector('select#curriculum')?.value
                     const loadedDataLocalStorage = JSON.parse(localStorage.getItem('syllabus.loaded_data'));
+                    
+                    const listCLO = cloUtils.getListFromLocalStorage();
+                    const listSessions = JSON.parse(localStorage.getItem(app.localStorage.syllabus.sessions));
+                    const listQuestions = JSON.parse(localStorage.getItem(app.localStorage.syllabus.questions));
+                    const listAssessments = JSON.parse(localStorage.getItem(app.localStorage.syllabus.assessments));
+
+                    renderList(listSessions, 'sessions')
+                    renderList(listQuestions, 'questions')
+                    renderList(listAssessments, 'assessments')
+
+                    renderListCLO(listCLO)
+                    initForm(myForm);
                     handleLoadData(null, curID, loadedDataLocalStorage)
+                    $('#btn-add-plo').on('click', handleAddCLO)
+                    $("#cloTbl").on("click", "[name='editBtn']", renderUpdateCLOForm);
+                    $("#cloTbl").on("click", "[name='saveBtn']", handleSaveEdit);
+                    $("#btn-update-clo").on("click", handleUpdateCLO);
+                    document.getElementById("curriculum").addEventListener("change", e => handleLoadData(e));
+
+                    stopLoading();
                 })
 
-                $("#cloTbl").on("click", "[name='editBtn']", renderUpdateCLOForm);
-                $("#cloTbl").on("click", "[name='saveBtn']", handleSaveEdit);
-                $("#btn-update-clo").on("click", handleUpdateCLO);
+                document.getElementById("addSyllabusForm").addEventListener("submit", handleSubmitAddSyllabus);
                 
-                document.getElementById("curriculum").addEventListener("change", e => handleLoadData(e));
-
-                document.getElementById("addSyllabusForm").addEventListener("submit", async (e) => {
+                
+                function getListFromLocalStorage(key) {
+                    return JSON.parse(localStorage.getItem(key)) || []
+                }
+                
+                async function handleSubmitAddSyllabus(e) {
                     e.preventDefault();
                     const descriptionInput = document.getElementById("description");
                     const materialInput = document.getElementById("material-input-file");
                     descriptionInput.value = JSON.stringify(descriptionEditor.root.innerHTML);
                     const formData = new FormData(document.forms.addSyllabusForm);
+                    const listCLO = getListFromLocalStorage(app.localStorage.syllabus.list_clo);
+                    const sessions = getListFromLocalStorage(app.localStorage.syllabus.sessions);
+                    const questions = getListFromLocalStorage(app.localStorage.syllabus.questions);
+                    const assessments = getListFromLocalStorage(app.localStorage.syllabus.assessments);
+                    const submitCLOs = listCLO.map((c) => {c.plo = c.plo.value; return c})
                     formData.append('material', materialInput.files[0]);
                     const submitData = {}
                     for (const [key, value] of formData) {
-                    submitData[key] = value
+                        submitData[key] = value
+                    }
+                    
+                    submitData.list_clo = submitCLOs;
+                    submitData.sessions = sessions;
+                    submitData.questions = questions;
+                    submitData.assessments = assessments;
+
+                    
+                    console.log({
+                        submitData,
+                    });
+                try {
+                    const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/add', {
+                        method: 'POST',
+                        body: JSON.stringify(submitData)
+                    });
+                    const responseData = await res.json();
+                    console.log({res})
+
+                    if (!res.ok) {
+                        throw new Error(responseData.message)
                     }
 
+//                        window.location.href= responseData.redirectUrl;
+                }
+                catch (e)  {
+                    console.error("Error is " + e.message)
+                }
+                }
 
-                    console.log({submitData});
-//                    try {
-//                        const res = await fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/add', {
-//                            method: 'POST',
-//                            body: JSON.stringify(submitData)
-//                        });
-//                        const responseData = await res.json();
-//                        console.log({res})
-//                        
-//                        if (!res.ok) {
-//                            throw new Error(responseData.message)
-//                        }
-//                        
-//                            window.location.href= responseData.redirectUrl;
-//                    }
-//                    catch (e)  {
-//                        console.error("Error is " + e.message)
-//                    }
-                })
-                
                 function initForm(formNode) {
                     // Retrieve saved form data from localStorage
-                    const formKey = 'syllabus.'+ formNode.id
+                    const formKey = 'syllabus.' + formNode.id
                     const formData = JSON.parse(localStorage.getItem(formKey));
-
                     // Loop through form input elements
                     const formInputs = formNode.querySelectorAll("input, select, textarea");
                     formInputs.forEach((input) => {
-                      // Load saved value for input if available
-                      if (formData && formData[input.name]) {
-                        input.value = formData[input.name];
-                      }
+                        // Load saved value for input if available
+                        if (formData && formData[input.name]) {
+                            input.value = formData[input.name];
+                        }
 
-                      // Listen for changes to input and save to localStorage
-                      input.addEventListener("change", () => {
-                        const inputValues = {};
-                        formInputs.forEach((input) => {
-                          inputValues[input.name] = input?.value;
+                        // Listen for changes to input and save to localStorage
+                        input.addEventListener("change", () => {
+                            const inputValues = {};
+                            formInputs.forEach((input) => {
+                                inputValues[input.name] = input?.value;
+                            });
+                            localStorage.setItem(formKey, JSON.stringify(inputValues));
                         });
-                        localStorage.setItem(formKey, JSON.stringify(inputValues));
-                      });
                     });
-                  }
-                
-                 async function handleLoadData(e, initialCurId, loadedData) {
+                }
+
+                function startLoading() {
+                    const loadingClass = 'loading';
+                    const loadingContainer = document.createElement('div');
+                    loadingContainer.classList.add('loading')
+                    loadingContainer.innerHTML = `
+                                        <div class="spinner-border text-light" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>`
+                    document.body.appendChild(loadingContainer)
+                }
+
+                function stopLoading() {
+                    return document.querySelector('.loading')?.remove();
+                }
+
+                async function handleLoadData(e, initialCurId, loadedData) {
                     try {
                         const curId = e != null ? e?.target?.value : initialCurId;
                         if (!curId) throw new Error('Invalid Curriculum ID.');
@@ -520,14 +563,14 @@
                         const ploSelectNode = document.querySelector('select#mapToPLO');
                         const preRequisiteSelectNode = document.getElementById('preRequisite');
                         const htmls = data?.subjects?.map((s) => `
-                                              <option value="\${s.id.trim()}">\${s.id.trim()} - \${s.name}</option>
-                                        `).join('');
+                                                              <option value="\${s.id.trim()}">\${s.id.trim()} - \${s.name}</option>
+                                                        `).join('');
                         const ploOptionHtmls = data?.list_plo?.map((p) => `
-                                              <option value="\${p.id}"  title="\${p.description}">\${p.name}</option>
-                                        `).join('');
+                                                              <option value="\${p.id}"  title="\${p.description}">\${p.name}</option>
+                                                        `).join('');
                         localStorage.setItem('syllabus.list_plo', JSON.stringify(data?.list_plo))
                         localStorage.setItem('syllabus.loaded_data', JSON.stringify(data))
-                        
+
                         subjectSelectNode.innerHTML = htmls
                         subjectSelectNode.disabled = false;
                         ploSelectNode.innerHTML = '<option value="none">None</option>' + ploOptionHtmls;
@@ -539,10 +582,10 @@
                     }
                 }
 
-                        async function getSubjects(curId) {
-                        const promise = fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/get-subjects?curId=' + curId);
-                        return (await promise).json();
-                        }
+                async function getSubjects(curId) {
+                    const promise = fetch('${pageContext.servletContext.contextPath}/dashboard/syllabus/get-subjects?curId=' + curId);
+                    return (await promise).json();
+                }
 
                 function getListPLOFromLocalSyllabus() {
                     return JSON.parse(localStorage.getItem('syllabus.list_plo')) || [];
@@ -560,14 +603,14 @@
                 function showError(message) {
                     const errorShowNode = $('#clo-error');
                     errorShowNode.css('display', 'block')
-                        errorShowNode.text(message);
+                    errorShowNode.text(message);
                 }
 
                 function hideError() {
                     const errorShowNode = $('#clo-error');
                     errorShowNode.css('display', 'none');
                 }
-                
+
                 function handleUpdateCLO() {
                     const editForm = document.getElementById("edit-clo-form");
                     const index = editForm.querySelector("#cloID").value
@@ -576,10 +619,13 @@
                     const ploValue = editForm.querySelector("select#mapToPLO").value
                     const ploName = $("#edit-clo-form select#mapToPLO option:selected").text();
                     const listCLO = cloUtils.getListFromLocalStorage();
-                    
                     try {
-                        validateCLO('edit', listCLO, {currentIndex: index, name, description, ploName});
-                        
+                        validateCLO('edit', listCLO, {
+                            currentIndex: index,
+                            name,
+                            description,
+                            ploName
+                        });
                         const newCLO = {
                             index,
                             name,
@@ -597,10 +643,14 @@
                         showError(e.message);
                     }
                 }
-                
+
                 function validateCLO(action = 'add', list, inputs) {
-                    const {name, description, ploName, currentIndex} = inputs;
-                    
+                    const {
+                        name,
+                        description,
+                        ploName,
+                        currentIndex
+                    } = inputs;
                     if (!name || name.trim() === '') {
                         throw new Error("CLO name cannot be left blank, please try again!");
                     }
@@ -611,12 +661,12 @@
                     if (ploName.trim() == '') {
                         throw new Error("You must select PLO. Remember to select Curriculum first.!");
                     }
-                    
+
                     let isExist = list.findIndex((c, index) => action === 'add' && c.name === name && index != Number.parseInt(currentIndex || -1));
                     if (isExist != -1) {
                         throw new Error(name + " is exist, please try another!");
                     }
-                    
+
                     return true;
                 }
 
@@ -625,21 +675,25 @@
                     const nameCLONode = addCLOForm.querySelector("#cloName");
                     const descriptionCLONode = addCLOForm.querySelector("#cloDescription");
                     const mapToPLONode = $("#add-clo-form select#mapToPLO option:selected");
-                    
                     const name = nameCLONode.value;
                     const description = descriptionCLONode.value;
                     const ploName = mapToPLONode.text();
-                    console.log({ploName})
+                    console.log({
+                        ploName
+                    })
                     const ploValue = $("select#mapToPLO").val();
-
                     let listCLO = cloUtils.getListFromLocalStorage();
                     if (!nameCLONode || !descriptionCLONode || !mapToPLONode) {
                         showError("Missing value");
                         throw new Error("Missing value");
                     }
-              
+
                     try {
-                        validateCLO('add', listCLO, {name, description, ploName })
+                        validateCLO('add', listCLO, {
+                            name,
+                            description,
+                            ploName
+                        })
                         listCLO.push({
                             name: name,
                             description: description,
@@ -651,40 +705,43 @@
                         renderListCLO(listCLO);
                         localStorage.setItem("syllabus.list_clo", JSON.stringify(listCLO));
                         resetForm(addCLOForm);
-                    }catch (e) {
+                    } catch (e) {
                         showError(e.message);
                     }
-                    
-                    
+
+
                 }
 
                 function renderListCLO(listCLO) {
-                if (!listCLO) throw new Error("Cannot render list PLO");
-                const CLOTableBody = document.querySelector("#cloTbl tbody");
-                const htmls = listCLO.map((clo, index) => `
-                     <tr data-index="\${index}">
-                        <td scope="row" style="color: #495057;">\${clo?.name}</td>
-                        <td>\${clo?.description}</td>
-                        <td>\${clo?.plo?.name}</td>
-                        <td>
-                            <button name="editBtn" type="button" style="border: none; background: none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i class="fa-solid fa-pencil"></i></button>
-                            <button name="cancelBtn" type="button" style="border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                            <button type="button" id="btn-delete-plo" type="button" style="border: none; background: none; display: block;" ><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `).join("");
-                CLOTableBody.parentNode.style.display = 'table';
-                CLOTableBody.innerHTML = htmls;
+                    if (!listCLO) throw new Error("Cannot render list PLO");
+                    const CLOTableBody = document.querySelector("#cloTbl tbody");
+                    const htmls = listCLO.map((clo, index) => `
+                                     <tr data-index="\${index}">
+                                        <td scope="row" style="color: #495057;">\${clo?.name}</td>
+                                        <td style="padding-bottom: 12px">\${clo?.description}</td>
+                                        <td>\${clo?.plo?.name}</td>
+                                        <td>
+                                            <button name="editBtn" type="button" style="border: none; background: none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><i class="fa-solid fa-pencil"></i></button>
+                                            <button name="cancelBtn" type="button" style="border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                            <button type="button" id="btn-delete-plo" type="button" style="border: none; background: none; display: block;" ><i class="fa-solid fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                `).join("");
+                    CLOTableBody.parentNode.style.display = 'table';
+                    CLOTableBody.innerHTML = htmls;
                 }
 
                 function renderUpdateCLOForm() {
-                    
+
                     const oldName = $(this).closest("tr").find("td").eq(0).text();
                     const oldDescription = $(this).closest("tr").find("td").eq(1).text();
                     const oldMapToPLO = $(this).closest("tr").find("td").eq(2).text();
                     const index = $(this).closest("tr").data("index");
                     const editForm = document.getElementById('edit-clo-form');
-                    console.log({index, editForm})
+                    console.log({
+                        index,
+                        editForm
+                    })
                     const idInput = editForm.querySelector("#cloID")
                     const nameInput = editForm.querySelector("#cloName")
                     const selectPLOInput = editForm.querySelector("select#mapToPLO");
@@ -693,60 +750,286 @@
                     idInput.value = index;
                     nameInput.value = oldName;
                     cloDescriptionInput.value = oldDescription;
-                    const  optionsHtmls = lisPLO.map((p, i) => `
-                        <option value="\${p.id}"  title="\${p.description}" \${p.name === oldMapToPLO && 'selected'}>\${p.name}</option>
-                    `).join('')
-                        selectPLOInput.innerHTML = optionsHtmls
-//                        element.html('');
-//                        element.append(input);
+                    const optionsHtmls = lisPLO.map((p, i) => `
+                                        <option value="\${p.id}"  title="\${p.description}" \${p.name === oldMapToPLO && 'selected'}>\${p.name}</option>
+                                    `).join('')
+                    selectPLOInput.innerHTML = optionsHtmls
+                    //                        element.html('');
+                    //                        element.append(input);
                 }
 
                 function handleEditCLO(index, newName, newDescription, newMapToPLO) {
 
                 }
 
-                function handleSaveEdit () {
-                const cloIndex = $(this).closest("tr").data("index");
-                console.log({cloIndex})
-                        const newName = $(this).closest("tr").find("td").find('input').val();
-                const newDescription = $(this).closest("tr").find("td").find('textarea').val();
-                const newMapToPLO = $(this).closest("tr").find("td").find('select#mapToPLO option:selected').text();
-                const tblIDCheck = $(this).closest('table').attr('id');
-                if (newName.includes('CLO') && newDescription) {
-                handleEditCLO(cloIndex, newName, newDescription, newMapToPLO);
-                } else {
-                if (tblIDCheck.includes('plo')) {
-                var errorShow = $('#plo-error');
-                if (newName == '') {
-                errorShow.css('display', 'block');
-                errorShow.text("PLO name cannot be left blank, please try again!");
-                } else {
-                errorShow.css('display', 'block');
-                errorShow.text("PLO name must follow format PLOxx, please try again!");
-                }
-                } else {
-                var errorShow = $('#po-error');
-                if (newName == '') {
-                errorShow.css('display', 'block');
-                errorShow.text("PO name cannot be left blank, please try again!");
-                } else {
-                errorShow.css('display', 'block');
-                errorShow.text("PO name must follow format POxx, please try again!");
-                }
-                }
-                }
+                function handleSaveEdit() {
+                    const cloIndex = $(this).closest("tr").data("index");
+                    console.log({
+                        cloIndex
+                    })
+                    const newName = $(this).closest("tr").find("td").find('input').val();
+                    const newDescription = $(this).closest("tr").find("td").find('textarea').val();
+                    const newMapToPLO = $(this).closest("tr").find("td").find('select#mapToPLO option:selected').text();
+                    const tblIDCheck = $(this).closest('table').attr('id');
+                    if (newName.includes('CLO') && newDescription) {
+                        handleEditCLO(cloIndex, newName, newDescription, newMapToPLO);
+                    } else {
+                        if (tblIDCheck.includes('plo')) {
+                            var errorShow = $('#plo-error');
+                            if (newName == '') {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PLO name cannot be left blank, please try again!");
+                            } else {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PLO name must follow format PLOxx, please try again!");
+                            }
+                        } else {
+                            var errorShow = $('#po-error');
+                            if (newName == '') {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PO name cannot be left blank, please try again!");
+                            } else {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PO name must follow format POxx, please try again!");
+                            }
+                        }
+                    }
                 }
 
                 function resetForm(form) {
-                const formElements = form.querySelectorAll("input, select, textarea");
-                for (let i = 0; i < formElements.length; i++) {
-                const elementType = formElements[i].type.toLowerCase();
-                if (elementType === "text" || elementType === "password" || elementType === "textarea" || elementType === "select-one" || elementType === "select-multiple") {
-                formElements[i].value = "";
-                } else if (elementType === "checkbox" || elementType === "radio") {
-                formElements[i].checked = formElements[i].defaultChecked;
+                    const formElements = form.querySelectorAll("input, select, textarea");
+                    for (let i = 0; i < formElements.length; i++) {
+                        const elementType = formElements[i].type.toLowerCase();
+                        if (elementType === "text" || elementType === "password" || elementType === "textarea" || elementType === "select-one" || elementType === "select-multiple") {
+                            formElements[i].value = "";
+                        } else if (elementType === "checkbox" || elementType === "radio") {
+                            formElements[i].checked = formElements[i].defaultChecked;
+                        }
+                    }
                 }
+
+
+                // handle sessions-questions-assessments
+                const input = document.getElementById("file-input");
+               
+                input.addEventListener("change", handleFileUpload);
+
+                async function handleFileUpload(event) {
+                    const file = event.target.files[0];
+                    const sessionsMap = {
+                        'No': 'no',
+                        'Topic': 'topic',
+                        'Learning Type': 'learning_type',
+                        'LO': 'lo',
+                        'ITU': 'itu',
+                        'Material': 'material',
+                    };
+                    const questionsMap = {
+                        'No': 'no',
+                        'SessionNo': 'session_no',
+                        'Name': 'name',
+                        'Details': 'details',
+                    };
+                    const assessmentsMap = {
+                        'No': 'no',
+                        'Category': 'category',
+                        'Type': 'type',
+                        'Part': 'part',
+                        'Weight': 'weight',
+                        'Complement citerial': 'complement_citerial',
+                        'Duration': 'duration',
+                        'CLO': 'clo',
+                        'Question Type': 'question_type',
+                        'Total Questions': 'total_question',
+                        'Knowledge and Skill': 'kns',
+                        'Grading Guide': 'grading_guide',
+
+                    };
+
+                    try {
+                        startLoading();
+
+                        const sessionsData = await readXlsxFile(file, {
+                            sheet: "Sessions",
+                            map: sessionsMap
+                        });
+                        const assessmentsData = await readXlsxFile(file, {
+                            sheet: "Assessments",
+                            map: assessmentsMap
+                        });
+                       const questionsData = await readXlsxFile(file, {
+                            sheet: "Questions",
+                            map: questionsMap
+                        });
+                        
+                        renderList(sessionsData?.rows, 'sessions');
+                        renderList(questionsData?.rows, 'questions')
+                        renderList(assessmentsData?.rows, 'assessments')
+                    } catch (e) {
+                        console.error(e);
+                    } finally {
+                        stopLoading();
+                    }
+
+                };
+                
+                function renderList(list, type) {
+                    if (!list || list.length === 0) return;
+
+                    const action = {
+                        sessions: renderListSessions,
+                        assessments: renderListAssessments,
+                        questions: renderListQuestions
+                    }
+                    
+                    const executeFn = action[type]
+                    
+                    if (!executeFn) throw new Error('Invalid type of list. We\'ve supported sessions, questions and assessments. Try again');
+                    
+                    executeFn(list);
+                    localStorage.setItem('syllabus.' + type, JSON.stringify(list));
                 }
+                function renderListQuestions(rows) {
+                    const questionsTable = document.getElementById("excel-table-questions");
+                    
+                    rows.forEach((row) => {
+                        const tr = document.createElement("tr");
+                        const tdCheckbox = document.createElement("td");
+                        const checkbox = document.createElement("input");
+                        const tdNo = document.createElement("td");
+                        const tdSessionNo = document.createElement("td");
+                        const tdName = document.createElement("td");
+                        const tdDetails = document.createElement("td");
+                        const tdEdit = document.createElement("td");
+                        const editButton = document.createElement("button");
+                        
+                        checkbox.type = "checkbox";
+                        checkbox.checked = true;
+                        tdNo.textContent = row.no;
+                        tdSessionNo.textContent = row?.session_no;
+                        tdName.textContent = row?.name;
+                        tdDetails.textContent = row.details;
+                        tdDetails.setAttribute('colspan', 3);
+                        editButton.textContent = "Edit";
+                        editButton.classList.add("btn", "btn-sm", "btn-primary");
+                        
+                        tdCheckbox.appendChild(checkbox);
+                        tr.appendChild(tdCheckbox);
+                        tr.appendChild(tdNo);
+                        tr.appendChild(tdSessionNo);
+                        tr.appendChild(tdName);
+                        tr.appendChild(tdDetails);
+                        tdEdit.appendChild(editButton);
+                        tr.appendChild(tdEdit);
+                        questionsTable.appendChild(tr);
+                    });
+                }
+
+                function renderListAssessments(rows) {
+                    const assessmentsTable = document.getElementById("excel-table-assessments");
+                    
+                    rows.forEach((row) => {
+                        const tr = document.createElement("tr");
+                        const tdCheckbox = document.createElement("td");
+                        const checkbox = document.createElement("input");
+                        const tdNo = document.createElement("td");
+                        const tdCategory = document.createElement("td");
+                        const tdType = document.createElement("td");
+                        const tdPart = document.createElement("td");
+                        const tdWeight = document.createElement("td");
+                        const tdComplementCiterial = document.createElement("td");
+                        const tdDuration = document.createElement("td");
+                        const tdCLO = document.createElement("td");
+                        const tdQuestionType = document.createElement("td");
+                        const tdTotalQuestions = document.createElement("td");
+                        const tdKnowledgeSkills = document.createElement("td");
+                        const tdGradingGuide = document.createElement("td");
+                        const tdEdit = document.createElement("td");
+                        const editButton = document.createElement("button");
+                        
+                        checkbox.type = "checkbox";
+                        checkbox.checked = true;
+                        tdNo.textContent = row?.no;
+                        tdCategory.textContent = row?.category;
+                        tdType.textContent = row?.type;
+                        tdPart.textContent = row?.part;
+                        tdWeight.textContent = row?.weight;
+                        tdComplementCiterial.textContent = row?.complement_citerial;
+                        tdDuration.textContent = row?.duration;
+                        tdCLO.textContent = row?.clo;
+                        tdQuestionType.textContent = row?.question_type;
+                        tdTotalQuestions.textContent = row?.total_questions;
+                        tdKnowledgeSkills.textContent = row?.kns;
+                        tdGradingGuide.textContent = row?.grading_guide;
+
+                        editButton.textContent = "Edit";
+                        editButton.classList.add("btn", "btn-sm", "btn-primary");
+                        
+                        tdCheckbox.appendChild(checkbox);
+                        tdEdit.appendChild(editButton);
+                        
+                        tr.appendChild(tdCheckbox);
+                        tr.appendChild(tdNo);
+                        tr.appendChild(tdCategory);
+                        tr.appendChild(tdType);
+                        tr.appendChild(tdPart);
+                        tr.appendChild(tdWeight);
+                        tr.appendChild(tdComplementCiterial);
+                        tr.appendChild(tdDuration);
+                        tr.appendChild(tdCLO);
+                        tr.appendChild(tdQuestionType);
+                        tr.appendChild(tdTotalQuestions);
+                        tr.appendChild(tdKnowledgeSkills);
+                        tr.appendChild(tdGradingGuide);
+                        
+                        tr.appendChild(tdEdit);
+                        assessmentsTable.appendChild(tr);
+                    });
+                }
+
+                function renderListSessions(rows) {
+                    const sessionsTable = document.getElementById("excel-table-sessions");
+                    
+                    rows.forEach((row) => {
+                        //Create elements
+                        const tr = document.createElement("tr");
+                        const tdCheckbox = document.createElement("td");
+                        const checkbox = document.createElement("input");
+                        const tdNo = document.createElement("td");
+                        const tdTopic = document.createElement("td");
+                        const tdLearningType = document.createElement("td");
+                        const tdLO = document.createElement("td");
+                        const tdITU = document.createElement("td");
+                        const tdMaterial = document.createElement("td");
+                        const tdEdit = document.createElement("td");
+                        const editButton = document.createElement("button");
+
+                        // Set essentials data
+                        checkbox.type = "checkbox";
+                        checkbox.checked = true;
+                        tdCheckbox.appendChild(checkbox);
+                        tdNo.textContent = row.no;
+                        tdTopic.textContent = row.topic;
+                        tdLearningType.textContent = row.learningType;
+                        tdLO.textContent = row.lo;
+                        tdITU.textContent = row.itu;
+                        tdMaterial.textContent = row.material;
+                        editButton.textContent = "Edit";
+                        editButton.classList.add("btn", "btn-sm", "btn-primary");
+
+                        // Append them.
+                        tdEdit.appendChild(editButton);
+
+                        tr.appendChild(tdCheckbox);
+                        tr.appendChild(tdNo);
+                        tr.appendChild(tdTopic);
+                        tr.appendChild(tdLearningType);
+                        tr.appendChild(tdLO);
+                        tr.appendChild(tdITU);
+                        tr.appendChild(tdMaterial);
+                        tr.appendChild(tdEdit);
+                        sessionsTable.appendChild(tr);
+                    });
                 }
             </script>
     </body>

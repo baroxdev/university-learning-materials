@@ -1,12 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controllers.auth;
 
-import actions.auth.Login;
-import actions.auth.Logout;
+import actions.auth.UpdatePassword;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -20,17 +18,16 @@ import actions.Action;
 
 /**
  *
- * @author Admin
+ * @author quocb
  */
-@WebServlet(name = "UserController", urlPatterns = {"/login", "/logout"})
-public class AuthController extends HttpServlet {
+@WebServlet(name = "Auth2", urlPatterns = {"/auth/*"})
+public class AuthPassWordController extends HttpServlet {
 
-    private final Map<String, Action> actionMap = new HashMap<>();
+    private Map<String, Action> actionMap = new HashMap<>();
 
-    @Override
     public void init() {
-        actionMap.put("/login", new Login());
-        actionMap.put("/logout", new Logout());
+        actionMap.put("/auth/reset-password", new UpdatePassword());
+        actionMap.put("/auth/update-password", new UpdatePassword());
     }
 
     /**
@@ -45,15 +42,15 @@ public class AuthController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UserController</title>");
+            out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UserController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Auth2 at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -71,9 +68,10 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Action action = actionMap.get(request.getServletPath());
+        String path = request.getServletPath() + request.getPathInfo();
+        Action action = actionMap.get(path);
+        System.out.println("path " + path);
         if (action != null) {
-            System.out.println("logout here");
             action.doGet(request, response);
         } else {
             // Handle error if the path is not supported
@@ -92,8 +90,10 @@ public class AuthController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("path " + request.getServletPath());
-        Action action = actionMap.get(request.getServletPath());
+        System.out.println(request.getContextPath());
+        String path = request.getServletPath() + request.getPathInfo();
+        Action action = actionMap.get(path);
+        System.out.println("path " + path);
         if (action != null) {
             action.doPost(request, response);
         } else {
