@@ -5,23 +5,25 @@
 package actions.dashboard;
 
 import actions.Action;
-import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
- *
  * @author quocb
  */
-public class ViewDashboard implements Action{
+public class ViewDashboard implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/pages/dashboard/index.jsp").forward(request, response);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/pages/dashboard/index.jsp").forward(request, response);
     }
-    
+
 }

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- *
  * @author quocb
  */
 public class DBUtils {
@@ -23,7 +22,7 @@ public class DBUtils {
 //                 +";databasename="+db+";user="+uid+";password="+pwd;
         String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
         String password = "Fullstack123";
-        String url = "jdbc:sqlserver://ulm-server.database.windows.net:1433;database=ULMDatabase;user=ulmteam@ulm-server;password="+password + ";encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        String url = "jdbc:sqlserver://ulm-server.database.windows.net:1433;database=ULMDatabase;user=ulmteam@ulm-server;password=" + password + ";encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;useUnicode=true;characterEncoding=UTF-8";
         Class.forName(driver);
         cn = DriverManager.getConnection(url);
         return cn;

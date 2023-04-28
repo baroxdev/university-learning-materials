@@ -4,18 +4,19 @@
  */
 package utils;
 
-import java.io.IOException;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.stream.Collectors;
+
 /**
- *
  * @author quocb
  */
 public class JsonUtils {
 
     public static JSONObject getRequestJson(HttpServletRequest request) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         String jsonString = request.getReader().lines().collect(Collectors.joining());
         JSONObject json = new JSONObject(jsonString);
         return json;

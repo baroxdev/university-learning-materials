@@ -12,28 +12,27 @@ import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
 import exceptions.CurriculumException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
 import utils.ResponseUtils;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author quocb
  */
 public class AddNewCurriculum implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/dashboard/addCurriculum.jsp").forward(request, response);
     }
 
     @Override
@@ -62,16 +61,18 @@ public class AddNewCurriculum implements Action {
                 cur.setDescription(curDescription);
                 cur.setDecisionNo(curDecisionNo);
                 cur.setViName(curViName);
-
+                System.out.println("Origin decision " + curDecisionNo);
+                System.out.println("Decision in AddNewCurr...java " + cur.getDecisionNo());
                 //convert jsonArray to list
                 List<ProgramObjective> poList = jsonArrayToList("po", poArray);
                 List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
 
                 //tạo liên kết với po, plo...
                 //thêm vào db
-                System.out.println(curViName);
+                System.out.println("Vietnamese name " + curViName);
 
 //                CurriculumDao.add(cur, poList, ploList);
+                System.out.println("Do not add to  2");
             } catch (CurriculumException ce) {
                 JSONObject jsonResponse = new JSONObject();
                 jsonResponse.put("message", ce.getMessage());
