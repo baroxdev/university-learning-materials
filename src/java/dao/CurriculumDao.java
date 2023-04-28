@@ -11,20 +11,14 @@ import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
 import entities.SearchResult;
 import exceptions.CurriculumException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import utils.DBUtils;
 import utils.DataUtils;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author giahu
  */
 public class CurriculumDao {
@@ -45,8 +39,8 @@ public class CurriculumDao {
                 curriculum.setCode(rs.getString("code"));
                 curriculum.setName(rs.getString("name"));
                 curriculum.setDescription(rs.getString("description"));
-                curriculum.setDecisionNo(rs.getString("decisionNo"));
-                curriculum.setViName(rs.getString("viName"));
+                curriculum.setDecisionNo(rs.getNString("decisionNo"));
+                curriculum.setViName(rs.getNString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
                 System.out.println("AFter convert " + DataUtils.getBoolean(rs.getInt("active")));
@@ -67,28 +61,23 @@ public class CurriculumDao {
         String query = "select * from Curriculum where code like ?";
         List<Curriculum> list = new ArrayList<>();
         try {
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, "%" + code + "%");
-            ResultSet rs = pre.executeQuery();
-            while (rs.next()) {
-                Curriculum curriculum = new Curriculum();
-                curriculum.setId(rs.getInt("id"));
-                curriculum.setCode(rs.getString("code"));
-                curriculum.setName(rs.getString("name"));
-                curriculum.setDescription(rs.getString("description"));
-                curriculum.setDecisionNo(rs.getString("decisionNo"));
-                curriculum.setViName(rs.getString("viName"));
-                curriculum.setCreatedAt(rs.getString("createdAt"));
-                curriculum.setUpdatedAt(rs.getString("updatedAt"));
-                curriculum.setActive(rs.getBoolean("active"));
-                list.add(curriculum);
-            }
-            con.close();
+            searchDatabase(code, query, list);
         } catch (Exception e) {
             throw new CurriculumException("Something went wrong in read curriculum progress.");
         }
         return list;
+    }
+
+    private static void searchDatabase(String code, String query, List<Curriculum> list) throws Exception {
+        Connection con = DBUtils.makeConnection();
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, "%" + code + "%");
+        ResultSet rs = pre.executeQuery();
+        while (rs.next()) {
+            Curriculum curriculum = getCurriculumFromResultSet(rs);
+            list.add(curriculum);
+        }
+        con.close();
     }
 
     //Get list curriculum by name(search by name)
@@ -96,24 +85,7 @@ public class CurriculumDao {
         String query = "select * from Curriculum where name like ?";
         List<Curriculum> list = new ArrayList<>();
         try {
-            Connection con = DBUtils.makeConnection();
-            PreparedStatement pre = con.prepareStatement(query);
-            pre.setString(1, "%" + name + "%");
-            ResultSet rs = pre.executeQuery();
-            while (rs.next()) {
-                Curriculum curriculum = new Curriculum();
-                curriculum.setId(rs.getInt("id"));
-                curriculum.setCode(rs.getString("code"));
-                curriculum.setName(rs.getString("name"));
-                curriculum.setDescription(rs.getString("description"));
-                curriculum.setDecisionNo(rs.getString("decisionNo"));
-                curriculum.setViName(rs.getString("viName"));
-                curriculum.setCreatedAt(rs.getString("createdAt"));
-                curriculum.setUpdatedAt(rs.getString("updatedAt"));
-                curriculum.setActive(rs.getBoolean("active"));
-                list.add(curriculum);
-            }
-            con.close();
+            searchDatabase(name, query, list);
         } catch (Exception e) {
             throw new CurriculumException("Something went wrong in get curriculum progress.");
         }
@@ -129,23 +101,29 @@ public class CurriculumDao {
             PreparedStatement pre = con.prepareStatement(query);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
-                Curriculum curriculum = new Curriculum();
-                curriculum.setId(rs.getInt("id"));
-                curriculum.setCode(rs.getString("code"));
-                curriculum.setName(rs.getString("name"));
-                curriculum.setDescription(rs.getString("description"));
-                curriculum.setDecisionNo(rs.getString("decisionNo"));
-                curriculum.setViName(rs.getString("viName"));
-                curriculum.setCreatedAt(rs.getString("createdAt"));
-                curriculum.setUpdatedAt(rs.getString("updatedAt"));
-                curriculum.setActive(rs.getBoolean("active"));
+                Curriculum curriculum = getCurriculumFromResultSet(rs);
                 list.add(curriculum);
             }
             con.close();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CurriculumException("Something went wrong in get curriculum progress.");
         }
         return list;
+    }
+
+    private static Curriculum getCurriculumFromResultSet(ResultSet rs) throws Exception {
+        Curriculum curriculum = new Curriculum();
+        curriculum.setId(rs.getInt("id"));
+        curriculum.setCode(rs.getString("code"));
+        curriculum.setName(rs.getString("name"));
+        curriculum.setDescription(rs.getString("description"));
+        curriculum.setDecisionNo(rs.getNString("decisionNo"));
+        curriculum.setViName(rs.getNString("viName"));
+        curriculum.setCreatedAt(rs.getString("createdAt"));
+        curriculum.setUpdatedAt(rs.getString("updatedAt"));
+        curriculum.setActive(rs.getBoolean("active"));
+        return curriculum;
     }
 
     public static List<SearchResult> searchByName(String name) throws Exception {
@@ -183,10 +161,10 @@ public class CurriculumDao {
             con.setAutoCommit(false);
 
             if (poList.isEmpty()) {
-                throw new IllegalArgumentException("Atleast one PO must be add.");
+                throw new IllegalArgumentException("At least one PO must be add.");
             }
             if (ploList.isEmpty()) {
-                throw new IllegalArgumentException("Atleast one PLO must be add.");
+                throw new IllegalArgumentException("At least one PLO must be add.");
             }
 
             curId = add(con, curriculum);
@@ -223,6 +201,7 @@ public class CurriculumDao {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                throw e;
             }
         }
     }
@@ -236,9 +215,10 @@ public class CurriculumDao {
         pre.setNString(2, curriculum.getViName());
         pre.setString(3, curriculum.getName());
         pre.setString(4, curriculum.getDescription());
+        System.out.println("decision " + curriculum.getDecisionNo());
         pre.setNString(5, curriculum.getDecisionNo());
         pre.setString(6, null);
-        pre.setBoolean(7, true); 
+        pre.setBoolean(7, true);
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {

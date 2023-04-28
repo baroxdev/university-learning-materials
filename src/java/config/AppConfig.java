@@ -8,66 +8,66 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- *
  * @author quocb
  */
 public class AppConfig {
 
-//    AUTHENTICATION
+    //    AUTHENTICATION
     public final static String AUTH_USER = "USER";
     public final static String AUTH_FORCE_UPDATE_PASSWORD = "FORCE_UPDATE_PASSWORD";
     public final static String AUTH_PERMITTED_PATHS = "PERMITTED_PATHS";
     public final static ArrayList<String> EXCLUDE_ROUTES = new ArrayList(Arrays.asList("/login", "/register", "/Test", "/logout"));
 
-//    REQUISITE
+    //    REQUISITE
     public final static String REQUISITE_ITEM = "REQUISITE";
 
-//    SYLLABUS
+    //    SYLLABUS
     public final static String SYLLABUS_ITEM = "SYLLABUS";
     public final static String SYLLABUS_ROOT_SLUG = "syllabus";
 
-//    CURRICULUMNS
+    //    CURRICULUMNS
     public final static String CURRICULUM_ITEM = "CURRICULUMN";
     public final static String CURRICULUM_ROOT_SLUG = "curriculums";
 
-//    PO
+    //    PO
     public final static String PO_ITEM = "PO";
     public final static String PO_LIST = "PO_LIST";
 
-//    PLO
+    //    PLO
     public final static String PLO_ITEM = "PLO";
     public final static String PLO_LIST = "PLO_LIST";
 
-//    CLO
+    //    CLO
     public final static String CLO_ITEM = "CLO";
     public final static String CLO_LIST = "CLO_LIST";
 
-//    MATERIALS
+    //    MATERIALS
     public final static String MATERIALS_ITEM = "MATERIALS";
     public final static String MATERIALS_LIST = "MATERIALS_LIST";
 
-//    SESSION
+    //    SESSION
     public final static String SESSION_ITEM = "SESSION";
     public final static String SESSION_LIST = "SESSION_LIST";
 
-//    SUBJECT
+    //    SUBJECT
     public final static String SUBJECT_ITEM = "SUBJECT";
     public final static String SUBJECT_LIST = "SUBJECT_LIST";
 
-//    EXPLORE
+    //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";
 
-//    Dashboard
+    //    Dashboard
     public final static String DASHBOARD_CURRICULUM_LIST = "lsCurriculums";
     public final static String DASHBOARD_CURRICULUM_TARGET = "curriculum";
     public final static String DASHBOARD_SYLLABUS_TARGET = "syllabus";
     public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
+    public final static String DASHBOARD_SUBJECT_LIST = "lsSubjects";
 
-//    ERRORS
+    //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";
     public final static String PO_ERROR_MESSAGE = "PO_ERROR_MESSAGE";
     public final static String PLO_ERROR_MESSAGE = "PLO_ERROR_MESSAGE";
 
-//    PATHS
+    //    PATHS
     public final static String NOT_FOUND_PAGE = "/pages/not-found.jsp";
 }

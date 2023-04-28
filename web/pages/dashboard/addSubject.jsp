@@ -1,0 +1,234 @@
+<%-- 
+    Document   : CurriculumAdd
+    Created on : Apr 13, 2023, 11:20:49 PM
+    Author     : Admin
+--%>
+
+<%@page import="config.AppConfig" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        <%@ include file="/css/style.css" %>
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Add Subject</title>
+</head>
+
+<body>
+<div class="container-fluid h-100" id="add-curriculum-page">
+    <div class="row h-100">
+        <div class="left col-md-2">
+
+        </div>
+        <div class="right col-md-10">
+            <header>
+                <div class="d-flex align-items-center justify-content-between container">
+                    <a href="#">
+                        <h3></h3>
+                    </a>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="dropdown">
+                            <div class="dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown"
+                                 aria-expanded="false" style="margin: 0!important">
+                                <img class="rounded-circle" style="width:40px"
+                                     src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp">
+                                <span class="caret"></span>
+                            </div>
+                            <ul class="dropdown-menu  dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#">Setting</a></li>
+                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <hr/>
+            <main style="margin-bottom: 100px;">
+                <div class="container" style="margin: 0 auto">
+                    <!--Modal-->
+                    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Note</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Uploading will be able to delete all existing datas, do you want to keep
+                                        them?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="modal-no" type="button" class="btn btn-secondary">No</button>
+                                    <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <legend>Add Subject</legend>
+                    <form class="mt-4" action="<c:url value="/dashboard/subjects/add" />" method="POST"
+                          id="add-subject-form">
+                        <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                            <div class="col-2">
+                                <label for="subject.code" class="col-form-label" style="font-size: 16px;">Code</label>
+                            </div>
+                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                <input type="text" name="subject.code" id="subject.code" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row g-3 align-items-center mt-1">
+                            <div class="col-2">
+                                <label for="subject.slug" class="col-form-label" style="font-size: 16px;">Slug</label>
+                            </div>
+                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                <input type="text" name="subject.slug" id="subject.slug" class="form-control" readonly
+                                       disabled>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 align-items-center mt-1">
+                            <div class="col-2">
+                                <label for="subject.name" class="col-form-label" style="font-size: 16px;">English
+                                    name</label>
+                            </div>
+                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                <input type="text" id="subject.name" name="subject.name" class="form-control"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="row g-3 align-items-center mt-1">
+                            <div class="col-2">
+                                <label for="subject.viName" class="col-form-label"
+                                       style="font-size: 16px;">Vietnamese name</label>
+                            </div>
+                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                <input type="text" id="subject.viName" name="subject.viName" class="form-control"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="subject.semester" class="col-form-label" style="font-size: 16px;">
+                                Semester
+                            </label>
+                            <input type="number" value="0" min="0" max="10" step="0.25" id="subject.semester"
+                                   name="subject.semester"
+                                   class="form-control"/>
+                        </div>
+                        <div class="" style="margin-left: auto">
+                            <button id="btn-submit" type="submit" class="btn btn-primary">Add
+                            </button>
+                            <button onclick="history.back()" id="btn-save" type="button" class="btn btn-secondary"
+                            >Cancel
+                            </button>
+                        </div>
+                        <div class="alert alert-danger" id="submit-error" role="alert"
+                             style="margin-top: 20px; margin-right: 4px; display: none;">
+                            SUBMIT_MESSAGE
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
+<script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+            // renderBasicInf();
+            $("#add-subject-form").submit(function (e) {
+                $(':disabled').each(function (e) {
+                    $(this).removeAttr('disabled');
+                })
+            });
+        }
+    );
+
+    document.getElementById("subject.code").addEventListener("change", handleCodeChange);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        document.getElementById("subject.slug").disabled = false;
+        e.submit();
+    }
+
+    function handleCodeChange(e) {
+        const code = e.target.value;
+        document.getElementById("subject.slug").value = slugify(code.toLowerCase().replaceAll('_', '- '));
+    }
+
+    function renderBasicInf() {
+        let basicCode = localStorage.getItem("curiculum.basicCode");
+        let basicSlug = localStorage.getItem("curiculum.basicSlug");
+        let basicEnglishName = localStorage.getItem("curiculum.basicEnglishName");
+        let basicVietnameseName = localStorage.getItem("curiculum.basicVietnameseName");
+        let basicDescription = localStorage.getItem("curiculum.basicDescription");
+        let basicDecisionNo = localStorage.getItem("curiculum.basicDecisionNo");
+        if (basicCode == null) {
+            $('#code').val('');
+        } else {
+            $('#code').val(JSON.parse(basicCode));
+        }
+        if (basicSlug == null) {
+            $('#slug').val('');
+        } else {
+            $('#slug').val(JSON.parse(basicSlug));
+        }
+        if (basicEnglishName == null) {
+            $('#englishName').val('');
+        } else {
+            $('#englishName').val(JSON.parse(basicEnglishName));
+        }
+        if (basicVietnameseName == null) {
+            $('#vietnameseName').val('');
+        } else {
+            $('#vietnameseName').val(JSON.parse(basicVietnameseName));
+        }
+        if (basicDescription == null) {
+            $('#description').val('');
+        } else {
+            $('#description').val(JSON.parse(basicDescription));
+        }
+        if (basicDecisionNo == null) {
+            $('#decisionNo').val('');
+        } else {
+            $('#decisionNo').val(JSON.parse(basicDecisionNo));
+        }
+    }
+
+    function resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo) {
+        localStorage.setItem("curiculum.basicCode", JSON.stringify(basicCode));
+        localStorage.setItem("curiculum.basicEnglishName", JSON.stringify(basicEnglishName));
+        localStorage.setItem("curiculum.basicVietnameseName", JSON.stringify(basicVietnameseName));
+        localStorage.setItem("curiculum.basicDescription", JSON.stringify(basicDescription));
+        localStorage.setItem("curiculum.basicDecisionNo", JSON.stringify(basicDecisionNo));
+        localStorage.setItem("curiculum.basicSlug", JSON.stringify(basicSlug));
+    }
+
+</script>
+</body>
+
+</html>

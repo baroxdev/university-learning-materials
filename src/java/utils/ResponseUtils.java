@@ -4,18 +4,15 @@
  */
 package utils;
 
-import config.AppConfig;
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
- *
  * @author quocb
  */
 public class ResponseUtils {
-
     public static void sendJson(HttpServletResponse response, Integer status, JSONObject json) throws IOException {
         response.setStatus(status);
         response.setContentType("application/json");

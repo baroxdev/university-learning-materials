@@ -5,46 +5,42 @@
  */
 package entities;
 
-import java.util.Date;
-
 /**
- *
  * @author giahu
  */
 public class Subject {
 
     private String id;
     private String name;
+    private String viName;
     private String createdAt;
+
     private String updatedAt;
     private String preRequisite;
     private String slug;
-    private int semester;
-    private int credit;
-    private int knowlegdeCategoryID;
+    private String semester;
 
     public Subject() {
     }
 
-    public Subject(String id, String name, String createdAt, String updatedAt, int semester, int credit, String slug) {
+    public Subject(String id, String name, String viName, String createdAt, String updatedAt, String preRequisite, String slug, String semester) {
         this.id = id;
         this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.semester = semester;
-        this.credit = credit;
-        this.slug = slug;
-    }
-
-    public Subject(String id, String name, String createdAt, String updatedAt, String preRequisite, int semester, int credit, int knowlegdeCategoryID) {
-        this.id = id;
-        this.name = name;
+        this.viName = viName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.preRequisite = preRequisite;
+        this.slug = slug;
         this.semester = semester;
-        this.credit = credit;
-        this.knowlegdeCategoryID = knowlegdeCategoryID;
+    }
+
+    public Subject(String id, String name, String createdAt, String updatedAt, String semester, String slug) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.semester = semester;
+        this.slug = slug;
     }
 
     public String getId() {
@@ -61,6 +57,14 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getViName() {
+        return viName;
+    }
+
+    public void setViName(String viName) {
+        this.viName = viName;
     }
 
     public String getCreatedAt() {
@@ -87,28 +91,12 @@ public class Subject {
         this.preRequisite = preRequisite;
     }
 
-    public int getSemester() {
+    public String getSemester() {
         return semester;
     }
 
-    public void setSemester(int semester) {
+    public void setSemester(String semester) {
         this.semester = semester;
-    }
-
-    public int getCredit() {
-        return credit;
-    }
-
-    public void setCredit(int credit) {
-        this.credit = credit;
-    }
-
-    public int getKnowlegdeCategoryID() {
-        return knowlegdeCategoryID;
-    }
-
-    public void setKnowlegdeCategoryID(int knowlegdeCategoryID) {
-        this.knowlegdeCategoryID = knowlegdeCategoryID;
     }
 
     public String getSlug() {
@@ -118,6 +106,6 @@ public class Subject {
     public void setSlug(String slug) {
         this.slug = slug;
     }
-    
-    
+
+
 }
