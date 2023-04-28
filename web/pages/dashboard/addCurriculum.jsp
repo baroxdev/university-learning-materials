@@ -272,16 +272,16 @@
 
     $(document).ready(function () {
         let oldName;
-            let oldDescription;
+        let oldDescription;
 
-            $("#btn-submit").click(function () {
-                handleSubmit();
-            });
+        $("#btn-submit").click(function () {
+            handleSubmit();
+        });
 
-            $('#file_upload').click(function () {
-                $(this).val('');
-            }).change(function () {
-                let file = $('#file_upload')[0].files[0];
+        $('#file_upload').click(function () {
+            $(this).val('');
+        }).change(function () {
+            let file = $('#file_upload')[0].files[0];
                 let errorShow = $('#upload-error');
                 const addPOForm = $('#add-po-form');
                 const addPLOForm = $('#add-plo-form');

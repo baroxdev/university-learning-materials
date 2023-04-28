@@ -60,6 +60,7 @@ public class AuthFilter implements Filter {
             }
 
             if (!formatedPathInfo.equals("/404") && !inRangePermitted) {
+                System.out.println("not permit");
                 res.sendRedirect(req.getContextPath() + "/404");
                 return;
             }

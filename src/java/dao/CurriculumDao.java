@@ -150,6 +150,31 @@ public class CurriculumDao {
         return list;
     }
 
+    public static List<SearchResult> searchByCode(String code) throws Exception {
+        String query = "select * from Curriculum where code like ?";
+        List<SearchResult> list = new ArrayList<>();
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, "%" + code + "%");
+            ResultSet rs = pre.executeQuery();
+            System.out.println("search");
+            while (rs.next()) {
+                SearchResult searchResult = new SearchResult();
+                searchResult.setId(rs.getInt("id"));
+                searchResult.setName(rs.getString("code"));
+                searchResult.setSlug(String.valueOf(rs.getInt("id")));
+                searchResult.setRoot_slug(AppConfig.CURRICULUM_ROOT_SLUG);
+                list.add(searchResult);
+            }
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CurriculumException("Something went wrong in get curriculum progress.");
+        }
+        return list;
+    }
+
     //Add new curriculum(+po,plo) to db
     public static void add(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramLearningObjective> ploList) throws Exception {
         Connection con = null;

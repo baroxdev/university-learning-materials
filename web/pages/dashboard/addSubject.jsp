@@ -132,7 +132,7 @@
 <script>
 
     $(document).ready(function () {
-        // renderBasicInf();
+            // renderBasicInf();
             $("#add-subject-form").submit(function (e) {
                 $(':disabled').each(function (e) {
                     $(this).removeAttr('disabled');
