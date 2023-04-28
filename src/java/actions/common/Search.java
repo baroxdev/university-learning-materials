@@ -4,19 +4,19 @@ import actions.Action;
 import dao.CurriculumDao;
 import dao.SyllabusDao;
 import entities.SearchResult;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.ResponseUtils;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author quocb
  */
 public class Search implements Action {
@@ -25,16 +25,15 @@ public class Search implements Action {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JSONObject json = new JSONObject();
         Integer status = HttpServletResponse.SC_OK;
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             try {
                 String query = request.getParameter("q");
                 String category = request.getParameter("c");
                 System.out.println("cate " + category);
                 List<SearchResult> results = new ArrayList<>();
-                System.out.println("query" + query);
                 switch (category) {
                     case "curriculum": {
-                        results = CurriculumDao.searchByName(query);
+                        results = CurriculumDao.searchByCode(query);
                         break;
                     }
                     case "syllabus": {
@@ -43,7 +42,7 @@ public class Search implements Action {
                         break;
                     }
                 }
-                
+
                 JSONArray jsonArray = new JSONArray(results);
                 json.put("data", jsonArray);
             } catch (Exception e) {

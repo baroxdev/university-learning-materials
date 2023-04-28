@@ -28,265 +28,240 @@
 </head>
 
 <body>
-<div class="container-fluid h-100" id="add-curriculum-page">
-    <div class="row h-100">
-        <div class="left col-md-2">
-
-        </div>
-        <div class="right col-md-10">
-            <header>
-                <div class="d-flex align-items-center justify-content-between container">
-                    <a href="#">
-                        <h3></h3>
-                    </a>
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown"
-                                 aria-expanded="false" style="margin: 0!important">
-                                <img class="rounded-circle" style="width:40px"
-                                     src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp">
-                                <span class="caret"></span>
+<div class="dashboard-container">
+    <%@include file="/components/dashboard/sidebar.jspx" %>
+    <main>
+        <%@include file="/components/dashboard/header.jspx" %>
+        <div class="dashboard-content">
+            <div class="container" style="margin: 0 auto">
+                <!--Modal-->
+                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Note</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
-                            <ul class="dropdown-menu  dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Setting</a></li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul>
+                            <div class="modal-body">
+                                <p>Uploading will be able to delete all existing datas, do you want to keep
+                                    them?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="modal-no" type="button" class="btn btn-secondary">No</button>
+                                <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </header>
-            <hr/>
-            <main style="margin-bottom: 100px;">
-                <div class="container" style="margin: 0 auto">
-                    <!--Modal-->
-                    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Note</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Uploading will be able to delete all existing datas, do you want to keep
-                                        them?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="modal-no" type="button" class="btn btn-secondary">No</button>
-                                    <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
-                                </div>
+
+
+                <legend>Add Curriculum</legend>
+                <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
+
+                    <!-- Basic Infomation -->
+                    <span>Basic Infomation</span>
+                    <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                        <div class="col-2">
+                            <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" name="code" id="code" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" name="splug" id="slug" class="form-control" readonly disabled>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="englishName" class="col-form-label" style="font-size: 16px;">English
+                                name</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" id="englishName" name="englishName" class="form-control"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="vietnameseName" class="col-form-label"
+                                   style="font-size: 16px;">Vietnamese name</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="description" class="col-form-label"
+                                   style="font-size: 16px;">Description</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="decisionNo" class="col-form-label" style="font-size: 16px;">Decision
+                                No</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" id="decisionNo" name="decisionNo" class="form-control"
+                                   placeholder="BIT_SE_K16C">
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" id="basic-error" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        BASIC_INFO_ERROR_MESSAGE
+                    </div>
+
+                    <!-- Objectives -->
+                    <span
+                            style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span><br>
+
+                    <!-- Objectives / Program Objectives (PO) -->
+                    <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
+                                    Objectives (PO)</span>
+                    <table id="poTbl" style="width: 96%; margin-bottom: 32px; display:none;">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%;">Name</th>
+                            <th style="width: 72%">Description</th>
+                            <th style="width: 20.4%;"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="form-add row g-3 align-items-center mt-1">
+                        <div class="row col-12" id="add-po-form">
+                            <div>
+                                <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
+                                <input type="text" id="poName" name="poName" class="form-control">
+                            </div>
+                            <div class="">
+                                <label for="poDescription" class="col-form-label"
+                                       style="font-size: 16px;">Description</label>
+                                <textarea id="poDescription" class="form-control" name="poDescription"
+                                ></textarea>
+                            </div>
+                            <div style="margin-top: 16px;">
+                                <button type="button" class="btn btn-primary" id="btn-add-po" name="op"
+                                        value="add_po">Add
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
                             </div>
                         </div>
                     </div>
 
+                    <div class="alert alert-danger" id="po-error" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        PO_ERROR_MESSAGE
+                    </div>
 
-                    <legend>Add Curriculum</legend>
-                    <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
-
-                        <!-- Basic Infomation -->
-                        <span>Basic Infomation</span>
-                        <div class="row g-3 align-items-center" style="margin-top: 23px;">
-                            <div class="col-2">
-                                <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" name="code" id="code" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" name="splug" id="slug" class="form-control" readonly disabled>
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="englishName" class="col-form-label" style="font-size: 16px;">English
-                                    name</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" id="englishName" name="englishName" class="form-control"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="vietnameseName" class="col-form-label"
-                                       style="font-size: 16px;">Vietnamese name</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="description" class="col-form-label"
-                                       style="font-size: 16px;">Description</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                <textarea class="form-control" id="description" name="description"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="decisionNo" class="col-form-label" style="font-size: 16px;">Decision
-                                    No</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" id="decisionNo" name="decisionNo" class="form-control"
-                                       placeholder="BIT_SE_K16C">
-                            </div>
-                        </div>
-                        <div class="alert alert-danger" id="basic-error" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            BASIC_INFO_ERROR_MESSAGE
-                        </div>
-
-                        <!-- Objectives -->
-                        <span
-                                style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span><br>
-
-                        <!-- Objectives / Program Objectives (PO) -->
-                        <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
-                                    Objectives (PO)</span>
-                        <table id="poTbl" style="width: 96%; margin-bottom: 32px; display:none;">
-                            <thead>
-                            <tr>
-                                <th style="width: 10%;">Name</th>
-                                <th style="width: 72%">Description</th>
-                                <th style="width: 20.4%;"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <div class="form-add row g-3 align-items-center mt-1">
-                            <div class="row col-12" id="add-po-form">
-                                <div>
-                                    <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
-                                    <input type="text" id="poName" name="poName" class="form-control">
-                                </div>
-                                <div class="">
-                                    <label for="poDescription" class="col-form-label"
-                                           style="font-size: 16px;">Description</label>
-                                    <textarea id="poDescription" class="form-control" name="poDescription"
-                                    ></textarea>
-                                </div>
-                                <div style="margin-top: 16px;">
-                                    <button type="button" class="btn btn-primary" id="btn-add-po" name="op"
-                                            value="add_po">Add
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="alert alert-danger" id="po-error" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            PO_ERROR_MESSAGE
-                        </div>
-
-                        <!-- Objectives / Program Learning Objectives (PLO) -->
-                        <span
-                                style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Program
+                    <!-- Objectives / Program Learning Objectives (PLO) -->
+                    <span
+                            style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Program
                                     Program Learning Objectives (PLO)</span>
 
-                        <table id="ploTbl" style="width: 96%; margin-bottom: 32px; display:none;">
-                            <thead>
-                            <tr>
-                                <th style="width: 7.6%;">Name</th>
-                                <th style="width: 65%">Description</th>
-                                <th style="width: 22%; text-align: right;">Map to PO</th>
-                                <th style="width: 5.4%;"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!--TITLE-->
-                            </tbody>
-                        </table>
+                    <table id="ploTbl" style="width: 96%; margin-bottom: 32px; display:none;">
+                        <thead>
+                        <tr>
+                            <th style="width: 7.6%;">Name</th>
+                            <th style="width: 65%">Description</th>
+                            <th style="width: 22%; text-align: right;">Map to PO</th>
+                            <th style="width: 5.4%;"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!--TITLE-->
+                        </tbody>
+                    </table>
 
-                        <div class="form-add row g-3 align-items-center mt-1">
-                            <div class="row col-12" id="add-plo-form">
-                                <div class="row" style="padding-right: 0">
-                                    <div class="col-6">
-                                        <label for="ploName" class="col-form-label"
-                                               style="font-size: 16px;">Name</label>
-                                        <input type="text" id="ploName" name="ploName" class="form-control">
-                                    </div>
-                                    <div class="col-6" style="padding-right: 0">
-                                        <label for="mapToPO" class="col-form-label" style="font-size: 16px;">Map to
-                                            PO</label>
-                                        <select style="color: #495057;" name="mapToPO" id="mapToPO" class="form-select">
-                                        </select>
-                                    </div>
+                    <div class="form-add row g-3 align-items-center mt-1">
+                        <div class="row col-12" id="add-plo-form">
+                            <div class="row" style="padding-right: 0">
+                                <div class="col-6">
+                                    <label for="ploName" class="col-form-label"
+                                           style="font-size: 16px;">Name</label>
+                                    <input type="text" id="ploName" name="ploName" class="form-control">
                                 </div>
-                                <div class="">
-                                    <label for="ploDescription" class="col-form-label"
-                                           style="font-size: 16px;">Description</label>
-                                    <textarea id="ploDescription" class="form-control" name="ploDescription"
-                                    ></textarea>
-                                </div>
-                                <div style="margin-top: 16px;">
-                                    <button type="button" id="btn-add-plo" class="btn btn-primary" name="op"
-                                            value="add_plo">Add
-                                    </button>
-                                    <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
+                                <div class="col-6" style="padding-right: 0">
+                                    <label for="mapToPO" class="col-form-label" style="font-size: 16px;">Map to
+                                        PO</label>
+                                    <select style="color: #495057;" name="mapToPO" id="mapToPO" class="form-select">
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="alert alert-danger" id="plo-error" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            PLO_ERROR_MESSAGE
-                        </div>
-
-                        <!-- Subject -->
-                        <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
-                        <br/>
-
-                        <div class="fixed-footer">
-                            <div class="" style="margin-left: auto">
-                                <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Publish
+                            <div class="">
+                                <label for="ploDescription" class="col-form-label"
+                                       style="font-size: 16px;">Description</label>
+                                <textarea id="ploDescription" class="form-control" name="ploDescription"
+                                ></textarea>
+                            </div>
+                            <div style="margin-top: 16px;">
+                                <button type="button" id="btn-add-plo" class="btn btn-primary" name="op"
+                                        value="add_plo">Add
                                 </button>
-                                <button id="btn-save" type="button" class="btn btn-secondary" name="save">Save as
-                                    Draft
-                                </button>
-                                <label id="file_upload_btn" class="btn btn-outline-secondary">
-                                    <input type="file" id="file_upload"/>
-                                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                </label>
+                                <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
                             </div>
                         </div>
-                        <div class="alert alert-danger" id="upload-error" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            UPLOAD_MESSAGE
+                    </div>
+
+                    <div class="alert alert-danger" id="plo-error" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        PLO_ERROR_MESSAGE
+                    </div>
+
+                    <!-- Subject -->
+                    <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
+                    <br/>
+
+                    <div class="fixed-footer">
+                        <div class="" style="margin-left: auto">
+                            <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Publish
+                            </button>
+                            <button id="btn-save" type="button" class="btn btn-secondary" name="save">Save as
+                                Draft
+                            </button>
+                            <label id="file_upload_btn" class="btn btn-outline-secondary">
+                                <input type="file" id="file_upload"/>
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                            </label>
                         </div>
-                        <div class="alert alert-danger" id="upload-error-po" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            UPLOAD_PO_MESSAGE
-                        </div>
-                        <div class="alert alert-danger" id="upload-error-plo" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            UPLOAD_PLO_MESSAGE
-                        </div>
-                        <div class="alert alert-danger" id="submit-error" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            SUBMIT_MESSAGE
-                        </div>
-                    </form>
-                </div>
-            </main>
+                    </div>
+                    <div class="alert alert-danger" id="upload-error" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        UPLOAD_MESSAGE
+                    </div>
+                    <div class="alert alert-danger" id="upload-error-po" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        UPLOAD_PO_MESSAGE
+                    </div>
+                    <div class="alert alert-danger" id="upload-error-plo" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        UPLOAD_PLO_MESSAGE
+                    </div>
+                    <div class="alert alert-danger" id="submit-error" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        SUBMIT_MESSAGE
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -296,17 +271,17 @@
 <script>
 
     $(document).ready(function () {
-            let oldName;
-            let oldDescription;
+        let oldName;
+        let oldDescription;
 
-            $("#btn-submit").click(function () {
-                handleSubmit();
-            });
+        $("#btn-submit").click(function () {
+            handleSubmit();
+        });
 
-            $('#file_upload').click(function () {
-                $(this).val('');
-            }).change(function () {
-                let file = $('#file_upload')[0].files[0];
+        $('#file_upload').click(function () {
+            $(this).val('');
+        }).change(function () {
+            let file = $('#file_upload')[0].files[0];
                 let errorShow = $('#upload-error');
                 const addPOForm = $('#add-po-form');
                 const addPLOForm = $('#add-plo-form');

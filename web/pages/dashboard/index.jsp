@@ -8,9 +8,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <%@include file="/components/common/head.jspf" %>
+    <title>ULM Dashboard</title>
 </head>
 <body>
-<h1>Hello sdsd</h1>
+<div class="dashboard-container">
+    <%@include file="/components/dashboard/sidebar.jspx" %>
+    <main>
+        <%@include file="/components/dashboard/header.jspx" %>
+        <div class="dashboard-content">
+        </div>
+    </main>
+</div>
 </body>
 </html>
