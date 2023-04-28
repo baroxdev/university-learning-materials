@@ -3,47 +3,46 @@
     Created on : Apr 16, 2023, 6:46:29 PM
     Author     : admin
 --%>
-<%@page import="config.AppConfig"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="entities.Syllabus"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="config.AppConfig" %>
+<%@page import="java.util.ArrayList" %>
+<%@page import="entities.Syllabus" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <%@include file="/components/common/head.jspf" %>
-        <title>List Syllabus</title>
-    </head>
-    <body>
-        <%
-            ArrayList<Syllabus> lsSyllabus = (ArrayList<Syllabus>) request.getAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST);
-        %>
-        <div class="dashboard-container">
-            <div class="col-md-2" style="background-color: rgba(5, 44, 101, 1); width: 212px;">
-                <h2 style="color: #FFFFFF; font-family: 'Inter'; font-size: 20px;">
-                    ULM Dashboard
-                </h2>
-            </div>
+<head>
+    <%@include file="/components/common/head.jspf" %>
+    <title>List Syllabus</title>
+</head>
+<body>
+<%
+    ArrayList<Syllabus> lsSyllabus = (ArrayList<Syllabus>) request.getAttribute(AppConfig.DASHBOARD_SYLLABUS_LIST);
+%>
+<div class="dashboard-container">
+    <%@include file="/components/dashboard/sidebar.jspx" %>
+    <main>
+        <%@include file="/components/dashboard/header.jspx" %>
+        <div class="dashboard-content">
             <div class="container-2xl">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th scope="col">
-                                <input type="checkbox" />
-                            </th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Subject Code</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Credit</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">CreatedAt</th>
-                            <th scope="col">UpdatedAt</th>
-                            <th scope="col">isApproved</th>
-                            <th scope="col">Edit</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">
+                            <input type="checkbox"/>
+                        </th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Subject Code</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Credit</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">CreatedAt</th>
+                        <th scope="col">UpdatedAt</th>
+                        <th scope="col">isApproved</th>
+                        <th scope="col">Edit</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="syl" items="<%= lsSyllabus%>">
+                    <c:forEach var="syl" items="<%= lsSyllabus%>">
                         <td>${syl.id}</td>
                         <td>${syl.subjectID}</td>
                         <td>${syl.name}</td>
@@ -65,5 +64,7 @@
                 </table>
             </div>
         </div>
-    </body>
+    </main>
+</div>
+</body>
 </html>

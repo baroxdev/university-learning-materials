@@ -26,129 +26,103 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <title>Add Subject</title>
 </head>
-
 <body>
-<div class="container-fluid h-100" id="add-curriculum-page">
-    <div class="row h-100">
-        <div class="left col-md-2">
-
-        </div>
-        <div class="right col-md-10">
-            <header>
-                <div class="d-flex align-items-center justify-content-between container">
-                    <a href="#">
-                        <h3></h3>
-                    </a>
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown"
-                                 aria-expanded="false" style="margin: 0!important">
-                                <img class="rounded-circle" style="width:40px"
-                                     src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp">
-                                <span class="caret"></span>
+<div class="dashboard-container">
+    <%@include file="/components/dashboard/sidebar.jspx" %>
+    <main>
+        <%@include file="/components/dashboard/header.jspx" %>
+        <div class="dashboard-content">
+            <div class="container" style="margin: 0 auto">
+                <!--Modal-->
+                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Note</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                             </div>
-                            <ul class="dropdown-menu  dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Setting</a></li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </header>
-            <hr/>
-            <main style="margin-bottom: 100px;">
-                <div class="container" style="margin: 0 auto">
-                    <!--Modal-->
-                    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Note</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Uploading will be able to delete all existing datas, do you want to keep
-                                        them?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="modal-no" type="button" class="btn btn-secondary">No</button>
-                                    <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
-                                </div>
+                            <div class="modal-body">
+                                <p>Uploading will be able to delete all existing datas, do you want to keep
+                                    them?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="modal-no" type="button" class="btn btn-secondary">No</button>
+                                <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
                             </div>
                         </div>
                     </div>
-
-
-                    <legend>Add Subject</legend>
-                    <form class="mt-4" action="<c:url value="/dashboard/subjects/add" />" method="POST"
-                          id="add-subject-form">
-                        <div class="row g-3 align-items-center" style="margin-top: 23px;">
-                            <div class="col-2">
-                                <label for="subject.code" class="col-form-label" style="font-size: 16px;">Code</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" name="subject.code" id="subject.code" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="subject.slug" class="col-form-label" style="font-size: 16px;">Slug</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" name="subject.slug" id="subject.slug" class="form-control" readonly
-                                       disabled>
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="subject.name" class="col-form-label" style="font-size: 16px;">English
-                                    name</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" id="subject.name" name="subject.name" class="form-control"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="row g-3 align-items-center mt-1">
-                            <div class="col-2">
-                                <label for="subject.viName" class="col-form-label"
-                                       style="font-size: 16px;">Vietnamese name</label>
-                            </div>
-                            <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                <input type="text" id="subject.viName" name="subject.viName" class="form-control"
-                                >
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <label for="subject.semester" class="col-form-label" style="font-size: 16px;">
-                                Semester
-                            </label>
-                            <input type="number" value="0" min="0" max="10" step="0.25" id="subject.semester"
-                                   name="subject.semester"
-                                   class="form-control"/>
-                        </div>
-                        <div class="" style="margin-left: auto">
-                            <button id="btn-submit" type="submit" class="btn btn-primary">Add
-                            </button>
-                            <button onclick="history.back()" id="btn-save" type="button" class="btn btn-secondary"
-                            >Cancel
-                            </button>
-                        </div>
-                        <div class="alert alert-danger" id="submit-error" role="alert"
-                             style="margin-top: 20px; margin-right: 4px; display: none;">
-                            SUBMIT_MESSAGE
-                        </div>
-                    </form>
                 </div>
-            </main>
+
+
+                <legend>Add Subject</legend>
+                <form class="mt-4" action="<c:url value="/dashboard/subjects/add" />" method="POST"
+                      id="add-subject-form">
+                    <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                        <div class="col-2">
+                            <label for="subject.code" class="col-form-label" style="font-size: 16px;">Code</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" name="subject.code" id="subject.code" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="subject.slug" class="col-form-label" style="font-size: 16px;">Slug</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" name="subject.slug" id="subject.slug" class="form-control" readonly
+                                   disabled>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="subject.name" class="col-form-label" style="font-size: 16px;">English
+                                name</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" id="subject.name" name="subject.name" class="form-control"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="subject.viName" class="col-form-label"
+                                   style="font-size: 16px;">Vietnamese name</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="text" id="subject.viName" name="subject.viName" class="form-control"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="subject.semester" class="col-form-label" style="font-size: 16px;">
+                            Semester
+                        </label>
+                        <input type="number" value="0" min="0" max="10" step="0.25" id="subject.semester"
+                               name="subject.semester"
+                               class="form-control"/>
+                    </div>
+                    <div class="" style="margin-left: auto">
+                        <button id="btn-submit" type="submit" class="btn btn-primary">Add
+                        </button>
+                        <button onclick="history.back()" id="btn-save" type="button" class="btn btn-secondary"
+                        >Cancel
+                        </button>
+                    </div>
+                    <div class="alert alert-danger" id="submit-error" role="alert"
+                         style="margin-top: 20px; margin-right: 4px; display: none;">
+                        SUBMIT_MESSAGE
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -158,7 +132,7 @@
 <script>
 
     $(document).ready(function () {
-            // renderBasicInf();
+        // renderBasicInf();
             $("#add-subject-form").submit(function (e) {
                 $(':disabled').each(function (e) {
                     $(this).removeAttr('disabled');

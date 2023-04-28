@@ -12,6 +12,10 @@ and open the template in the editor.
     font-style: normal;
 }
 
+:root {
+    --dashboard-header-height: 60px;
+}
+
 html, body {
     height: 100%;
     width: 100%;
@@ -79,7 +83,7 @@ label, a {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -210,7 +214,7 @@ header h3 {
 .posts-section {
 }
 
-.posts-section+.posts-section {
+.posts-section + .posts-section {
     margin-bottom: 30px;
 }
 
@@ -343,7 +347,7 @@ time.post-card_time {
     transition: 0.4s;
 }
 
-.nav_mobile>nav {
+.nav_mobile > nav {
     position: absolute;
     padding-right: 18px;
     top: 30px;
@@ -410,8 +414,20 @@ a:is(:link, :active, :visited).is-active {
 /* Dashboard */
 .dashboard-container {
     display: grid;
-    grid-template-columns: 212px 1fr;
+    grid-template-columns: 300px 1fr;
     height: 100%;
+}
+
+.dashboard-content {
+    height: calc(100vh - var(--dashboard-header-height));
+    overflow: auto;
+}
+
+.dashboard-header {
+    height: var(--dashboard-header-height);
+    background: #fff;
+    width: 100%;
+    box-shadow: 1px -3px 11px 0 #16161638;
 }
 
 @media only screen and (max-width: 768px) {
@@ -441,7 +457,6 @@ a:is(:link, :active, :visited).is-active {
     }
 
     /* Syllabus and Curriculum details Responsive */
-
     .sidebar {
         display: none;
     }
@@ -453,6 +468,40 @@ a:is(:link, :active, :visited).is-active {
 }
 
 /* Admin CSS */
+
+/* Dashboard Sidebar */
+.dashboard-sidebar {
+    width: 300px;
+    min-height: 100vh;
+    padding: 16px;
+    background: hsl(215.75deg 56.23% 43.85%);
+    box-shadow: 1px 0 hsl(0deg 0% 92.13%);
+}
+
+.dashboard-sidebar .nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-sidebar .navbar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-sidebar .navbar-item__a {
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    width: 100%;
+    color: #fff;
+}
+
+.dashboard-sidebar .navbar-item__a:hover {
+    background: hsl(215.75deg 56.23% 53.85%);
+}
+
 .left {
     background-color: #052C65;
 }
@@ -467,12 +516,12 @@ span {
     font-size: 20px;
 }
 
-table{
+table {
     table-layout: fixed;
     font-size: 16px;
 }
 
-table td a{
+table td a {
     width: 16px;
     height: 16px;
     color: #212529;
@@ -481,7 +530,7 @@ table td a{
 }
 
 .table-heading {
-        margin-top: 64px;
+    margin-top: 64px;
     font-size: 20px;
     font-weight: 600;
 }
