@@ -19,7 +19,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jdt.core.compiler.InvalidInputException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
@@ -69,7 +68,7 @@ public class AddNewCurriculum implements Action {
                 //thêm vào db
                 CurriculumDao.add(cur, poList, ploList);
 
-            } catch (InvalidInputException | IllegalArgumentException ie) {
+            } catch (IllegalArgumentException ie) {
                 ie.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
             } catch (Exception e) {

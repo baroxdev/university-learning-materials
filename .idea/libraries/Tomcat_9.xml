@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Tomcat 9">
+    <CLASSES>
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/docs/appdev/sample/src" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/examples/WEB-INF/classes" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/PRJ301_FirstProject" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/Plantee" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/Review2" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/UniversityULM" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/WebApplication4" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/demo" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/host-manager" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/manager" />
+      <root url="file://C:/Program Files/Apache Software Foundation/Tomcat 9.0/work/Catalina/localhost/university-learning-materials" />
+    </SOURCES>
+  </library>
+</component>
