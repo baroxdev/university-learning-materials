@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@page import="config.AppConfig"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -12,8 +13,8 @@
 <html lang="en">
 
     <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             <%@ include file="/css/style.css" %>
@@ -57,6 +58,27 @@
                     <hr />
                     <main>
                         <div class="container" style="margin: 0 auto">
+
+                            <!--Modal-->
+                            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Note</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Uploading will be able to delete all existing datas, do you want to keep them?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="modal-no" type="button" class="btn btn-secondary">No</button>
+                                            <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <legend>Add Curriculum</legend>
                             <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
 
@@ -144,7 +166,7 @@
                                     </tbody>
                                 </table>
                                 <div class="form-add row g-3 align-items-center mt-1">
-                                    <div class="row col-6" id="add-po-form">
+                                    <div class="row col-12" id="add-po-form">
                                         <div>
                                             <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
                                             <input type="text" id="poName" name="poName" class="form-control">
@@ -158,18 +180,6 @@
                                         <div style="margin-top: 16px;">
                                             <button type="button" class="btn btn-primary" id="btn-add-po" name="op" value="add_po">Add</button>
                                             <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <div class="row col-4">
-                                        <div class="col-12">
-                                            <label for="POList" class="col-form-label" style="font-size: 16px;">List
-                                                of PO</label>
-                                        </div>
-                                        <div class="col-12">
-                                            <label id="POList" class="btn btn-outline-secondary">
-                                                <input type="file" />
-                                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -193,24 +203,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%--<c:forEach var="plo" items="${ploList}" >
-                                            <tr>
-                                                <td style="color: #495057;">${plo.name}</td>
-                                                <td>${plo.description}</td>
-                                                <td style="text-align: right;">${plo.mapToPO}</td>
-                                                <td>
-                                                    <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                                    <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                    <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button>
-                                                </td>
-                                            </tr>
-                                            <tr style="height: 66px;"></tr>
-                                        </c:forEach>--%>
+                                        <!--TITLE-->
                                     </tbody>
                                 </table>
 
                                 <div class="form-add row g-3 align-items-center mt-1"> 
-                                    <div class="row col-6" id="add-plo-form">
+                                    <div class="row col-12" id="add-plo-form">
                                         <div class="row" style="padding-right: 0">
                                             <div class="col-6">
                                                 <label for="ploName" class="col-form-label" style="font-size: 16px;">Name</label>
@@ -234,35 +232,37 @@
                                             <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
                                         </div>
                                     </div>
-
-                                    <div class="row col-4">
-                                        <div class="col-12">
-                                            <label for="PLOList" class="col-form-label" style="font-size: 16px;">List
-                                                of PLO</label>
-                                        </div>
-                                        <div class="col-12">
-                                            <label id="PLOList" class="btn btn-outline-secondary">
-                                                <input type="file" />
-                                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                            </label>
-                                        </div>
-                                    </div>
                                 </div>
-                                    
+
                                 <div class="alert alert-danger" id="plo-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
                                     PLO_ERROR_MESSAGE
                                 </div>
+
                                 <!-- Subject -->
                                 <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
                                 <br/>
+
                                 <div class="fixed-footer">
                                     <div class="" style="margin-left: auto">
                                         <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Publish</button>  
                                         <button id="btn-save" type="button" class="btn btn-secondary" name="save">Save as Draft</button>  
+                                        <label id="file_upload_btn" class="btn btn-outline-secondary">
+                                            <input type="file" id="file_upload"/>
+                                            <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                                        </label>
                                     </div>
                                 </div>
+                                <div class="alert alert-danger" id="upload-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                    UPLOAD_MESSAGE
+                                </div>
+                                <div class="alert alert-danger" id="upload-error-po" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                    UPLOAD_PO_MESSAGE
+                                </div>
+                                <div class="alert alert-danger" id="upload-error-plo" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                    UPLOAD_PLO_MESSAGE
+                                </div>
                                 <div class="alert alert-danger" id="submit-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
-                                    PLO_ERROR_MESSAGE
+                                    SUBMIT_MESSAGE
                                 </div>
                             </form>
                         </div>
@@ -271,37 +271,84 @@
             </div>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
+        <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <script>
 
             $(document).ready(function () {
-                var oldName;
-                var oldDescription;
+                let oldName;
+                let oldDescription;
+
                 $("#btn-submit").click(function () {
                     handleSubmit();
+                });
+
+                $('#file_upload').click(function () {
+                    $(this).val('');
+                }).change(function () {
+                    let file = $('#file_upload')[0].files[0];
+                    let errorShow = $('#upload-error');
+                    const addPOForm = $('#add-po-form');
+                    const addPLOForm = $('#add-plo-form');
+                    $("#myModal").modal("show");
+                    $('#modal-yes, #modal-no').off('click').on('click', function () {
+                        if (this.id === 'modal-no') {
+                            localStorage.removeItem('curiculum.list_po');
+                            localStorage.removeItem('curiculum.list_plo');
+                        }
+                        $("#myModal").modal("hide");
+
+                        let oldPOList = getListPOFromLocalStorage();
+                        let poFileContent = readXlsxFile(file, {sheet: 'PO'});
+                        let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
+                        
+                        poFileContent.then(function (data) {
+                            if (data.length > 0) {
+                                handleAddFilePO(data);
+                            }
+                            errorShow.css('display', 'none');
+                        }).then(function () {
+                            ploFileContent.then(function (data) {
+                                if (data.length > 0) {
+                                    handleAddFilePLO(data, oldPOList);
+                                }
+                                errorShow.css('display', 'none');
+                            }).catch(function (error) {
+                                localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                                renderListPO(oldPOList, addPOForm);
+                                errorShow.css('display', 'block');
+                                errorShow.text("Your upload file doesn't have PLO sheet, please try again!");
+                            });
+                        }).catch(function (error) {
+                            errorShow.css('display', 'block');
+                            errorShow.text("Your upload file doesn't have PO sheet, please try again!");
+                        });
+                    });
                 });
 
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                    var row = $(this).closest('tr');
-                    var form = $('<tr>');
-                    var tdList = row.find('td');
+                    let row = $(this).closest('tr');
+                    let form = $('<tr>');
+                    let tdList = row.find('td');
+                    let input;
 
                     tdList.each(function (index, element) {
                         if (index != tdList.length - 1) {
                             if (index == 0) {
-                                var input = $('<td><input class="form-control" type="text" /></td>')
+                                input = $('<td><input class="form-control" type="text" /></td>')
                                 input.find('input').attr('value', oldName);
                             } else {
-                                var input = $('<td><textarea class="form-control"></textarea></td>');
+                                input = $('<td><textarea class="form-control"></textarea></td>');
                                 input.find('textarea').text(oldDescription);
                             }
 
                             form.append(input);
                         } else {
-                            var input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                            input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
                                                 <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
                                                 <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
                             form.append(input);
@@ -315,20 +362,21 @@
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
 
-                    var row = $(this).closest('tr');
-                    var form = $('<tr>');
-                    var tdList = row.find('td');
+                    let row = $(this).closest('tr');
+                    let form = $('<tr>');
+                    let tdList = row.find('td');
+                    let input;
 
                     tdList.each(function (index, element) {
                         if (index != tdList.length - 1) {
                             if (index == 0) {
-                                var input = $('<td><input class="form-control" type="text" /></td>');
+                                input = $('<td><input class="form-control" type="text" /></td>');
                                 input.find('input').attr('value', oldName);
                             } else if (index == 1) {
-                                var input = $('<td><textarea class="form-control"></textarea></td>');
+                                input = $('<td><textarea class="form-control"></textarea></td>');
                                 input.find('textarea').text(oldDescription);
                             } else {
-                                var input = $('<td><select style="color: #495057;" name="mapToPO" id="" class="form-select"></select></td>');
+                                input = $('<td><select style="color: #495057;" name="mapToPO" id="" class="form-select"></select></td>');
                                 let poList = getListPOFromLocalStorage();
                                 poList.forEach(function (item) {
                                     input.find('select').append($('<option>', {value: item.name, text: item.name}));
@@ -337,7 +385,7 @@
 
                             form.append(input);
                         } else {
-                            var input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                            let input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
                                                 <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
                                                 <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
                             form.append(input);
@@ -348,10 +396,10 @@
                 });
 
                 $("table").on("click", "[name='saveBtn']", function () {
-                    var newName = $(this).closest("tr").find("td").find('input').val();
-                    var newDescription = $(this).closest("tr").find("td").find('textarea').val();
-                    var newMapToPO;
-                    var tblIDCheck = $(this).closest('table').attr('id');
+                    let newName = $(this).closest("tr").find("td").find('input').val().toUpperCase();
+                    let newDescription = $(this).closest("tr").find("td").find('textarea').val();
+                    let newMapToPO;
+                    let tblIDCheck = $(this).closest('table').attr('id');
 
                     if (newName.includes('PO')) {
                         handleEditPO(oldName, newName, newDescription);
@@ -360,7 +408,7 @@
                         handleEditPLO(oldName, newName, newDescription, newMapToPO);
                     } else {
                         if (tblIDCheck.includes('plo')) {
-                            var errorShow = $('#plo-error');
+                            let errorShow = $('#plo-error');
                             if (newName == '') {
                                 errorShow.css('display', 'block');
                                 errorShow.text("PLO name cannot be left blank, please try again!");
@@ -369,7 +417,7 @@
                                 errorShow.text("PLO name must follow format PLOxx, please try again!");
                             }
                         } else {
-                            var errorShow = $('#po-error');
+                            let errorShow = $('#po-error');
                             if (newName == '') {
                                 errorShow.css('display', 'block');
                                 errorShow.text("PO name cannot be left blank, please try again!");
@@ -382,9 +430,9 @@
                 }
                 );
                 $("table").on("click", "[name='cancelBtn']", function () {
-                    var str = $(this).closest('tr').find('td').find('input').val();
-                    var errorPOShow = $('#po-error');
-                    var errorPLOShow = $('#plo-error');
+                    let str = $(this).closest('tr').find('td').find('input').val();
+                    let errorPOShow = $('#po-error');
+                    let errorPLOShow = $('#plo-error');
                     let listPO = getListPOFromLocalStorage();
                     let listPLO = getListPLOFromLocalStorage();
 
@@ -406,32 +454,37 @@
                 $('table').on("click", "#btn-delete-po", function () {
                     const addPOForm = $('#add-po-form');
                     const name = $(this).closest("tr").find("td").eq(0).text();
-                    var mappedCheck = 0;
+                    const indexDeleteRow = $(this).closest("tr").data('index');
+                    console.log(indexDeleteRow);
+                    let mappedCheck = 0;
                     let listPLO = getListPLOFromLocalStorage();
                     listPLO.forEach(function (item) {
+                        let errorShow = $('#po-error');
+
                         if (name == item.mapToPO)
                             mappedCheck = 1;
-                        var errorShow = $('#po-error');
                         errorShow.css('display', 'block');
                         errorShow.text("This PO is mapped to PLOs, please delete these PLO before!");
                     });
                     if (mappedCheck == 0) {
-                        var errorShow = $('#po-error');
+                        let errorShow = $('#po-error');
                         errorShow.css('display', 'none');
                         let listPO = getListPOFromLocalStorage();
-                        listPO = listPO.filter(po => po.name != name);
+
+                        listPO = listPO.filter((po, index) => index != indexDeleteRow);
                         renderListPO(listPO, addPOForm);
-                        localStorage.setItem("list_po", JSON.stringify(listPO));
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
                         updatePLOMapPOOptions(listPO);
                     }
                 });
                 $('table').on("click", "#btn-delete-plo", function () {
                     const addPLOForm = $('#add-po-form');
-                    const name = $(this).closest("tr").find("td").eq(0).text();
                     let listPLO = getListPLOFromLocalStorage();
-                    listPLO = listPLO.filter(plo => plo.name != name);
+                    let indexDeleteRow = $(this).closest("tr").data("index");
+
+                    listPLO = listPLO.filter((plo, index) => index != indexDeleteRow);
                     renderListPLO(listPLO, addPLOForm);
-                    localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
                 });
             }
             );
@@ -453,7 +506,7 @@
             }
 
             function getListPOFromLocalStorage() {
-                let listPO = JSON.parse(localStorage.getItem("list_po"));
+                let listPO = JSON.parse(localStorage.getItem("curiculum.list_po"));
                 if (listPO === null) {
                     listPO = [];
                 }
@@ -462,7 +515,7 @@
             }
 
             function getListPLOFromLocalStorage() {
-                let listPLO = JSON.parse(localStorage.getItem("list_plo"));
+                let listPLO = JSON.parse(localStorage.getItem("curiculum.list_plo"));
                 if (listPLO === null) {
                     listPLO = [];
                 }
@@ -474,9 +527,9 @@
                 const addPOForm = document.getElementById('add-po-form');
                 const namePONode = addPOForm.querySelector("#poName");
                 const descriptionPONode = addPOForm.querySelector("#poDescription");
-                const name = namePONode.value;
+                const name = namePONode.value.toUpperCase();
                 let listPO = getListPOFromLocalStorage();
-                var errorShow = $('#po-error');
+                let errorShow = $('#po-error');
                 if (!namePONode) {
                     throw new Error("Missing value");
                 }
@@ -488,15 +541,8 @@
                     errorShow.css('display', 'block');
                     errorShow.text("PO name must follow format POxx, please try again!");
                 } else {
-                    var poRepeatCheck = 0;
-                    if (listPO.length > 0) {
-                        listPO.find(function (poElement) {
-                            if (poElement.name == name) {
-                                poRepeatCheck = 1;
-                            }
-                        });
-                    }
-                    if (poRepeatCheck == 1) {
+                    let isExist = listPO.find(po => po.name === name);
+                    if (isExist) {
                         errorShow.css('display', 'block');
                         errorShow.text("This PO name was created, please try another!");
                     } else {
@@ -507,11 +553,146 @@
                             description: description
                         });
                         renderListPO(listPO, addPOForm);
-                        localStorage.setItem("list_po", JSON.stringify(listPO));
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
                         updatePLOMapPOOptions(listPO);
                         resetAddPOForm(addPOForm);
                     }
                 }
+            }
+
+            function handleAddFilePO(poListAdd) {
+                const addPOForm = document.getElementById('add-po-form');
+                let listPO = getListPOFromLocalStorage();
+                let errorShow = $('#upload-error-po');
+                let formatErrorIndexStr = '';
+                let repeatErrorIndexStr = '';
+                poListAdd.forEach(function (element, index) {
+                    if (index > 0) {
+                        let nameE = element[0];
+                        let descriptionE = element[1];
+
+                        if (nameE != null && descriptionE != null) {
+                            nameE = nameE.toUpperCase();
+
+                            if (nameE.includes('PO')) {
+                                let isExistedName = listPO.find(po => po.name === nameE);
+
+                                if (isExistedName) {
+                                    repeatErrorIndexStr += (index + 1) + ', ';
+                                } else {
+                                    listPO.push({
+                                        name: nameE,
+                                        description: descriptionE
+                                    });
+                                }
+
+                            } else {
+                                formatErrorIndexStr += (index + 1) + ', ';
+                            }
+                        } else if (descriptionE != null) {
+                            formatErrorIndexStr += (index + 1) + ', ';
+                        }
+                    }
+                });
+                if (formatErrorIndexStr.length != '' && repeatErrorIndexStr != '') {
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text(" There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 1. Make sure the PO name is not blank and in the format POxxx, please check again!\n\
+                    - The PO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else if (formatErrorIndexStr.length != '') {
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 1. Make sure the PO name is not blank and in the format POxxx, please check again!");
+                } else if (repeatErrorIndexStr != '') {
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- The PO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else {
+                    errorShow.css('display', 'none');
+                    renderListPO(listPO, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                    updatePLOMapPOOptions(listPO);
+                }
+
+            }
+
+            function handleAddFilePLO(ploListAdd, oldPOList) {
+                const addPLOForm = document.getElementById('add-plo-form');
+                const addPOForm = document.getElementById('add-po-form');
+                let listPLO = getListPLOFromLocalStorage();
+                let listPO = getListPOFromLocalStorage();
+                let errorShow = $('#upload-error-plo');
+                let formatErrorIndexStr = '';
+                let repeatErrorIndexStr = '';
+                ploListAdd.forEach(function (element, index) {
+                    if (index > 0) {
+                        let nameE = element[0];
+                        let descriptionE = element[1];
+                        let mapToPO = element[2];
+
+                        if (nameE != null && descriptionE != null && mapToPO != null) {
+                            nameE = nameE.toUpperCase();
+                            mapToPO = mapToPO.toUpperCase();
+
+                            if (nameE.includes('PLO')) {
+                                let isExistedName = listPLO.find(plo => plo.name === nameE);
+
+                                if (isExistedName) {
+                                    repeatErrorIndexStr += (index + 1) + ', ';
+                                } else {
+                                    let isExisted = listPO.find(po => po.name === mapToPO);
+
+                                    if (isExisted) {
+                                        listPLO.push({
+                                            name: nameE,
+                                            description: descriptionE,
+                                            mapToPO: mapToPO
+                                        });
+                                    } else {
+                                        formatErrorIndexStr += (index + 1) + ', ';
+                                    }
+                                }
+
+                            } else {
+                                formatErrorIndexStr += (index + 1) + ', ';
+                            }
+                        } else if (descriptionE != null || mapToPO != null) {
+                            formatErrorIndexStr += (index + 1) + ', ';
+                        }
+
+                    }
+                });
+
+                if (formatErrorIndexStr.length != '' && repeatErrorIndexStr != '') {
+                    renderListPO(oldPOList, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                    updatePLOMapPOOptions(oldPOList);
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 2. Make sure that datas of MapToPO colunms was created, the PLO name is not blank and in the format PLOxxx, please check again!\n\
+                    - The PLO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else if (formatErrorIndexStr.length != '') {
+                    renderListPO(oldPOList, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                    updatePLOMapPOOptions(oldPOList);
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 2. Make sure that datas of MapToPO colunms was created, the PLO name is not blank and in the format PLOxxx, please check again!");
+                } else if (repeatErrorIndexStr != '') {
+                    renderListPO(oldPOList, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                    updatePLOMapPOOptions(oldPOList);
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- The PLO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else {
+                    errorShow.css('display', 'none');
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
+                }
+
             }
 
             function handleAddPLO() {
@@ -519,11 +700,11 @@
                 const namePLONode = addPLOForm.querySelector("#ploName");
                 const descriptionPLONode = addPLOForm.querySelector("#ploDescription");
                 const mapToPONode = $("#mapToPO option:selected");
-                const name = namePLONode.value;
+                const name = namePLONode.value.toUpperCase();
                 const description = descriptionPLONode.value;
                 const mapToPO = mapToPONode.text();
                 let listPLO = getListPLOFromLocalStorage();
-                var errorShow = $('#plo-error');
+                let errorShow = $('#plo-error');
                 if (!namePLONode || !descriptionPLONode || !mapToPONode) {
                     throw new Error("Missing value");
                 }
@@ -538,15 +719,8 @@
                     errorShow.css('display', 'block');
                     errorShow.text("Please create a new PO before!");
                 } else {
-                    var ploRepeatCheck = 0;
-                    if (listPLO.length > 0) {
-                        listPLO.find(function (ploElement) {
-                            if (ploElement.name == name) {
-                                ploRepeatCheck = 1;
-                            }
-                        });
-                    }
-                    if (ploRepeatCheck == 1) {
+                    let isExist = listPLO.find(plo => plo.name === name);
+                    if (isExist) {
                         errorShow.css('display', 'block');
                         errorShow.text("This PLO name was created, please try another!");
                     } else {
@@ -558,7 +732,7 @@
                             mapToPO: mapToPO
                         })
                         renderListPLO(listPLO, addPLOForm);
-                        localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                        localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
                         resetAddPLOForm(addPLOForm);
                     }
                 }
@@ -567,39 +741,42 @@
             function handleEditPO(oldName, newName, newDescription) {
                 const addPOForm = document.getElementById('add-po-form');
                 let listPO = getListPOFromLocalStorage();
-                var errorShow = $('#po-error');
-                var poRepeatCheck = 0;
-                listPO.find(function (poElement) {
-                    if (poElement.name == newName && poElement.name != oldName) {
-                        poRepeatCheck = 1;
-                    }
-                });
-                if (poRepeatCheck == 1) {
+                let errorShow = $('#po-error');
+                let isExist = listPO.find(po => po.name == newName && po.name != oldName);
+
+                if (isExist) {
                     errorShow.css('display', 'block');
                     errorShow.text("This PO name was created, please try another!");
                     return;
                 } else {
-                    errorShow.css('display', 'none');
-                    let poElement = listPO.find(po => po.name === oldName);
-                    poElement.name = newName;
-                    poElement.description = newDescription;
-                    renderListPO(listPO, addPOForm);
-                    localStorage.setItem("list_po", JSON.stringify(listPO));
-                    updatePLOMapPOOptions(listPO)
+                    let mappedCheck = 0;
+                    let listPLO = getListPLOFromLocalStorage();
+                    listPLO.forEach(function (item) {
+                        if (oldName == item.mapToPO)
+                            mappedCheck = 1;
+                        let errorShow = $('#po-error');
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PO is mapped to PLOs, please delete these PLO before!");
+                    });
+                    if (mappedCheck == 0) {
+                        errorShow.css('display', 'none');
+                        let poElement = listPO.find(po => po.name === oldName);
+                        poElement.name = newName;
+                        poElement.description = newDescription;
+                        renderListPO(listPO, addPOForm);
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                        updatePLOMapPOOptions(listPO)
+                    }
                 }
             }
 
             function handleEditPLO(oldName, newName, newDescription, newMapToPO) {
                 const addPLOForm = document.getElementById('add-plo-form');
-                var errorShow = $('#plo-error');
+                let errorShow = $('#plo-error');
                 let listPLO = getListPLOFromLocalStorage();
-                var ploRepeatCheck = 0;
-                listPLO.find(function (ploElement) {
-                    if (ploElement.name == newName && ploElement.name != oldName) {
-                        ploRepeatCheck = 1;
-                    }
-                });
-                if (ploRepeatCheck == 1) {
+                let isExist = listPLO.find(plo => plo.name == newName && plo.name != oldName);
+
+                if (isExist) {
                     errorShow.css('display', 'block');
                     errorShow.text("This PLO name was created, please try another!");
                     return;
@@ -610,7 +787,7 @@
                     ploElement.description = newDescription;
                     ploElement.mapToPO = newMapToPO;
                     renderListPLO(listPLO, addPLOForm);
-                    localStorage.setItem("list_plo", JSON.stringify(listPLO));
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
                 }
             }
 
@@ -629,7 +806,7 @@
                     throw new Error("Cannot render list PO");
                 const POTableBody = document.querySelector("#poTbl tbody");
                 const htmls = listPO.map((po, index) => `
-                     <tr>
+                     <tr data-index="\${index}">
                         <td style="color: #495057;">\${po?.name}</td>
                         <td>\${po?.description}</td>
                         <td>
@@ -648,7 +825,7 @@
                     throw new Error("Cannot render list PLO");
                 const PLOTableBody = document.querySelector("#ploTbl tbody");
                 const htmls = listPLO.map((plo, index) => `
-                     <tr>
+                     <tr data-index="\${index}">
                         <td style="color: #495057;">\${plo?.name}</td>
                         <td>\${plo?.description}</td>
                         <td style="text-align: right;">\${plo?.mapToPO}</td>
@@ -664,12 +841,12 @@
             }
 
             function renderBasicInf() {
-                var basicCode = localStorage.getItem("basicCode");
-                var basicSlug = localStorage.getItem("basicSlug");
-                var basicEnglishName = localStorage.getItem("basicEnglishName");
-                var basicVietnameseName = localStorage.getItem("basicVietnameseName");
-                var basicDescription = localStorage.getItem("basicDescription");
-                var basicDecisionNo = localStorage.getItem("basicDecisionNo");
+                let basicCode = localStorage.getItem("curiculum.basicCode");
+                let basicSlug = localStorage.getItem("curiculum.basicSlug");
+                let basicEnglishName = localStorage.getItem("curiculum.basicEnglishName");
+                let basicVietnameseName = localStorage.getItem("curiculum.basicVietnameseName");
+                let basicDescription = localStorage.getItem("curiculum.basicDescription");
+                let basicDecisionNo = localStorage.getItem("curiculum.basicDecisionNo");
                 if (basicCode == null) {
                     $('#code').val('');
                 } else {
@@ -717,26 +894,26 @@
             }
 
             function resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo) {
-                localStorage.setItem("basicCode", JSON.stringify(basicCode));
-                localStorage.setItem("basicEnglishName", JSON.stringify(basicEnglishName));
-                localStorage.setItem("basicVietnameseName", JSON.stringify(basicVietnameseName));
-                localStorage.setItem("basicDescription", JSON.stringify(basicDescription));
-                localStorage.setItem("basicDecisionNo", JSON.stringify(basicDecisionNo));
-                localStorage.setItem("basicSlug", JSON.stringify(basicSlug));
+                localStorage.setItem("curiculum.basicCode", JSON.stringify(basicCode));
+                localStorage.setItem("curiculum.basicEnglishName", JSON.stringify(basicEnglishName));
+                localStorage.setItem("curiculum.basicVietnameseName", JSON.stringify(basicVietnameseName));
+                localStorage.setItem("curiculum.basicDescription", JSON.stringify(basicDescription));
+                localStorage.setItem("curiculum.basicDecisionNo", JSON.stringify(basicDecisionNo));
+                localStorage.setItem("curiculum.basicSlug", JSON.stringify(basicSlug));
             }
 
             async function handleSubmit() {
-                var basicCode = $('#code').val();
-                var basicSlug = $('#slug').val();
-                var basicEnglishName = $('#englishName').val();
-                var basicVietnameseName = $('#vietnameseName').val();
-                var basicDescription = $('#description').val();
-                var basicDecisionNo = $('#decisionNo').val();
+                let basicCode = $('#code').val();
+                let basicSlug = $('#slug').val();
+                let basicEnglishName = $('#englishName').val();
+                let basicVietnameseName = $('#vietnameseName').val();
+                let basicDescription = $('#description').val();
+                let basicDecisionNo = $('#decisionNo').val();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
-                var errorShow = $('#basic-error');
-                var errorShowSubmit = $('#submit-error');
-                var invalid = 0;
+                let errorShow = $('#basic-error');
+                let errorShowSubmit = $('#submit-error');
+                let invalid = 0;
 
                 resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo);
 
@@ -767,22 +944,27 @@
                         ploList: listPLO
                     });
 
-                    var currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/add';
+                    let currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/add';
 
-                    var options = {
+                    let options = {
                         method: "POST",
-                        headers: {"Content-Type": "application/json"},
+                        headers: {"Content-Type": "application/json; charset=UTF-8"},
                         body: jsonSubmit
                     };
 
                     try {
                         const res = await fetch(currAPI, options);
                         if (res.ok) {
-                            localStorage.clear();
-                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                            errorShowSubmit.css('display', 'none');
+//                            localStorage.clear();
+//                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                        } else {
+                            const json = await res.json();
+                            errorShowSubmit.css('display', 'block');
+                            errorShowSubmit.text(json?.message);
                         }
-                    } catch (e) {
-                        console.log('error when add new cur');
+                    } catch (error) {
+                        console.log('error when add new cur', error);
                     }
                 }
             }

@@ -14,6 +14,7 @@ import entities.ProgramObjective;
 import exceptions.CurriculumException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
+import utils.ResponseUtils;
 
 /**
  *
@@ -36,9 +38,10 @@ public class AddNewCurriculum implements Action {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-
                 //nhận data từ form 
                 JSONObject json = JsonUtils.getRequestJson(request);
                 String curCode = json.getString("code");
@@ -66,17 +69,16 @@ public class AddNewCurriculum implements Action {
 
                 //tạo liên kết với po, plo...
                 //thêm vào db
-                CurriculumDao.add(cur, poList, ploList);
+                System.out.println(curViName);
 
-            } catch (IllegalArgumentException ie) {
-                ie.printStackTrace();
-                request.setAttribute(AppConfig.ERROR_MESSAGE, ie.getMessage());
+//                CurriculumDao.add(cur, poList, ploList);
+            } catch (CurriculumException ce) {
+                JSONObject jsonResponse = new JSONObject();
+                jsonResponse.put("message", ce.getMessage());
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, jsonResponse);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
-                request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
-            } finally {
-                request.getRequestDispatcher("/admin_page/index.jsp").forward(request, response);
             }
         }
     }
@@ -103,5 +105,17 @@ public class AddNewCurriculum implements Action {
             }
         }
         return list;
+    }
+
+    public void doSomething() {
+//        InputStream inp = new FileInputStream("workbook.xlsx");
+//        Workbook wb = WorkbookFactory.create(inp);
+//        Sheet sheet = wb.getSheetAt(0);
+//        for (Row row : sheet) {
+//            for (Cell cell : row) {
+//                System.out.print(cell.getStringCellValue() + " ");
+//            }
+//            System.out.println();
+//        }
     }
 }
