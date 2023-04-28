@@ -18,7 +18,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.eclipse.jdt.core.compiler.InvalidInputException;
 
 /**
  *
@@ -79,7 +78,7 @@ public class EditCurriculum implements Action {
         String name = request.getParameter(objName + "Name");
         String description = request.getParameter(objName + "Description");
         if (!name.matches(objName.toUpperCase() + "[\\d]+")) {
-            throw new InvalidInputException(objName.toUpperCase() + " Name must follow format "
+            throw new Exception(objName.toUpperCase() + " Name must follow format "
                     + objName.toUpperCase() + "(number)");
         }
         obj.setName(name);
@@ -91,7 +90,7 @@ public class EditCurriculum implements Action {
         obj = readObjInput(obj, objName, request, response);
         for (Objective o : list) {
             if (o.getName().equals(obj.getName())) {
-                throw new InvalidInputException(objName.toUpperCase() + " already exist.");
+                throw new Exception(objName.toUpperCase() + " already exist.");
             }
         }
 

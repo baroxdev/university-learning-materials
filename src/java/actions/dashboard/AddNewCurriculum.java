@@ -76,7 +76,6 @@ public class AddNewCurriculum implements Action {
                 JSONObject jsonResponse = new JSONObject();
                 jsonResponse.put("message", ce.getMessage());
                 ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, jsonResponse);
-
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
