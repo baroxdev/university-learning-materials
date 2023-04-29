@@ -43,10 +43,11 @@ public class AddNewCurriculum implements Action {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                JSONObject json = new JSONObject();
+//                JSONObject json = new JSONObject();
                 List<Subject> subjList = SubjectDao.readSubjectFullList();
-                json.put("subjList", subjList);
-                ResponseUtils.sendJson(response, HttpServletResponse.SC_FOUND, json);
+//                json.put("subjList", subjList);
+//                ResponseUtils.sendJson(response, HttpServletResponse.SC_FOUND, json);
+                request.setAttribute("subjList", subjList);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
