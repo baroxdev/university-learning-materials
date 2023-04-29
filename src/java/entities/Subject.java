@@ -5,8 +5,6 @@
  */
 package entities;
 
-import java.util.Date;
-
 /**
  *
  * @author giahu
@@ -17,34 +15,23 @@ public class Subject {
     private String name;
     private String createdAt;
     private String updatedAt;
-    private String preRequisite;
     private String slug;
+    private String viName;
     private int semester;
     private int credit;
-    private int knowlegdeCategoryID;
 
     public Subject() {
     }
 
-    public Subject(String id, String name, String createdAt, String updatedAt, int semester, int credit, String slug) {
+    public Subject(String id, String name, String createdAt, String updatedAt, String slug, String viName, int semester, int credit) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.semester = semester;
-        this.credit = credit;
         this.slug = slug;
-    }
-
-    public Subject(String id, String name, String createdAt, String updatedAt, String preRequisite, int semester, int credit, int knowlegdeCategoryID) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.preRequisite = preRequisite;
+        this.viName = viName;
         this.semester = semester;
         this.credit = credit;
-        this.knowlegdeCategoryID = knowlegdeCategoryID;
     }
 
     public String getId() {
@@ -79,12 +66,20 @@ public class Subject {
         this.updatedAt = updatedAt;
     }
 
-    public String getPreRequisite() {
-        return preRequisite;
+    public String getSlug() {
+        return slug;
     }
 
-    public void setPreRequisite(String preRequisite) {
-        this.preRequisite = preRequisite;
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public String getViName() {
+        return viName;
+    }
+
+    public void setViName(String viName) {
+        this.viName = viName;
     }
 
     public int getSemester() {
@@ -102,22 +97,4 @@ public class Subject {
     public void setCredit(int credit) {
         this.credit = credit;
     }
-
-    public int getKnowlegdeCategoryID() {
-        return knowlegdeCategoryID;
-    }
-
-    public void setKnowlegdeCategoryID(int knowlegdeCategoryID) {
-        this.knowlegdeCategoryID = knowlegdeCategoryID;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-    
-    
 }
