@@ -96,8 +96,8 @@ public class CurriculumDao {
     public static List<Curriculum> readCurriculumFullList() throws Exception {
         String query = "select * from Curriculum where active = 1";
         List<Curriculum> list = new ArrayList<>();
-        try {
-            Connection con = DBUtils.makeConnection();
+        try {           
+            Connection con = DBUtils.makeConnection();         
             PreparedStatement pre = con.prepareStatement(query);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {

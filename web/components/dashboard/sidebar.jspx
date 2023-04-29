@@ -1,4 +1,4 @@
-<nav class="dashboard-sidebar" id="dashboard-sidebar">
+<nav class="dashboard-sidebar" id="dashboard-sidebar" style="z-index: 1;">
     <ul class="nav">
         <li class="navbar-item">
             <a class="navbar-item__a"
