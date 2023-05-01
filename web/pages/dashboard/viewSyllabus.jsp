@@ -23,45 +23,41 @@
     <main>
         <%@include file="/components/dashboard/header.jspx" %>
         <div class="dashboard-content">
-            <div class="container-2xl">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">
-                            <input type="checkbox"/>
-                        </th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Subject Code</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Credit</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">CreatedAt</th>
-                        <th scope="col">UpdatedAt</th>
-                        <th scope="col">isApproved</th>
-                        <th scope="col">Edit</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="syl" items="<%= lsSyllabus%>">
-                        <td>${syl.id}</td>
-                        <td>${syl.subjectID}</td>
-                        <td>${syl.name}</td>
-                        <td>${syl.credit}</td>
-                        <td>${syl.status}</td>
-                        <td>${syl.createdAt}</td>
-                        <td>${syl.updatedAt}</td>
-                        <td>${syl.isApproved}</td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-outline-success btn-sm">Publish</button>
-                                <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
-                                <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-                            </div>
-                        </td>
+            <div class="container-xl" style="margin-top: 32px">
+                <div class="ulm-table__container">
+                    <table class="ulm-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Subject Code</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>CreatedAt</th>
+                            <th>UpdatedAt</th>
+                            <th>isApproved</th>
+                            <th>Edit</th>
                         </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="syl" items="<%= lsSyllabus%>">
+                            <td>${syl.id}</td>
+                            <td>${syl.subjectID}</td>
+                            <td>${syl.name}</td>
+                            <td>${syl.status}</td>
+                            <td>${syl.createdAt}</td>
+                            <td>${syl.updatedAt}</td>
+                            <td>${syl.isApproved}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm">Edit</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
+                                </div>
+                            </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>

@@ -271,7 +271,6 @@
         <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
         <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <script>
-
             $(document).ready(function () {
                 let oldName;
                 let oldDescription;
