@@ -6,41 +6,32 @@
 package entities;
 
 /**
+ *
  * @author giahu
  */
 public class Subject {
 
     private String id;
     private String name;
-    private String viName;
     private String createdAt;
-
     private String updatedAt;
-    private String preRequisite;
     private String slug;
-    private String semester;
+    private String viName;
+    private int semester;
+    private int credit;
 
     public Subject() {
     }
 
-    public Subject(String id, String name, String viName, String createdAt, String updatedAt, String preRequisite, String slug, String semester) {
+    public Subject(String id, String name, String createdAt, String updatedAt, String slug, String viName, int semester, int credit) {
         this.id = id;
         this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.slug = slug;
         this.viName = viName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.preRequisite = preRequisite;
-        this.slug = slug;
         this.semester = semester;
-    }
-
-    public Subject(String id, String name, String createdAt, String updatedAt, String semester, String slug) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.semester = semester;
-        this.slug = slug;
+        this.credit = credit;
     }
 
     public String getId() {
@@ -59,14 +50,6 @@ public class Subject {
         this.name = name;
     }
 
-    public String getViName() {
-        return viName;
-    }
-
-    public void setViName(String viName) {
-        this.viName = viName;
-    }
-
     public String getCreatedAt() {
         return createdAt;
     }
@@ -83,22 +66,6 @@ public class Subject {
         this.updatedAt = updatedAt;
     }
 
-    public String getPreRequisite() {
-        return preRequisite;
-    }
-
-    public void setPreRequisite(String preRequisite) {
-        this.preRequisite = preRequisite;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
-
     public String getSlug() {
         return slug;
     }
@@ -107,5 +74,27 @@ public class Subject {
         this.slug = slug;
     }
 
+    public String getViName() {
+        return viName;
+    }
 
+    public void setViName(String viName) {
+        this.viName = viName;
+    }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
+    }
+
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
+    }
 }
