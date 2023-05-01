@@ -293,15 +293,15 @@
                 }
                 $("#myModal").modal("hide");
 
-                    let oldPOList = getListPOFromLocalStorage();
-                    let poFileContent = readXlsxFile(file, {sheet: 'PO'});
-                    let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
+                let oldPOList = getListPOFromLocalStorage();
+                let poFileContent = readXlsxFile(file, {sheet: 'PO'});
+                let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
 
-                    poFileContent.then(function (data) {
-                        if (data.length > 0) {
-                            handleAddFilePO(data);
-                        }
-                        errorShow.css('display', 'none');
+                poFileContent.then(function (data) {
+                    if (data.length > 0) {
+                        handleAddFilePO(data);
+                    }
+                    errorShow.css('display', 'none');
                     }).then(function () {
                         ploFileContent.then(function (data) {
                             if (data.length > 0) {
