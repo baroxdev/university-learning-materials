@@ -14,6 +14,8 @@ and open the template in the editor.
 
 :root {
     --dashboard-header-height: 60px;
+    --text-color: hsl(0deg 0% 20.47%);
+    --text-hover-color: hsl(0deg 0% 10.47%);
 }
 
 html, body {
@@ -69,6 +71,32 @@ label, a {
     line-height: 150%;
 }
 
+/* Login form*/
+
+#login-form .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+#login-form .description {
+    font-size: .875rem;
+    color: #6a6a6a;
+}
+
+#login-form .head-section {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+#login-form .options-section {
+    margin-top: 8px !important;
+    margin-bottom: 24px !important;
+}
+
+#login-form .options-section label, #login-form .options-section a {
+    font-size: .875rem;
+}
+
 /*.show {
     float: right;
     margin-right: 13px;
@@ -76,7 +104,6 @@ label, a {
     position: relative;
     z-index: 2;
 }*/
-
 .loading {
     position: fixed;
     top: 0;
@@ -247,7 +274,7 @@ header h3 {
     border: 1px solid #E9ECEF;
     min-height: 140px;
     transition: all 0.25s ease-in-out;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 .post-card__header {
@@ -257,9 +284,14 @@ header h3 {
 }
 
 .post-card__title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
+    color: var(--text-color);
+    text-decoration: none;
+}
 
+post-card__title:hover {
+    color: var(--text-hover-color) !important;
 }
 
 .post-card:hover {
@@ -281,36 +313,34 @@ time.post-card_time {
     color: #ADB5BD;
 }
 
-.rounded-badge {
-    width: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1/1;
-    background: #fff;
-    color: #1f65cd;
-    border-radius: 100%;
-    font-size: 28px;
-    font-weight: 600;
-    border: 1px solid #f3f3f3;
-    height: 50px;
-}
+/*.rounded-badge {*/
+/*    width: 50px;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    aspect-ratio: 1/1;*/
+/*    background: #fff;*/
+/*    color: #1f65cd;*/
+/*    border-radius: 100%;*/
+/*    font-size: 28px;*/
+/*    font-weight: 600;*/
+/*    border: 1px solid #f3f3f3;*/
+/*    height: 50px;*/
+/*}*/
+
+/* Post Detail */
 
 .objective-card {
-    background: #ffffff;
-    box-shadow: 2px 3px 9px 0 rgba(13, 110, 253, .25);
+    color: #000;
+    background: #f0f2f5;
     display: flex;
     align-items: center;
-    padding: 12px;
+    padding: 18px;
     border-radius: 10px;
     margin-bottom: 12px;
-
 }
 
 .objective-container {
-    border-radius: 24px;
-    padding: 24px;
-    background: linear-gradient(-45deg, #a1c7ff, transparent);
 }
 
 .objective-card:last-child {
@@ -330,12 +360,30 @@ time.post-card_time {
 .text-content h5 {
     font-weight: 700;
     font-size: 20px;
-    margin-top: 1.5px;
+    margin-top: 1.5rem;
     margin-bottom: 1rem;
 }
 
-/* Syllabus and Curriculum details Responsive */
+.nav_mobile a:hover {
+    color: var(--nav-pills-text) !important;
+    background-color: var(--nav-pills-bg-hover) !important;
+}
 
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link, .nav-pills .nav-link.is-active {
+    color: var(--nav-pills-text) !important;
+    background-color: var(--nav-pills-bg-active) !important;
+    font-weight: 700;
+}
+
+.nav-pills .nav-link {
+    --nav-pills-bg-hover: #e9e9e9;
+    --nav-pills-bg-active: #f3f3f3;
+    --nav-pills-text: #333;
+    color: var(--nav-pills-text);
+    font-size: 14px;
+}
+
+/* Syllabus and Curriculum details Responsive */
 .nav_mobile {
     width: 250px !important;
     background-image: linear-gradient(0, rgb(255, 255, 255, 0.9), rgb(255, 255, 255, 0.9));
@@ -368,45 +416,28 @@ a:is(:link, :active, :visited).is-active {
     background-color: #0d6efd;
 }
 
-.over-hamburger {
+.fixed-hamburger {
     position: fixed;
-    left: 180px;
+    right: 24px;
     bottom: 20px;
-    background-color: #0d6efd;
-    padding: 7px;
-    border-radius: 10px;
-    height: 50px;
-    width: 55px !important;
-    left: 82%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 
 }
 
 .hamburger {
-    position: relative;
-    display: block;
-    width: 35px;
-    height: 35px;
+    display: none;
+
+    width: 45px;
+    height: 45px;
     cursor: pointer;
-    background-color: #0d6efd;
 }
 
-.hamburger .bar, .hamburger::after, .hamburger::before {
-    content: '';
-    display: block;
-    width: 80%;
-    height: 5px;
-    margin: 3px 0px;
-    background-color: white;
-    transition: 0.4s;
+.hamburger:hover {
+    background: #efefef;
 }
 
-.hamburger.is-active::before {
-    transform: rotate(-45deg) translate(-9px, 9px);
-}
-
-.hamburger.is-active::after {
-    transform: rotate(45deg) translate(-8px, -8px);
-}
 
 .hamburger.is-active .bar {
     opacity: 0;
@@ -434,6 +465,12 @@ a:is(:link, :active, :visited).is-active {
 @media only screen and (max-width: 768px) {
     .components {
         display: none !important;
+    }
+
+    .hamburger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .header {
@@ -501,6 +538,21 @@ a:is(:link, :active, :visited).is-active {
 
 .dashboard-sidebar .navbar-item__a:hover {
     background: hsl(215.75deg 56.23% 53.85%);
+}
+
+.ulm-table {
+    padding: 4px;
+    width: 100%;
+    border
+}
+
+.ulm-table head {
+    width: 100%;
+}
+
+.ulm-table th {
+    font-size: 14px;
+    padding: 12px;
 }
 
 .left {

@@ -282,16 +282,16 @@
             $(this).val('');
         }).change(function () {
             let file = $('#file_upload')[0].files[0];
-                let errorShow = $('#upload-error');
-                const addPOForm = $('#add-po-form');
-                const addPLOForm = $('#add-plo-form');
-                $("#myModal").modal("show");
-                $('#modal-yes, #modal-no').off('click').on('click', function () {
-                    if (this.id === 'modal-no') {
-                        localStorage.removeItem('curiculum.list_po');
-                        localStorage.removeItem('curiculum.list_plo');
-                    }
-                    $("#myModal").modal("hide");
+            let errorShow = $('#upload-error');
+            const addPOForm = $('#add-po-form');
+            const addPLOForm = $('#add-plo-form');
+            $("#myModal").modal("show");
+            $('#modal-yes, #modal-no').off('click').on('click', function () {
+                if (this.id === 'modal-no') {
+                    localStorage.removeItem('curiculum.list_po');
+                    localStorage.removeItem('curiculum.list_plo');
+                }
+                $("#myModal").modal("hide");
 
                     let oldPOList = getListPOFromLocalStorage();
                     let poFileContent = readXlsxFile(file, {sheet: 'PO'});
