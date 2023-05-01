@@ -18,56 +18,65 @@
     <main>
         <%@include file="/components/dashboard/header.jspx" %>
         <div class="dashboard-content">
-            <div class="container-xl">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">
-                            <input type="checkbox"/>
-                        </th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Edit</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="cur" items="<%= lsCur%>">
+            <div class="container-xl" style="margin-top: 32px">
+                <div class="ulm-table__container">
+                    <table class="ulm-table">
+                        <thead>
                         <tr>
-                            <th scope="row">
+                            <th style="width:100px">
                                 <input type="checkbox"/>
                             </th>
-                            <td>${cur.id}</td>
-                            <td>${cur.name}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${cur.active}">
-                                        <span class="badge rounded-pill text-bg-success">active</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="badge rounded-pill text-bg-secondary">in-active</span>
-                                    </c:otherwise>
-                                </c:choose>
-
-                            </td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-outline-primary btn-sm"
-                                            onclick="window.location.href='${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit?id=${cur.id}'"
-                                            style="height: 100%;">Edit
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-                                </div>
-                            </td>
+                            <th style="width:120px">ID</th>
+                            <th>Name</th>
+                            <th style="width: 150px">Status</th>
+                            <th style="width: 150px">Edit</th>
                         </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="cur" items="<%= lsCur%>">
+                            <tr onclick="((e) => {e.stopPropagation(); viewCurriculum(${cur.id});})()">
+                                <td>
+                                    <input type="checkbox"/>
+                                </td>
+                                <td>${cur.id}</td>
+                                <td>${cur.name}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${cur.active}">
+                                            <span class="badge rounded-pill text-bg-success">active</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="badge rounded-pill text-bg-secondary">in-active</span>
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-outline-primary btn-sm"
+                                                onclick="window.location.href='${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit?id=${cur.id}'"
+                                                style="height: 100%;">Edit
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
     </main>
 </div>
+
+<script>
+    function viewCurriculum(e, curriculumId) {
+        const url = "${pageContext.servletContext.contextPath}/dashboard/curriculums/edit?id=" + curriculumId;
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>
 

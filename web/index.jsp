@@ -160,7 +160,7 @@
                         <span class="badge text-bg-primary">${ex.type}</span>
                     </div>
                     <div class="post-card__body">
-                        <p class="post-card__description">Text line</p>
+                            <%--                        <p class="post-card__description">Text line</p>--%>
                     </div>
                     <div class="post-card_footer">
                         <time class="post-card_time">Updated at <fmt:formatDate pattern="MMMM dd, yyyy"

@@ -282,26 +282,26 @@
             $(this).val('');
         }).change(function () {
             let file = $('#file_upload')[0].files[0];
-                let errorShow = $('#upload-error');
-                const addPOForm = $('#add-po-form');
-                const addPLOForm = $('#add-plo-form');
-                $("#myModal").modal("show");
-                $('#modal-yes, #modal-no').off('click').on('click', function () {
-                    if (this.id === 'modal-no') {
-                        localStorage.removeItem('curiculum.list_po');
-                        localStorage.removeItem('curiculum.list_plo');
+            let errorShow = $('#upload-error');
+            const addPOForm = $('#add-po-form');
+            const addPLOForm = $('#add-plo-form');
+            $("#myModal").modal("show");
+            $('#modal-yes, #modal-no').off('click').on('click', function () {
+                if (this.id === 'modal-no') {
+                    localStorage.removeItem('curiculum.list_po');
+                    localStorage.removeItem('curiculum.list_plo');
+                }
+                $("#myModal").modal("hide");
+
+                let oldPOList = getListPOFromLocalStorage();
+                let poFileContent = readXlsxFile(file, {sheet: 'PO'});
+                let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
+
+                poFileContent.then(function (data) {
+                    if (data.length > 0) {
+                        handleAddFilePO(data);
                     }
-                    $("#myModal").modal("hide");
-
-                    let oldPOList = getListPOFromLocalStorage();
-                    let poFileContent = readXlsxFile(file, {sheet: 'PO'});
-                    let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
-
-                    poFileContent.then(function (data) {
-                        if (data.length > 0) {
-                            handleAddFilePO(data);
-                        }
-                        errorShow.css('display', 'none');
+                    errorShow.css('display', 'none');
                     }).then(function () {
                         ploFileContent.then(function (data) {
                             if (data.length > 0) {
