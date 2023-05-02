@@ -312,16 +312,16 @@
                         localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
                         renderListPO(oldPOList, addPOForm);
                         errorShow.css('display', 'block');
-                            errorShow.text("Your upload file doesn't have PLO sheet, please try again!");
-                        });
-                    }).catch(function (error) {
-                        errorShow.css('display', 'block');
-                        errorShow.text("Your upload file doesn't have PO sheet, please try again!");
+                        errorShow.text("Your upload file doesn't have PLO sheet, please try again!");
                     });
+                }).catch(function (error) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                 });
             });
+        });
 
-            $("#poTbl").on("click", "[name='editBtn']", function () {
+        $("#poTbl").on("click", "[name='editBtn']", function () {
                 oldName = $(this).closest("tr").find("td").eq(0).text();
                 oldDescription = $(this).closest("tr").find("td").eq(1).text();
                 let row = $(this).closest('tr');
