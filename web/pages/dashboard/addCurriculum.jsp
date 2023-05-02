@@ -332,26 +332,26 @@
             tdList.each(function (index, element) {
                 if (index != tdList.length - 1) {
                     if (index == 0) {
-                            input = $('<td><input class="form-control" type="text" /></td>')
-                            input.find('input').attr('value', oldName);
-                        } else {
-                            input = $('<td><textarea class="form-control"></textarea></td>');
-                            input.find('textarea').text(oldDescription);
-                        }
-
-                        form.append(input);
+                        input = $('<td><input class="form-control" type="text" /></td>')
+                        input.find('input').attr('value', oldName);
                     } else {
-                        input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                        input = $('<td><textarea class="form-control"></textarea></td>');
+                        input.find('textarea').text(oldDescription);
+                    }
+
+                    form.append(input);
+                } else {
+                    input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
                                                 <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
                                                 <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
-                        form.append(input);
-                    }
-                });
-                form.append('</tr>');
-                row.replaceWith(form);
+                    form.append(input);
+                }
             });
+            form.append('</tr>');
+            row.replaceWith(form);
+        });
 
-            $("#ploTbl").on("click", "[name='editBtn']", function () {
+        $("#ploTbl").on("click", "[name='editBtn']", function () {
                 oldName = $(this).closest("tr").find("td").eq(0).text();
                 oldDescription = $(this).closest("tr").find("td").eq(1).text();
 

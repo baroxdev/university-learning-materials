@@ -1,11 +1,12 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package controllers.dashboard;
 
 import actions.Action;
-import actions.dashboard.ViewDashboard;
+import actions.dashboard.ViewListAccount;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,20 +18,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author quocb
+ * @author admin
  */
-@WebServlet(name = "DashboardController", urlPatterns = {"/dashboard/*"})
-public class DashboardController extends HttpServlet {
+@WebServlet(name = "AccountDashboard", urlPatterns = {"/accounts"})
+public class AccountDashboard extends HttpServlet {
 
-    private final Map<String, HttpServlet> controllerMap = new HashMap<>();
-    private final Action viewRootDashboardAction = new ViewDashboard();
+    private final Map<String, Action> actionMap = new HashMap<>();
 
     @Override
     public void init() {
-        controllerMap.put("curriculums", new CurriculumDashboard());
-        controllerMap.put("syllabus", new SyllabusDashboard());
-        controllerMap.put("subjects", new SubjectDashboard());
-        controllerMap.put("accounts", new AccountDashboard());
+        actionMap.put("/accounts", new ViewListAccount());
     }
 
     /**
@@ -45,7 +42,6 @@ public class DashboardController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,16 +57,12 @@ public class DashboardController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("paths " + request.getPathInfo());
-        String pathInfo = request.getPathInfo();
-        String path = pathInfo != null ? pathInfo.split("/")[1] : "";
-        HttpServlet servlet = controllerMap.get(path);
-
-        if (servlet != null) {
-            servlet.init();
-            servlet.service(request, response);
+        Action action = actionMap.get(request.getPathInfo().trim());
+        if (action != null) {
+            action.doGet(request, response);
         } else {
-            viewRootDashboardAction.doGet(request, response);
+            // Handle error if the path is not supported
+            System.out.println("Not found action");
         }
     }
 
@@ -85,14 +77,12 @@ public class DashboardController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path = request.getPathInfo().split("/")[1];
-        HttpServlet servlet = controllerMap.get(path);
-
-        if (servlet != null) {
-            servlet.init();
-            servlet.service(request, response);
+        Action action = actionMap.get(request.getPathInfo());
+        if (action != null) {
+            action.doPost(request, response);
         } else {
-            viewRootDashboardAction.doPost(request, response);
+            // Handle error if the path is not supported
+            System.out.println("Not found action");
         }
     }
 
