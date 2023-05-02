@@ -322,16 +322,16 @@
         });
 
         $("#poTbl").on("click", "[name='editBtn']", function () {
-                oldName = $(this).closest("tr").find("td").eq(0).text();
-                oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                let row = $(this).closest('tr');
-                let form = $('<tr>');
-                let tdList = row.find('td');
-                let input;
+            oldName = $(this).closest("tr").find("td").eq(0).text();
+            oldDescription = $(this).closest("tr").find("td").eq(1).text();
+            let row = $(this).closest('tr');
+            let form = $('<tr>');
+            let tdList = row.find('td');
+            let input;
 
-                tdList.each(function (index, element) {
-                    if (index != tdList.length - 1) {
-                        if (index == 0) {
+            tdList.each(function (index, element) {
+                if (index != tdList.length - 1) {
+                    if (index == 0) {
                             input = $('<td><input class="form-control" type="text" /></td>')
                             input.find('input').attr('value', oldName);
                         } else {
