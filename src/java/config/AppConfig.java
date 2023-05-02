@@ -62,6 +62,7 @@ public class AppConfig {
     public final static String DASHBOARD_SYLLABUS_TARGET = "syllabus";
     public final static String DASHBOARD_SYLLABUS_LIST = "lsSyllabus";
     public final static String DASHBOARD_SUBJECT_LIST = "lsSubjects";
+    public final static String DASHBOARD_SUBJECT = "subject";
 
     //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";

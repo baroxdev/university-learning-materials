@@ -451,7 +451,9 @@ a:is(:link, :active, :visited).is-active {
 }
 
 .dashboard-content {
-    height: calc(100vh - var(--dashboard-header-height));
+    --dashboard-content-margin: 32px;
+    margin: var(--dashboard-content-margin) 0;
+    height: calc(100vh - var(--dashboard-header-height) - (2 * var(--dashboard-content-margin)));
     overflow: auto;
 }
 

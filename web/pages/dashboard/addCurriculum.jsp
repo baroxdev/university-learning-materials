@@ -302,16 +302,16 @@
                         handleAddFilePO(data);
                     }
                     errorShow.css('display', 'none');
-                    }).then(function () {
-                        ploFileContent.then(function (data) {
-                            if (data.length > 0) {
-                                handleAddFilePLO(data, oldPOList);
-                            }
-                            errorShow.css('display', 'none');
-                        }).catch(function (error) {
-                            localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
-                            renderListPO(oldPOList, addPOForm);
-                            errorShow.css('display', 'block');
+                }).then(function () {
+                    ploFileContent.then(function (data) {
+                        if (data.length > 0) {
+                            handleAddFilePLO(data, oldPOList);
+                        }
+                        errorShow.css('display', 'none');
+                    }).catch(function (error) {
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                        renderListPO(oldPOList, addPOForm);
+                        errorShow.css('display', 'block');
                             errorShow.text("Your upload file doesn't have PLO sheet, please try again!");
                         });
                     }).catch(function (error) {

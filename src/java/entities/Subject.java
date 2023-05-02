@@ -5,6 +5,8 @@
  */
 package entities;
 
+import java.util.Date;
+
 /**
  * @author giahu
  */
@@ -13,34 +15,25 @@ public class Subject {
     private String id;
     private String name;
     private String viName;
-    private String createdAt;
+    private Date createdAt;
 
-    private String updatedAt;
-    private String preRequisite;
+    private Date updatedAt;
     private String slug;
     private String semester;
+    private Boolean active;
 
     public Subject() {
     }
 
-    public Subject(String id, String name, String viName, String createdAt, String updatedAt, String preRequisite, String slug, String semester) {
+    public Subject(String id, String name, String viName, Date createdAt, Date updatedAt, String slug, String semester, Boolean active) {
         this.id = id;
         this.name = name;
         this.viName = viName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.preRequisite = preRequisite;
         this.slug = slug;
         this.semester = semester;
-    }
-
-    public Subject(String id, String name, String createdAt, String updatedAt, String semester, String slug) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.semester = semester;
-        this.slug = slug;
+        this.active = active;
     }
 
     public String getId() {
@@ -67,28 +60,20 @@ public class Subject {
         this.viName = viName;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String getPreRequisite() {
-        return preRequisite;
-    }
-
-    public void setPreRequisite(String preRequisite) {
-        this.preRequisite = preRequisite;
     }
 
     public String getSemester() {
@@ -107,5 +92,11 @@ public class Subject {
         this.slug = slug;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
