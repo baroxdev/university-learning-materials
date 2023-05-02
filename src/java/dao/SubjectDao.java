@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import utils.DBUtils;
 
@@ -23,7 +24,7 @@ import utils.DBUtils;
 public class SubjectDao {
 
     public static Integer create(Subject subject) throws Exception {
-        String query = "insert into Subject (id, name, createdAt, semester, slug, viName) values ( ?, ?, cast(GETDATE() as date), ?, ?, ? )";
+        String query = "insert into Subject (id, name, createdAt, semester, slug, viName) values ( ?, ?, SYSDATETIME(), ?, ?, ? )";
         Connection cn = null;
         cn = DBUtils.makeConnection();
         if (cn == null) {
@@ -73,23 +74,26 @@ public class SubjectDao {
 
     public static ArrayList<Subject> readFullList() {
         ArrayList<Subject> result = new ArrayList<>();
-        String query = "select id, name, viName, createdAt, updatedAt, semester, slug from Subject";
+        String query = "select * from Subject ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         try (Connection cn = DBUtils.makeConnection()) {
             Statement stm = cn.createStatement();
             ResultSet rs = stm.executeQuery(query);
             while (rs.next()) {
-                Subject subject = new Subject();
-                subject.setId(rs.getString("id"));
-                subject.setName(rs.getString("name"));
-                String viName = rs.getNString("viName");
-                System.out.println("viName formatted " + viName);
-                subject.setViName(viName);
-                subject.setSlug(rs.getString("slug"));
-                subject.setSemester(rs.getInt("semester"));
-                subject.setCreatedAt(rs.getString("createdAt"));
-                subject.setUpdatedAt(rs.getString("updatedAt"));
+                Subject subject = getSubject(rs);
                 result.add(subject);
             }
+
+            Collections.sort(result, (Subject o1, Subject o2) -> {
+                if (o1.getUpdatedAt() != null && o2.getUpdatedAt() != null) {
+                    return o2.getUpdatedAt().compareTo(o1.getUpdatedAt());
+                } else if (o1.getUpdatedAt() != null && o2.getUpdatedAt() == null) {
+                    return o2.getCreatedAt().compareTo(o1.getUpdatedAt());
+                } else if (o1.getUpdatedAt() == null && o2.getUpdatedAt() != null) {
+                    return o2.getUpdatedAt().compareTo(o1.getCreatedAt());
+                } else {
+                    return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -101,27 +105,20 @@ public class SubjectDao {
         return result;
     }
 
-    public static List<Subject> readSubjectFullList() throws Exception {
-        String query = "select * from Subject";
-        List<Subject> list = new ArrayList<>();
+    //lấy subject theo id (subject detail)
+    public static Subject getSubjectById(String id) throws Exception {
+        String query = "select * from Subject where id = ?";
+        Subject subject = null;
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
-                Subject subject = new Subject();
-                subject.setId(rs.getString("id"));
-                subject.setName(rs.getString("name"));
-                subject.setCreatedAt(rs.getString("createdAt"));
-                subject.setUpdatedAt(rs.getString("updatedAt"));
-                subject.setSemester(rs.getInt("semester"));
-                subject.setSlug(rs.getString("slug"));
-                subject.setViName(rs.getNString("viName"));
-                subject.setCredit(rs.getInt("credit"));
-                list.add(subject);
+                subject = getSubject(rs);
             }
             con.close();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new SubjectException("Something went wrong in get subject progress.");
         }
         return list;
@@ -129,7 +126,9 @@ public class SubjectDao {
 
     //lấy list môn theo curriculumId
     public static List<Subject> readSubjectList(String curId) throws Exception {
-        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], [slug], [viName], [credit] from Subject join Curr_to_Subject on id = subjectID where curriculumID = ?";
+        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], slug from Subject" +
+                " join Curr_to_Subject on id = subjectID where curriculumID = ?" +
+                " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         List<Subject> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
@@ -137,15 +136,7 @@ public class SubjectDao {
             pre.setString(1, curId);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
-                Subject subject = new Subject();
-                subject.setId(rs.getString("id"));
-                subject.setName(rs.getString("name"));
-                subject.setCreatedAt(rs.getString("createdAt"));
-                subject.setUpdatedAt(rs.getString("updatedAt"));
-                subject.setSemester(rs.getInt("semester"));
-                subject.setSlug(rs.getString("slug"));
-                subject.setViName(rs.getNString("viName"));
-                subject.setCredit(rs.getInt("credit"));
+                Subject subject = getSubject(rs);
                 list.add(subject);
             }
             con.close();
@@ -156,17 +147,76 @@ public class SubjectDao {
         return list;
     }
 
-    //link curriculum to subject
-    public static void link(Connection con, int curId, String subjId) throws Exception {
-        String query = "insert Curr_to_Subject values(?,?)";
-        PreparedStatement pre = con.prepareStatement(query);
-        pre.setInt(1, curId);
-        pre.setString(2, subjId);
+    private static Subject getSubject(ResultSet rs) throws SQLException {
+        Subject subject = new Subject();
+        subject.setId(rs.getString("id"));
+        subject.setName(rs.getString("name"));
+        subject.setViName(rs.getNString("viName"));
+        subject.setCreatedAt(rs.getDate("createdAt"));
+        subject.setUpdatedAt(rs.getDate("updatedAt") != null ? rs.getDate("updatedAt") : null);
+        subject.setSemester(rs.getString("semester"));
+        subject.setSlug(rs.getString("slug"));
+        subject.setActive(rs.getBoolean("active"));
+        return subject;
+    }
 
-        int affectedRows = pre.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("Link curriculum to Subject failed, no rows affected.");
+    //lấy list môn theo curriculumId và khối ngành? và cả plo?
+    //cần junction table giữa Subject và PLO
+    public static List<Subject> readSubjectList(String curId, String KCId) throws Exception {
+        String query = "select * from subject join ... on id = sub_id where cur_id = ? and knowlegdeCategoryID = ?";//cái nay chưa có trong db nên để tạm
+        List<Subject> list = new ArrayList<>();
+        try {
+            Connection con = DBUtils.makeConnection();
+            PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, curId);
+            pre.setString(2, KCId);
+            ResultSet rs = pre.executeQuery();
+            while (rs.next()) {
+                Subject subject = getSubject(rs);
+                list.add(subject);
+            }
+            con.close();
+        } catch (Exception e) {
+            throw new SubjectException("Something went wrong in read subject progress.");
         }
+    }
+
+    public static Integer update(Subject subject) throws Exception {
+        String query = "update Subject set name = ?, viName = ?, updatedAt = GETDATE(), semester = ?, slug = ?, active = ? where id = ?";
+        Connection cn = null;
+        cn = DBUtils.makeConnection();
+        if (cn == null) throw new SubjectException("Cannot connect to Database now");
+        PreparedStatement ppstm = cn.prepareStatement(query);
+        ppstm.setString(1, subject.getName());
+        ppstm.setNString(2, subject.getViName());
+        ppstm.setString(3, subject.getSemester());
+        ppstm.setString(4, subject.getSlug());
+        ppstm.setBoolean(5, subject.getActive());
+        ppstm.setString(6, subject.getId());
+        Integer rows = ppstm.executeUpdate();
+
+        if (rows == 0) {
+            throw new SubjectException("Failed to add new Subject. Try again.");
+        }
+
+        return rows;
+    }
+
+    public static Integer updateStatus(String subjectId, Boolean isActive) throws Exception {
+        String query = "update Subject set active = ?, updatedAt = GETDATE() where id = ?";
+        Connection cn = null;
+        cn = DBUtils.makeConnection();
+        if (cn == null) throw new SubjectException("Cannot connect to Database now");
+        PreparedStatement ppstm = cn.prepareStatement(query);
+        ppstm.setBoolean(1, isActive);
+        ppstm.setString(2, subjectId);
+        Integer rows = ppstm.executeUpdate();
+
+        if (rows == 0) {
+            throw new SubjectException("Failed to update Subject status. Try again.");
+        }
+
+        return rows;
     }
 
     public static Boolean isExist(String id) throws Exception {
@@ -178,7 +228,6 @@ public class SubjectDao {
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, id);
             ResultSet rs = pre.executeQuery();
-            System.out.println("Result " + rs);
             if (rs.next()) {
                 isExist = true;
             }

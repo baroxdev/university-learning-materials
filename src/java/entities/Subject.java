@@ -5,6 +5,8 @@
  */
 package entities;
 
+import java.util.Date;
+
 /**
  *
  * @author giahu
@@ -13,17 +15,19 @@ public class Subject {
 
     private String id;
     private String name;
-    private String createdAt;
-    private String updatedAt;
-    private String slug;
     private String viName;
-    private int semester;
-    private int credit;
+    private Date createdAt;
+
+    private Date updatedAt;
+    private String slug;
+    private String semester;
+    private Boolean active;
+
 
     public Subject() {
     }
 
-    public Subject(String id, String name, String createdAt, String updatedAt, String slug, String viName, int semester, int credit) {
+    public Subject(String id, String name, String viName, Date createdAt, Date updatedAt, String slug, String semester, Boolean active) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
@@ -31,7 +35,7 @@ public class Subject {
         this.slug = slug;
         this.viName = viName;
         this.semester = semester;
-        this.credit = credit;
+        this.active = active;
     }
 
     public String getId() {
@@ -50,32 +54,32 @@ public class Subject {
         this.name = name;
     }
 
-    public String getCreatedAt() {
+    public String getViName() {
+        return viName;
+    }
+
+    public void setViName(String viName) {
+        this.viName = viName;
+    }
+
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public String getViName() {
-        return viName;
+    public String getSemester() {
+        return semester;
     }
 
     public void setViName(String viName) {
@@ -90,11 +94,12 @@ public class Subject {
         this.semester = semester;
     }
 
-    public int getCredit() {
-        return credit;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setCredit(int credit) {
-        this.credit = credit;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
+

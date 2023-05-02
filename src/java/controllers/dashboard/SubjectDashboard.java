@@ -7,6 +7,8 @@ package controllers.dashboard;
 
 import actions.Action;
 import actions.dashboard.AddNewSubject;
+import actions.dashboard.EditSubject;
+import actions.dashboard.UpdateSubjectStatus;
 import actions.dashboard.ViewListSubject;
 
 import javax.servlet.ServletException;
@@ -31,6 +33,9 @@ public class SubjectDashboard extends HttpServlet {
         actionMap.put("/subjects", new ViewListSubject());
         actionMap.put("/subjects/", new ViewListSubject());
         actionMap.put("/subjects/add", new AddNewSubject());
+        actionMap.put("/subjects/edit", new EditSubject());
+        actionMap.put("/subjects/update-status", new UpdateSubjectStatus());
+
     }
 
     /**

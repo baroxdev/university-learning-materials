@@ -297,7 +297,6 @@
                         let oldPOList = getListPOFromLocalStorage();
                         let poFileContent = readXlsxFile(file, {sheet: 'PO'});
                         let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
-
                         poFileContent.then(function (data) {
                             if (data.length > 0) {
                                 handleAddFilePO(data);
@@ -320,8 +319,10 @@
                             errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                         });
                     });
+                }).catch(function (error) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                 });
-
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();

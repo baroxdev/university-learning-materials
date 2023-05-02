@@ -5,13 +5,14 @@
 --%>
 
 <%@page import="config.AppConfig" %>
+<%@ page import="entities.Subject" %>
+<%@ page import="config.Label" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
@@ -24,9 +25,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <title>Add Subject</title>
+    <%
+        Subject subject = (Subject) request.getAttribute(AppConfig.DASHBOARD_SUBJECT);
+        Boolean isEdit = subject != null;
+    %>
+    <title><%= isEdit ? Label.DASHBOARD_SUBJECT_EDIT_TITLE : Label.DASHBOARD_SUBJECT_ADD_TITLE %>
+    </title>
 </head>
 <body>
+
 <div class="dashboard-container">
     <%@include file="/components/dashboard/sidebar.jspx" %>
     <main>
@@ -56,15 +63,35 @@
                 </div>
 
 
-                <legend>Add Subject</legend>
-                <form class="mt-4" action="<c:url value="/dashboard/subjects/add" />" method="POST"
+                <legend><%= isEdit ? Label.DASHBOARD_SUBJECT_EDIT_TITLE : Label.DASHBOARD_SUBJECT_ADD_TITLE %>
+                </legend>
+                <form class="mt-4" method="POST"
                       id="add-subject-form">
+                    <c:choose>
+                        <c:when test="${ subject != null}">
+                            <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                                <div class="col-2">
+                                    <label for="subject.status" class="col-form-label"
+                                           style="font-size: 16px;">Active</label>
+                                </div>
+                                <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               id="subject.status"
+                                               name="subject.status" <%=subject.getActive() ? "checked" : "" %>>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:when>
+                    </c:choose>
                     <div class="row g-3 align-items-center" style="margin-top: 23px;">
                         <div class="col-2">
                             <label for="subject.code" class="col-form-label" style="font-size: 16px;">Code</label>
                         </div>
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                            <input type="text" name="subject.code" id="subject.code" class="form-control">
+                            <input type="text" name="subject.code" id="subject.code" class="form-control"
+                                   value="<%= isEdit ? subject.getId() : "" %>" <%= isEdit ? "disabled" : "" %>
+                            >
                         </div>
                     </div>
 
@@ -74,6 +101,7 @@
                         </div>
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <input type="text" name="subject.slug" id="subject.slug" class="form-control" readonly
+                                   value="<%= isEdit && subject.getSlug() != null ? subject.getSlug(): "" %>"
                                    disabled>
                         </div>
                     </div>
@@ -85,6 +113,7 @@
                         </div>
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <input type="text" id="subject.name" name="subject.name" class="form-control"
+                                   value="<%= isEdit &&  subject.getName() != null ? subject.getName() : "" %>"
                             >
                         </div>
                     </div>
@@ -96,20 +125,27 @@
                         </div>
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <input type="text" id="subject.viName" name="subject.viName" class="form-control"
+                                   value="<%= isEdit && subject.getViName() != null ? subject.getViName() : "" %>"
                             >
                         </div>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="subject.semester" class="col-form-label" style="font-size: 16px;">
-                            Semester
-                        </label>
-                        <input type="number" value="0" min="0" max="10" step="0.25" id="subject.semester"
-                               name="subject.semester"
-                               class="form-control"/>
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="subject.semester" class="col-form-label" style="font-size: 16px;">
+                                Semester
+                            </label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                            <input type="number" min="0" max="10" step="0.25" id="subject.semester"
+                                   name="subject.semester"
+                                   value="<%= isEdit && subject.getSemester() != null  ? subject.getSemester(): "0" %>"
+                                   class="form-control"/>
+                        </div>
                     </div>
-                    <div class="" style="margin-left: auto">
-                        <button id="btn-submit" type="submit" class="btn btn-primary">Add
+                    <div style="margin-left: auto; margin-top: 32px;">
+                        <button id="btn-submit" type="submit"
+                                class="btn btn-primary"><%= isEdit ? Label.DASHBOARD_SUBJECT_EDIT_SUBMIT_BTN : Label.DASHBOARD_SUBJECT_ADD_SUBMIT_BTN %>
                         </button>
                         <button onclick="history.back()" id="btn-save" type="button" class="btn btn-secondary"
                         >Cancel

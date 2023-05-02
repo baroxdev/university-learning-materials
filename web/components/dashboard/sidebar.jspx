@@ -10,5 +10,8 @@
         <li class="navbar-item">
             <a class="navbar-item__a" href="${pageContext.servletContext.contextPath}/dashboard/subjects">Subjects</a>
         </li>
+        <li class="navbar-item">
+            <a class="navbar-item__a" href="${pageContext.servletContext.contextPath}/dashboard/accounts">Accounts</a>
+        </li>
     </ul>
 </nav>

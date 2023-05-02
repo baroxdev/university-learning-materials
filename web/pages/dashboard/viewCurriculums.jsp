@@ -49,7 +49,6 @@
                                             <span class="badge rounded-pill text-bg-secondary">in-active</span>
                                         </c:otherwise>
                                     </c:choose>
-
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2">
