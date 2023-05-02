@@ -51,7 +51,7 @@ public class AddNewSubject implements Action {
                 subject.setSlug(slug);
                 subject.setName(name);
                 subject.setViName(viName);
-                subject.setSemester(semester);
+                subject.setSemester(Integer.getInteger(semester));
 
                 System.out.println("create:new subject");
                 Integer rows = SubjectDao.create(subject);

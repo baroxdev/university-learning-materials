@@ -4,15 +4,19 @@
     Author     : Admin
 --%>
 
-<%@page import="config.AppConfig" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@page import="entities.ProgramLearningObjective"%>
+<%@page import="entities.ProgramObjective"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.List"%>
+<%@page import="config.AppConfig"%>
+<%@page import="entities.Curriculum"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -20,12 +24,14 @@
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-        <title>Add curriculum</title>
+        <title>Edit curriculum</title>
     </head>
-
+    <%
+        Curriculum cur = (Curriculum) request.getAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET);
+    %>
     <body>
         <div class="dashboard-container">
             <%@include file="/components/dashboard/sidebar.jspx" %>
@@ -33,6 +39,7 @@
                 <%@include file="/components/dashboard/header.jspx" %>
                 <div class="dashboard-content">
                     <div class="container" style="margin: 0 auto">
+
                         <!--Modal-->
                         <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                              aria-hidden="true">
@@ -55,18 +62,22 @@
                             </div>
                         </div>
 
-
-                        <legend>Add Curriculum</legend>
-                        <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
+                        <legend>Edit Curriculum</legend>
+                        <form class="mt-4" action="<c:url value="/dashboard/curriculums/edit" />" method="POST">
 
                             <!-- Basic Infomation -->
+                            <input type="hidden" name="id" value="<%= cur.getId()%>"/>
                             <span>Basic Infomation</span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" name="active" type="checkbox" role="switch" id="active-switch" <%= cur.getActive() ? "checked" : ""%>>
+                                <label class="form-check-label" for="active-switch">Active</label>
+                            </div>
                             <div class="row g-3 align-items-center" style="margin-top: 23px;">
                                 <div class="col-2">
                                     <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                 </div>
                                 <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                    <input type="text" name="code" id="code" class="form-control">
+                                    <input type="text" name="code" id="code" class="form-control" value="<%= cur.getCode()%>">
                                 </div>
                             </div>
 
@@ -85,8 +96,7 @@
                                         name</label>
                                 </div>
                                 <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                    <input type="text" id="englishName" name="englishName" class="form-control"
-                                           >
+                                    <input type="text" id="englishName" name="englishName" class="form-control" value="<%= cur.getName()%>">
                                 </div>
                             </div>
 
@@ -96,8 +106,7 @@
                                            style="font-size: 16px;">Vietnamese name</label>
                                 </div>
                                 <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                    <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                           >
+                                    <input type="text" id="vietnameseName" name="vietnameseName" class="form-control" value="<%=  cur.getViName()%>">
                                 </div>
                             </div>
 
@@ -107,7 +116,7 @@
                                            style="font-size: 16px;">Description</label>
                                 </div>
                                 <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                    <textarea class="form-control" id="description" name="description"></textarea>
+                                    <textarea class="form-control" id="description" name="description"><%= cur.getDescription()%></textarea>
                                 </div>
                             </div>
 
@@ -118,7 +127,7 @@
                                 </div>
                                 <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                                     <input type="text" id="decisionNo" name="decisionNo" class="form-control"
-                                           placeholder="BIT_SE_K16C">
+                                           placeholder="BIT_SE_K16C" value="<%= cur.getDecisionNo()%>">
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="basic-error" role="alert"
@@ -132,7 +141,7 @@
                                 <input type="file" id="file_upload"/>
                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                             </label>
-                            <br/>
+                            <br>
                             <!-- Objectives / Program Objectives (PO) -->
                             <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
                                 Objectives (PO)</span>
@@ -233,15 +242,8 @@
 
                             <div class="fixed-footer">
                                 <div class="" style="margin-left: auto">
-                                    <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Publish
-                                    </button>
-                                    <button id="btn-save" type="button" class="btn btn-secondary" name="save">Save as
-                                        Draft
-                                    </button>
-<!--                                    <label id="file_upload_btn" class="btn btn-outline-secondary">
-                                        <input type="file" id="file_upload"/>
-                                        <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                    </label>-->
+                                    <input type="hidden" id="${cur.id}"/>
+                                    <button type="submit" class="btn btn-primary">Save</button>  
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="upload-error" role="alert"
@@ -261,16 +263,19 @@
                                 SUBMIT_MESSAGE
                             </div>
                         </form>
+
                     </div>
                 </div>
+
             </main>
-        </div>
+        </div>  
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
         <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <script>
+
             $(document).ready(function () {
                 let oldName;
                 let oldDescription;
@@ -297,6 +302,7 @@
                         let oldPOList = getListPOFromLocalStorage();
                         let poFileContent = readXlsxFile(file, {sheet: 'PO'});
                         let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
+
                         poFileContent.then(function (data) {
                             if (data.length > 0) {
                                 handleAddFilePO(data);
@@ -319,10 +325,8 @@
                             errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                         });
                     });
-                }).catch(function (error) {
-                    errorShow.css('display', 'block');
-                    errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                 });
+
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
@@ -344,8 +348,8 @@
                             form.append(input);
                         } else {
                             input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
-                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
-                                                        <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
+                                                       <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
+                                                       <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
                             form.append(input);
                         }
                     });
@@ -381,8 +385,8 @@
                             form.append(input);
                         } else {
                             let input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
-                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
-                                                        <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
+                                                       <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
+                                                       <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
                             form.append(input);
                         }
                     });
@@ -484,6 +488,7 @@
             }
             );
             window.addEventListener("load", () => {
+
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
                 renderBasicInf();
@@ -594,7 +599,7 @@
                     repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
                     errorShow.css('display', 'block');
                     errorShow.text(" There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 1. Make sure the PO name is not blank and in the format POxxx, please check again!\n\
-                            - The PO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                           - The PO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
                 } else if (formatErrorIndexStr.length != '') {
                     formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
                     errorShow.css('display', 'block');
@@ -667,7 +672,7 @@
                     repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
                     errorShow.css('display', 'block');
                     errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 2. Make sure that datas of MapToPO colunms was created, the PLO name is not blank and in the format PLOxxx, please check again!\n\
-                            - The PLO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                           - The PLO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
                 } else if (formatErrorIndexStr.length != '') {
                     renderListPO(oldPOList, addPOForm);
                     localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
@@ -791,8 +796,8 @@
                 if (!selectNode || !listPO)
                     return console.error("Cannot update list PO options");
                 const htmls = listPO.map((po, index) => `
-                             <option value="\${po.name}">\${po.name}</option>
-                        `).join("");
+                            <option value="\${po.name}">\${po.name}</option>
+                       `).join("");
                 selectNode.innerHTML = htmls;
             }
 
@@ -801,16 +806,16 @@
                     throw new Error("Cannot render list PO");
                 const POTableBody = document.querySelector("#poTbl tbody");
                 const htmls = listPO.map((po, index) => `
-                             <tr data-index="\${index}">
-                                <td style="color: #495057;">\${po?.name}</td>
-                                <td>\${po?.description}</td>
-                                <td>
-                                    <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                    <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                    <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        `).join("");
+                            <tr data-index="\${index}">
+                               <td style="color: #495057;">\${po?.name}</td>
+                               <td>\${po?.description}</td>
+                               <td>
+                                   <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                   <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                   <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
+                               </td>
+                           </tr>
+                       `).join("");
                 POTableBody.parentNode.style.display = 'block';
                 POTableBody.innerHTML = htmls;
             }
@@ -820,17 +825,17 @@
                     throw new Error("Cannot render list PLO");
                 const PLOTableBody = document.querySelector("#ploTbl tbody");
                 const htmls = listPLO.map((plo, index) => `
-                             <tr data-index="\${index}">
-                                <td style="color: #495057;">\${plo?.name}</td>
-                                <td>\${plo?.description}</td>
-                                <td style="text-align: right;">\${plo?.mapToPO}</td>
-                                <td>
-                                    <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                    <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                    <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        `).join("");
+                            <tr data-index="\${index}">
+                               <td style="color: #495057;">\${plo?.name}</td>
+                               <td>\${plo?.description}</td>
+                               <td style="text-align: right;">\${plo?.mapToPO}</td>
+                               <td>
+                                   <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                   <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                   <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
+                               </td>
+                           </tr>
+                       `).join("");
                 PLOTableBody.parentNode.style.display = 'block';
                 PLOTableBody.innerHTML = htmls;
             }
@@ -922,7 +927,6 @@
                     errorShow.text("The Curriculum code must be followed format XXX-XX-XXXX, please try again!");
                     invalid++;
                 } else {
-                    basicCode = basicCode.toUpperCase();
                     errorShow.css('display', 'none');
                 }
 
@@ -956,7 +960,7 @@
                     }
                     ;
 
-                    console.log({jsonSubmit})
+//                    console.log({jsonSubmit})
                     try {
                         const res = await fetch(currAPI, options);
                         if (res.ok) {

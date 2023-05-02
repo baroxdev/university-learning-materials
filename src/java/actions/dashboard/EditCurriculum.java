@@ -41,7 +41,7 @@ public class EditCurriculum implements Action {
                 request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
                 return;
             }
-            request.getRequestDispatcher("/pages/dashboard/editCurriculum.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/dashboard/editCurriculum_1.jsp").forward(request, response);
         }
     }
 
