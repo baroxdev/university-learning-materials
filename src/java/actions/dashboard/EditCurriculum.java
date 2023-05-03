@@ -69,7 +69,7 @@ public class EditCurriculum implements Action {
                 cur.setDecisionNo(request.getParameter("decisionNo"));
                 cur.setDescription(request.getParameter("description"));
 //                CurriculumDao.update(cur);
-                response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
+//                response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, "Cannot update curriculum.");

@@ -270,7 +270,7 @@
                             <div class="fixed-footer">
                                 <div class="" style="margin-left: auto">
                                     <input type="hidden" id="${cur.id}"/>
-                                    <button type="submit" class="btn btn-primary">Save</button>  
+                                    <button id="btn-save" type="submit" class="btn btn-primary">Save</button>  
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="upload-error" role="alert"
@@ -307,8 +307,8 @@
                 let oldName;
                 let oldDescription;
 
-                $("#btn-submit").click(function () {
-                    handleSubmit();
+                $("#btn-save").click(function () {
+                    handleSave();
                 });
 
                 $('[name="subCheck"]').change(function () {
@@ -533,6 +533,10 @@
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
                 let listSub = getListSubFromLocalStorage();
+                
+                let curCode = $('#code').val();
+                let curSlug = slugify(curCode.toLowerCase().replaceAll('_', '- '));
+                $('#slug').val(curSlug);
 
                 let jsonItems = getItems(curId);
                 jsonItems.then(data => {
@@ -1018,7 +1022,8 @@
                 localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
             }
 
-            async function handleSubmit() {
+            async function handleSave() {
+                let basicActive = $('#active-switch').prop('checked');
                 let basicCode = $('#code').val();
                 let basicSlug = $('#slug').val();
                 let basicEnglishName = $('#englishName').val();
@@ -1058,6 +1063,7 @@
 
                 if (invalid == 0) {
                     const jsonSubmit = JSON.stringify({
+                        active: basicActive,
                         code: basicCode,
                         name: basicEnglishName,
                         description: basicDescription,
@@ -1083,8 +1089,8 @@
                         const res = await fetch(currAPI, options);
                         if (res.ok) {
                             errorShowSubmit.css('display', 'none');
-//                            localStorage.clear();
-//                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                            localStorage.clear();
+                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
                         } else {
                             const json = await res.json();
                             errorShowSubmit.css('display', 'block');
