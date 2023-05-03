@@ -4,26 +4,24 @@
  */
 package actions.curriculumns;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
 import dao.PLODao;
 import dao.PODao;
-import dao.SubjectDao;
 import entities.Curriculum;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
-import entities.Subject;
 import exceptions.NotFoundException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
 /**
- *
  * @author quocb
  */
 public class GetCurriculumnByID implements Action {
@@ -44,7 +42,7 @@ public class GetCurriculumnByID implements Action {
                 List<ProgramObjective> poList = PODao.readPOList(curId);
                 List<ProgramLearningObjective> ploList = PLODao.readPLOList(curId);
                 System.out.println("PLO " + ploList);
-//                List<Subject> subjectList = SubjectDao.readSubjectList(curId);
+//                List<Subject> subjectList = SubjectDao.getByCurriculumID(curId);
 
                 request.setAttribute(AppConfig.PO_LIST, poList);
                 request.setAttribute(AppConfig.PLO_LIST, ploList);

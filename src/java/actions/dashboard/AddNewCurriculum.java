@@ -9,7 +9,6 @@ import config.AppConfig;
 import dao.CurriculumDao;
 import dao.SubjectDao;
 import entities.Curriculum;
-import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
 import entities.Subject;
@@ -17,23 +16,20 @@ import exceptions.CurriculumException;
 import exceptions.PLOException;
 import exceptions.POException;
 import exceptions.SubjectException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-//import org.apache.poi.ss.usermodel.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
 import utils.ResponseUtils;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author quocb
  */
 public class AddNewCurriculum implements Action {
@@ -43,10 +39,7 @@ public class AddNewCurriculum implements Action {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-//                JSONObject json = new JSONObject();
-                List<Subject> subjList = SubjectDao.readSubjectFullList();
-//                json.put("subjList", subjList);
-//                ResponseUtils.sendJson(response, HttpServletResponse.SC_FOUND, json);
+                List<Subject> subjList = SubjectDao.getAll();
                 request.setAttribute("subjList", subjList);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());

@@ -6,43 +6,38 @@
 package actions.dashboard;
 
 import actions.Action;
-import config.AppConfig;
-import dao.CurriculumDao;
 import dao.PLODao;
 import dao.SubjectDao;
-import entities.Curriculum;
 import entities.ProgramLearningObjective;
 import entities.Subject;
-import entities.Syllabus;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utils.ResponseUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import utils.JsonUtils;
-import utils.ResponseUtils;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 /**
- *
  * @author admin
  */
 public class GetListSubjectInSyllabus implements Action {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             JSONObject resJson = new JSONObject();
             try {
                 String curId = request.getParameter("curId");
-                ArrayList<Subject> lsSubjects = (ArrayList<Subject>) SubjectDao.readSubjectList(curId);
+                ArrayList<Subject> lsSubjects = (ArrayList<Subject>) SubjectDao.getListByCurriculumID(curId);
                 ArrayList<ProgramLearningObjective> lsPLO = (ArrayList<ProgramLearningObjective>) PLODao.readPLOList(curId);
                 JSONArray results = new JSONArray(lsSubjects);
                 JSONArray listPLOJSON = new JSONArray(lsPLO);
                 resJson.put("subjects", results);
-                resJson.put("list_plo",listPLOJSON);
+                resJson.put("list_plo", listPLOJSON);
                 ResponseUtils.sendJson(response, HttpServletResponse.SC_OK, resJson);
             } catch (Exception e) {
                 e.printStackTrace();

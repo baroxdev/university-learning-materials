@@ -32,7 +32,6 @@ public class AddNewSubject implements Action {
         response.setContentType("text/html; charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                System.out.println("Get json from request");
                 String code = request.getParameter("subject.code");
                 String slug = request.getParameter("subject.slug");
                 String name = request.getParameter("subject.name");
@@ -44,14 +43,12 @@ public class AddNewSubject implements Action {
                 if (isExist) {
                     throw new SubjectException("Subject code is exist. Try another.");
                 }
-                System.out.println(name);
-                System.out.println(slug);
                 Subject subject = new Subject();
                 subject.setId(code);
                 subject.setSlug(slug);
                 subject.setName(name);
                 subject.setViName(viName);
-                subject.setSemester(Integer.getInteger(semester));
+                subject.setSemester(Integer.valueOf(semester));
 
                 System.out.println("create:new subject");
                 Integer rows = SubjectDao.create(subject);

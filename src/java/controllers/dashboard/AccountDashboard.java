@@ -6,6 +6,8 @@
 package controllers.dashboard;
 
 import actions.Action;
+import actions.dashboard.CreateNewAccount;
+import actions.dashboard.EditAccount;
 import actions.dashboard.ViewListAccount;
 
 import javax.servlet.ServletException;
@@ -28,6 +30,8 @@ public class AccountDashboard extends HttpServlet {
     @Override
     public void init() {
         actionMap.put("/accounts", new ViewListAccount());
+        actionMap.put("/accounts/create", new CreateNewAccount());
+        actionMap.put("/accounts/edit", new EditAccount());
     }
 
     /**

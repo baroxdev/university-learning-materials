@@ -26,6 +26,12 @@
         <%@include file="/components/dashboard/header.jspx" %>
         <div class="dashboard-content">
             <div class="container-xl" style="margin-top: 32px">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <legend>Accounts</legend>
+                    <a class="btn btn-primary d-flex align-items-center"
+                       href="${pageContext.servletContext.contextPath}/dashboard/accounts/create"><i
+                            icon-name="plus"></i>Create</a>
+                </div>
                 <div class="ulm-table__container">
                     <table class="ulm-table">
                         <thead>
@@ -34,19 +40,23 @@
                             <th scope="col">Full Name</th>
                             <th scope="col">username</th>
                             <th scope="col">Role</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Created at</th>
+                            <th scope="col">Updated at</th>
+                            <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         <c:forEach var="acc" items="<%= lsAccounts%>">
                             <td>${acc.id}</td>
-                            <td>${acc.fullname}</td>
+                            <td>${acc.fullName}</td>
                             <td>${acc.username}</td>
-                            <td>${acc.roleid}</td>
+                            <td>${acc.roleID}</td>
+                            <td>${acc.createdAt}</td>
+                            <td>${acc.updatedAt}</td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-outline-primary btn-sm"
-                                            onclick="window.location.href='${pageContext.servletContext.contextPath}/dashboard/subjects/edit?id=${sub.id.trim()}'">
+                                            onclick="window.location.href='${pageContext.servletContext.contextPath}/dashboard/accounts/edit?id=${acc.id.trim()}'">
                                         Edit
                                     </button>
                                     <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
@@ -61,5 +71,10 @@
         </div>
     </main>
 </div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 </html>

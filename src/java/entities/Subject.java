@@ -8,7 +8,6 @@ package entities;
 import java.util.Date;
 
 /**
- *
  * @author giahu
  */
 public class Subject {
@@ -20,14 +19,14 @@ public class Subject {
 
     private Date updatedAt;
     private String slug;
-    private String semester;
+    private Integer semester;
     private Boolean active;
 
 
     public Subject() {
     }
 
-    public Subject(String id, String name, String viName, Date createdAt, Date updatedAt, String slug, String semester, Boolean active) {
+    public Subject(String id, String name, String viName, Date createdAt, Date updatedAt, String slug, Integer semester, Boolean active) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
@@ -78,19 +77,12 @@ public class Subject {
         this.updatedAt = updatedAt;
     }
 
-    public String getSemester() {
+    public Integer getSemester() {
         return semester;
     }
 
-    public void setViName(String viName) {
-        this.viName = viName;
-    }
 
-    public int getSemester() {
-        return semester;
-    }
-
-    public void setSemester(int semester) {
+    public void setSemester(Integer semester) {
         this.semester = semester;
     }
 
@@ -100,6 +92,14 @@ public class Subject {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 }
 

@@ -27,7 +27,7 @@ public class ViewListAccount implements Action {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                ArrayList<User> lsAccounts = UserDao.getFullList();
+                ArrayList<User> lsAccounts = UserDao.getAll();
                 request.setAttribute(AppConfig.DASHBOARD_ACCOUNT_LIST, lsAccounts);
                 request.getRequestDispatcher("/pages/dashboard/viewListAccount.jsp").forward(request, response);
             } catch (Exception e) {

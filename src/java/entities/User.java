@@ -6,12 +6,12 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- *
  * @author Admin
  */
-public class User implements Serializable{
+public class User implements Serializable {
     private String id;
     private String username;
     private String password;
@@ -20,7 +20,20 @@ public class User implements Serializable{
     private String educationlevel;
     private String roleid;
 
+    private Date createdAt;
+    private Date updatedAt;
+
+    private Boolean active;
+
     public User() {
+    }
+
+    public User(String id, String fullName, String email, String educationLevel, String roleID) {
+        this.id = id;
+        this.fullname = fullName;
+        this.email = email;
+        this.educationlevel = educationLevel;
+        this.roleid = roleID;
     }
 
     public User(String id, String username, String password, String fullname, String email, String educationlevel, String roleid) {
@@ -31,6 +44,19 @@ public class User implements Serializable{
         this.email = email;
         this.educationlevel = educationlevel;
         this.roleid = roleid;
+    }
+
+    public User(String id, String username, String password, String fullname, String email, String educationlevel, String roleid, Date createdAt, Date updatedAt, Boolean active) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.email = email;
+        this.educationlevel = educationlevel;
+        this.roleid = roleid;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.active = active;
     }
 
     public String getId() {
@@ -57,11 +83,11 @@ public class User implements Serializable{
         this.password = password;
     }
 
-    public String getFullname() {
+    public String getFullName() {
         return fullname;
     }
 
-    public void setFullname(String fullname) {
+    public void setFullName(String fullname) {
         this.fullname = fullname;
     }
 
@@ -73,20 +99,43 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public String getEducationlevel() {
+    public String getEducationLevel() {
         return educationlevel;
     }
 
-    public void setEducationlevel(String educationlevel) {
+    public void setEducationLevel(String educationlevel) {
         this.educationlevel = educationlevel;
     }
 
-    public String getRoleid() {
+    public String getRoleID() {
         return roleid;
     }
 
-    public void setRoleid(String roleid) {
+    public void setRoleID(String roleid) {
         this.roleid = roleid;
     }
-    
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

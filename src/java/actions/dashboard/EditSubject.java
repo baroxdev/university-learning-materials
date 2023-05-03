@@ -27,7 +27,7 @@ public class EditSubject implements Action {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String subjectID = getSubjectIDFromRequest(request);
-            Subject subject = SubjectDao.getSubjectById(subjectID);
+            Subject subject = SubjectDao.getOneByID(subjectID);
             System.out.println(subject.getId());
             request.setAttribute(AppConfig.DASHBOARD_SUBJECT, subject);
             request.getRequestDispatcher("/pages/dashboard/addSubject.jsp").forward(request, response);
@@ -56,7 +56,7 @@ public class EditSubject implements Action {
                 subject.setSlug(slug);
                 subject.setName(name);
                 subject.setViName(viName);
-                subject.setSemester(semester);
+                subject.setSemester(Integer.valueOf(semester));
                 subject.setActive(status);
                 System.out.println("update:subject " + subject.getId());
                 Integer rows = SubjectDao.update(subject);
@@ -64,6 +64,10 @@ public class EditSubject implements Action {
                     throw new SubjectException("Failed to update Subject. Try again");
                 }
                 response.sendRedirect(request.getContextPath() + "/dashboard/subjects");
+            } catch (NumberFormatException numEx) {
+                numEx.printStackTrace();
+                request.setAttribute(AppConfig.ERROR_MESSAGE, "Invalid number format. Try again.");
+                request.getRequestDispatcher("/pages/dashboard/addSubject.jsp").forward(request, response);
             } catch (SubjectException subEx) {
                 subEx.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, subEx.getMessage());

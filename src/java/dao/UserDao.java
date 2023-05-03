@@ -6,9 +6,11 @@
 package dao;
 
 import entities.User;
+import exceptions.RoleException;
 import exceptions.WrongPasswordException;
 import utils.DBUtils;
 
+import javax.security.auth.login.AccountException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -16,6 +18,31 @@ import java.util.ArrayList;
  * @author Admin
  */
 public class UserDao {
+    public static Integer create(User user) throws Exception {
+        String query = "insert into [User] (id, username, [password], fullName, email, roleID, educationLevel)" +
+                " values (?, ?, ?, ?, ?, ?, ?)";
+        Connection cn = null;
+        try {
+            cn = DBUtils.makeConnection();
+            if (cn != null) {
+                PreparedStatement ppstm = cn.prepareStatement(query);
+                ppstm.setString(1, user.getId());
+                ppstm.setString(2, user.getUsername());
+                ppstm.setString(3, user.getPassword());
+                ppstm.setNString(4, user.getFullName());
+                ppstm.setString(5, user.getEmail());
+                ppstm.setString(6, user.getRoleID());
+                ppstm.setString(7, user.getEducationLevel());
+                Integer rows = ppstm.executeUpdate();
+                return rows;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Something went wrong when create new account");
+        }
+
+        return -1;
+    }
 
     public static User getUserById(String id) throws Exception {
         String query = "select id, username, password, fullname, email, educationlevel, roleid from [User] where id = ?";
@@ -41,8 +68,9 @@ public class UserDao {
         return user;
     }
 
-    public static ArrayList<User> getFullList() {
-        String query = "select id, username, password, fullname, email, educationlevel, roleid from [User]";
+    public static ArrayList<User> getAll() {
+        String query = "select id, username, password, fullName, email, educationLevel, roleID, createdAt, updatedAt from [User]" +
+                " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         ArrayList<User> lsUsers = null;
         Connection con = null;
         try {
@@ -54,7 +82,7 @@ public class UserDao {
                 while (rs.next()) {
                     User user = new User();
                     getUser(rs, user);
-                    System.out.println(user.getFullname());
+                    System.out.println(user.getFullName());
                     lsUsers.add(user);
                 }
                 con.close();
@@ -71,10 +99,38 @@ public class UserDao {
         user.setId(rs.getString("id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
-        user.setFullname(rs.getString("fullname"));
+        user.setFullName(rs.getString("fullName"));
         user.setEmail(rs.getString("email"));
-        user.setEducationlevel(rs.getString("educationlevel"));
-        user.setRoleid(rs.getString("roleID"));
+        user.setEducationLevel(rs.getString("educationLevel"));
+        user.setRoleID(rs.getString("roleID"));
+        user.setCreatedAt(rs.getDate("createdAt"));
+        user.setUpdatedAt(rs.getDate("updatedAt"));
+    }
+
+    public static Integer update(User user) throws AccountException {
+        String query = "update [User] set fullName = ?, email = ?, educationLevel = ?, roleID = ?, updatedAt = GETDATE() where id = ?";
+        Connection cn = null;
+        Integer rows = -1;
+        try {
+            cn = DBUtils.makeConnection();
+            if (cn != null) {
+                PreparedStatement ppstm = cn.prepareStatement(query);
+                ppstm.setNString(1, user.getFullName());
+                System.out.println(user.getFullName());
+                System.out.println(user.getId());
+                ppstm.setString(2, user.getEmail());
+                ppstm.setString(3, user.getEducationLevel());
+                ppstm.setString(4, user.getRoleID());
+                ppstm.setString(5, user.getId());
+                rows = ppstm.executeUpdate();
+            }
+        } catch (Exception e) {
+            System.out.println("error when update");
+            e.printStackTrace();
+            throw new AccountException("Cannot update");
+        }
+
+        return rows;
     }
 
     public static void updatePassword(String password, String id, String currentPassword) throws SQLException, Exception {
@@ -107,5 +163,18 @@ public class UserDao {
         }
     }
 
+    public static Boolean isExit(String id) throws Exception {
+        String query = "select * from [User] where id = ?";
+        Boolean isExit = false;
+        Connection cn = DBUtils.makeConnection();
+        if (cn == null) throw new RoleException("Cannot make connection to Database.");
+
+        PreparedStatement ppstm = cn.prepareStatement(query);
+        ppstm.setString(1, id);
+        ResultSet rs = ppstm.executeQuery();
+        if (rs.next()) isExit = true;
+
+        return isExit;
+    }
 
 }
