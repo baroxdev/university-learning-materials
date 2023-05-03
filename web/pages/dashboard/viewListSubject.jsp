@@ -47,7 +47,7 @@
                             <td>${sub.semester}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test='<%=user.getRoleid().equals("ADM")%>'>
+                                    <c:when test='<%=user.getRoleID().equals("ADM")%>'>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input subject-status" type="checkbox" role="switch"
                                                    data-subject-id="${sub.id.trim()}"

@@ -64,6 +64,11 @@ public class AppConfig {
     public final static String DASHBOARD_SUBJECT_LIST = "lsSubjects";
     public final static String DASHBOARD_SUBJECT = "subject";
     public final static String DASHBOARD_ACCOUNT_LIST = "dashboard.lsAccounts";
+    public final static String DASHBOARD_ACCOUNT = "dashboard.account";
+
+    public final static String DASHBOARD_ROLE_LIST = "dashboard.lsRole";
+    public final static String DASHBOARD_EDUCATION_LEVEL_LIST = "dashboard.educationLevel";
+
 
     //    ERRORS
     public final static String ERROR_MESSAGE = "ERROR_MESSAGE";

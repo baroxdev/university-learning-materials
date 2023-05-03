@@ -6,27 +6,17 @@
 package dao;
 
 import config.AppConfig;
-import entities.Curriculum;
-import entities.ProgramLearningObjective;
-import entities.ProgramObjective;
-import entities.SearchResult;
-import entities.Subject;
+import entities.*;
 import exceptions.CurriculumException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import utils.DBUtils;
 import utils.DataUtils;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 /**
- *
  * @author giahu
  */
 public class CurriculumDao {
@@ -236,7 +226,7 @@ public class CurriculumDao {
                 }
             }
             for (Subject subj : subjectList) {
-                SubjectDao.link(con, curId, subj.getId());
+                SubjectDao.linkWithCurriculum(con, curId, subj.getId());
             }
 
             con.commit();
