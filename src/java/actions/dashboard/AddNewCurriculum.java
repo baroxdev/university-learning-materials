@@ -9,6 +9,7 @@ import config.AppConfig;
 import dao.CurriculumDao;
 import dao.SubjectDao;
 import entities.Curriculum;
+import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
 import entities.Subject;
@@ -16,20 +17,23 @@ import exceptions.CurriculumException;
 import exceptions.PLOException;
 import exceptions.POException;
 import exceptions.SubjectException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+//import org.apache.poi.ss.usermodel.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.JsonUtils;
 import utils.ResponseUtils;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
+ *
  * @author quocb
  */
 public class AddNewCurriculum implements Action {
@@ -39,15 +43,15 @@ public class AddNewCurriculum implements Action {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                List<Subject> subjList = SubjectDao.getAll();
-                request.setAttribute("subjList", subjList);
+                List<Subject> subjList = SubjectDao.readSubjectFullList();
+                request.setAttribute(AppConfig.SUBJECT_LIST, subjList);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
                 e.printStackTrace();
                 request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
                 return;
             }
-            request.getRequestDispatcher("/admin_page/curriculum_add.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/dashboard/addCurriculum.jsp").forward(request, response);
         }
     }
 
@@ -72,8 +76,8 @@ public class AddNewCurriculum implements Action {
                 String curViName = json.getString("viName");
                 JSONArray poArray = json.getJSONArray("poList");
                 JSONArray ploArray = json.getJSONArray("ploList");
-                JSONArray subjArray = json.getJSONArray("subjList");
-
+                JSONArray subjArray = json.getJSONArray("subList");
+                
                 //check curCode exist
                 if (CurriculumDao.isExist(curCode)) {
                     throw new CurriculumException("Curriculum Code already exist");
@@ -84,12 +88,12 @@ public class AddNewCurriculum implements Action {
                 cur.setDescription(curDescription);
                 cur.setDecisionNo(curDecisionNo);
                 cur.setViName(curViName);
-
                 //convert jsonArray to list
                 List<ProgramObjective> poList = jsonArrayToList("po", poArray);
-                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
-                List<Subject> subjList = jsonArrayToList("subject", subjArray);
 
+                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
+                
+                List<Subject> subjList = jsonArrayToList("subject", subjArray);
                 //tạo liên kết với po, plo...
                 //thêm vào db
                 CurriculumDao.add(cur, poList, ploList, subjList);

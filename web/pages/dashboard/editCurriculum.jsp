@@ -4,6 +4,10 @@
     Author     : Admin
 --%>
 
+<%@page import="entities.ProgramLearningObjective"%>
+<%@page import="entities.ProgramObjective"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.List"%>
 <%@page import="config.AppConfig"%>
 <%@page import="entities.Curriculum"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -27,401 +31,1070 @@
     </head>
     <%
         Curriculum cur = (Curriculum) request.getAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET);
+        List subList = (List) request.getAttribute(AppConfig.SUBJECT_LIST);
     %>
     <body>
-        <div class="container-fluid h-100">
-            <div class="row h-100">
-                <div class="left col-md-2">
+        <div class="dashboard-container">
+            <%@include file="/components/dashboard/sidebar.jspx" %>
+            <main>
+                <%@include file="/components/dashboard/header.jspx" %>
+                <div class="dashboard-content">
+                    <div class="container" style="margin: 0 2%">
 
-                </div>
-                <div class="right col-md-10">
-                    <header>
-                        <div class="d-flex align-items-center justify-content-between container">
-                            <a href="#">
-                                <h3></h3>
-                            </a>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="dropdown">
-                                    <div class="dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown"
-                                         aria-expanded="false" style="margin: 0!important">
-                                        <img class="rounded-circle" style="width:40px"
-                                             src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp">
-                                        <span class="caret"></span>
+                        <!--Modal-->
+                        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Note</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
-                                    <ul class="dropdown-menu  dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="#">Setting</a></li>
-                                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                                    </ul>
+                                    <div class="modal-body">
+                                        <p>Uploading will be able to delete all existing datas, do you want to keep
+                                            them?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="modal-no" type="button" class="btn btn-secondary">No</button>
+                                        <button id="modal-yes" type="button" class="btn btn-primary">Yes</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </header>
-                    <hr />
-                    <main class="row">
-                        <div class="row ms-1">
-                            <legend>Edit Curriculum</legend>
-                            <form class="mt-4" action="<c:url value="/dashboard/curriculums/edit" />" method="POST">
-                                <input type="hidden" name="id" value="<%= cur.getId() %>"/>
-                                <span>Basic Infomation</span>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" name="active" type="checkbox" role="switch" id="active-switch" <%= cur.getActive() ? "checked" : "" %>>
-                                    <label class="form-check-label" for="active-switch">Active</label>
+
+                        <legend>Edit Curriculum</legend>
+                        <form class="mt-4" action="<c:url value="/dashboard/curriculums/edit" />" method="POST">
+
+                            <!-- Basic Infomation -->
+                            <input type="hidden" name="id" value="<%= cur.getId()%>"/>
+                            <span>Basic Infomation</span>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" name="active" type="checkbox" role="switch" id="active-switch" <%= cur.getActive() ? "checked" : ""%>>
+                                <label class="form-check-label" for="active-switch">Active</label>
+                            </div>
+                            <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                                <div class="col-2">
+                                    <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
                                 </div>
-                                <div class="row g-3 align-items-center" style="margin-top: 23px;">
-                                    <div class="col-2">
-                                        <label for="code" class="col-form-label" style="font-size: 16px;">Code</label>
-                                    </div>
-                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="code" id="code" value="<%= cur.getCode()%>" class="form-control" placeholder="code" required="">
-                                    </div>
+                                <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                    <input type="text" name="code" id="code" class="form-control" value="<%= cur.getCode()%>">
                                 </div>
+                            </div>
 
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-2">
-                                        <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
-                                    </div>
-                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" name="splug" id="slug" class="form-control" placeholder="bit-set-k16c">
-                                    </div>
+                            <div class="row g-3 align-items-center mt-1">
+                                <div class="col-2">
+                                    <label for="slug" class="col-form-label" style="font-size: 16px;">Slug</label>
                                 </div>
-
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-2">
-                                        <label for="englishName" class="col-form-label" style="font-size: 16px;">English
-                                            name</label>
-                                    </div>
-                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="englishName" name="englishName" class="form-control"
-                                               value="<%= cur.getName()%>"
-                                               required="">
-                                    </div>
+                                <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                    <input type="text" name="splug" id="slug" class="form-control" readonly disabled>
                                 </div>
+                            </div>
 
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-2">
-                                        <label for="vietnameseName" class="col-form-label"
-                                               style="font-size: 16px;">Vietnamese name</label>
-                                    </div>
-                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="vietnameseName" name="vietnameseName" class="form-control"
-                                               value="<%=  cur.getViName()%>"
-                                               required="">
-                                    </div>
+                            <div class="row g-3 align-items-center mt-1">
+                                <div class="col-2">
+                                    <label for="englishName" class="col-form-label" style="font-size: 16px;">English
+                                        name</label>
                                 </div>
-
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-2">
-                                        <label for="description" class="col-form-label"
-                                               style="font-size: 16px;">Description</label>
-                                    </div>
-                                    <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                        <textarea class="form-control"  name="description" required=""><%= cur.getDescription()%></textarea>
-                                    </div>
+                                <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                    <input type="text" id="englishName" name="englishName" class="form-control" value="<%= cur.getName()%>">
                                 </div>
+                            </div>
 
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-2">
-                                        <label for="decisionNo" class="col-form-label" style="font-size: 16px;">Decision
-                                            No</label>
-                                    </div>
-                                    <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
-                                        <input type="text" id="decisionNo"  value="<%= cur.getDecisionNo()%>" name="decisionNo" class="form-control" placeholder="BIT_SE_K16C" required="">
-                                    </div>
+                            <div class="row g-3 align-items-center mt-1">
+                                <div class="col-2">
+                                    <label for="vietnameseName" class="col-form-label"
+                                           style="font-size: 16px;">Vietnamese name</label>
                                 </div>
-
-                                <!-- Objectives -->
-                                <span
-                                    style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span><br>
-
-                                <!-- Objectives / Program Objectives (PO) -->
-                                <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
-                                    Objectives (PO)</span>
-                                    <c:if test="${poList != null}">
-                                    <table id="poTbl" style="width: 96%; margin-bottom: 32px;">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 7.6%;">Name</th>
-                                                <th style="width: 72%">Description</th>
-                                                <th style="width: 20.4%;"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="po" items="${poList}">
-                                                <tr>
-                                                    <td style="color: #495057;">${po.name}</td>
-                                                    <td>${po.description}</td>
-                                                    <td>
-                                                        <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                        <a href="<c:url value="/dashboard/curriculums/add?op=remove_po&nameToDelete=${po.name}" />"><i class="fa-solid fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr style="height: 18px;"></tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </c:if>
-
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="row col-7">
-                                        <div class="col-12">
-                                            <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
-                                        </div>
-                                        <div class="col-12" style="width: 356px;">
-                                            <input type="text" id="poName" name="poName" class="form-control" placeholder="PO3">
-                                        </div>
-                                    </div>
-                                    <div class="row col-3">
-                                        <div class="col-12">
-                                            <label for="POList" class="col-form-label" style="font-size: 16px;">List
-                                                of PO</label>
-                                        </div>
-                                        <div class="col-12">
-                                            <label id="POList" class="btn btn-secondary">
-                                                <input type="file" />
-                                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                            </label>
-                                        </div>
-                                    </div>
+                                <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                    <input type="text" id="vietnameseName" name="vietnameseName" class="form-control" value="<%=  cur.getViName()%>">
                                 </div>
+                            </div>
 
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-12">
+                            <div class="row g-3 align-items-center mt-1">
+                                <div class="col-2">
+                                    <label for="description" class="col-form-label"
+                                           style="font-size: 16px;">Description</label>
+                                </div>
+                                <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
+                                    <textarea class="form-control" id="description" name="description"><%= cur.getDescription()%></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 align-items-center mt-1">
+                                <div class="col-2">
+                                    <label for="decisionNo" class="col-form-label" style="font-size: 16px;">Decision
+                                        No</label>
+                                </div>
+                                <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
+                                    <input type="text" id="decisionNo" name="decisionNo" class="form-control"
+                                           placeholder="BIT_SE_K16C" value="<%= cur.getDecisionNo()%>">
+                                </div>
+                            </div>
+                            <div class="alert alert-danger" id="basic-error" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--BASIC_INFO_ERROR_MESSAGE-->
+                            </div>
+
+                            <!-- Objectives -->
+                            <span style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span>
+                            <label id="file_upload_btn" class="btn btn-outline-secondary">
+                                <input type="file" id="file_upload"/>
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                            </label>
+                            <br>
+                            <!-- Objectives / Program Objectives (PO) -->
+                            <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">Program
+                                Objectives (PO)</span>
+                            <table id="poTbl" style="width: 96%; margin-bottom: 32px; display:none;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10%;">Name</th>
+                                        <th style="width: 72%">Description</th>
+                                        <th style="width: 20.4%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="form-add row g-3 align-items-center mt-1">
+                                <div class="row col-12" id="add-po-form">
+                                    <div>
+                                        <label for="poName" class="col-form-label" style="font-size: 16px;">Name</label>
+                                        <input type="text" id="poName" name="poName" class="form-control">
+                                    </div>
+                                    <div class="">
                                         <label for="poDescription" class="col-form-label"
                                                style="font-size: 16px;">Description</label>
-                                    </div>
-                                    <div class="col-12" style="width: 751px; margin-top: 8px;">
                                         <textarea id="poDescription" class="form-control" name="poDescription"
-                                                  placeholder="Mastering professional skills and soft skills of 21st century citizens (thinking skills, work skills, skills in using work tools, life skills in a global society.)"></textarea>
+                                                  ></textarea>
+                                    </div>
+                                    <div style="margin-top: 16px;">
+                                        <button type="button" class="btn btn-primary" id="btn-add-po" name="op"
+                                                value="add_po">Add
+                                        </button>
+                                        <button type="button" class="btn btn-outline-secondary" value="">Cancel</button>
                                     </div>
                                 </div>
-                                <div style="margin-top: 16px;">
-                                    <button type="submit" class="btn btn-primary" name="op" value="add_po">Add</button>
-                                    <button type="submit" class="btn btn-secondary" value="">Cancel</button>
-                                </div>
-                                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
-                                    PO_ERROR_MESSAGE
-                                </div>
+                            </div>
 
-                                <!-- Objectives / Program Learning Objectives (PLO) -->
-                                <span
-                                    style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Program
-                                    Program Learning Objectives (PLO)</span>
+                            <div class="alert alert-danger" id="po-error" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--PO_ERROR_MESSAGE-->
+                            </div>
 
-                                <c:if test="${ploList != null}">
-                                    <table id="ploTbl" style="width: 96%; margin-bottom: 32px;">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 7.6%;">Name</th>
-                                                <th style="width: 65%">Description</th>
-                                                <th style="width: 22%; text-align: right;">Map to PO</th>
-                                                <th style="width: 5.4%;"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="plo" items="${ploList}" >
-                                                <tr>
-                                                    <td style="color: #495057;">${plo.name}</td>
-                                                    <td>${plo.description}</td>
-                                                    <td style="text-align: right;">${plo.mapToPO}</td>
-                                                    <td>
-                                                        <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
-                                                        <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
-                                                        <a href="<c:url value="/dashboard/curriculums/add?op=remove_plo&nameToDelete=${plo.name}" />"><i class="fa-solid fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                                <tr style="height: 66px;"></tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </c:if>
+                            <!-- Objectives / Program Learning Objectives (PLO) -->
+                            <span
+                                style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Program
+                                Program Learning Objectives (PLO)</span>
 
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="row col-4">
-                                        <div class="col-12">
-                                            <label for="ploName" class="col-form-label" style="font-size: 16px;">Name</label>
+                            <table id="ploTbl" style="width: 96%; margin-bottom: 32px; display:none;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 7.6%;">Name</th>
+                                        <th style="width: 65%">Description</th>
+                                        <th style="width: 22%; text-align: right;">Map to PO</th>
+                                        <th style="width: 5.4%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--TITLE-->
+                                </tbody>
+                            </table>
+
+                            <div class="form-add row g-3 align-items-center mt-1">
+                                <div class="row col-12" id="add-plo-form">
+                                    <div class="row" style="padding-right: 0">
+                                        <div class="col-6">
+                                            <label for="ploName" class="col-form-label"
+                                                   style="font-size: 16px;">Name</label>
+                                            <input type="text" id="ploName" name="ploName" class="form-control">
                                         </div>
-                                        <div class="col-12" style="width: 356px;">
-                                            <input type="text" id="ploName" name="ploName" class="form-control" placeholder="PLO3">
-                                        </div>
-                                    </div>
-                                    <div class="row col-4">
-                                        <div class="col-12">
+                                        <div class="col-6" style="padding-right: 0">
                                             <label for="mapToPO" class="col-form-label" style="font-size: 16px;">Map to
                                                 PO</label>
-                                        </div>
-                                        <div class="col-12" style="width: 356px;">
                                             <select style="color: #495057;" name="mapToPO" id="mapToPO" class="form-select">
-                                                <c:if test="${empty poList}" >
-                                                    <option selected>Please select</option>
-                                                </c:if>
-                                                <c:forEach var="po" items="${poList}">
-                                                    <option value="${po.name}" >${po.name}</option>
-                                                </c:forEach>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row col-2">
-                                        <div class="col-12">
-                                            <label for="PLOList" class="col-form-label" style="font-size: 16px;">List
-                                                of PLO</label>
-                                        </div>
-                                        <div class="col-12">
-                                            <label id="PLOList" class="btn btn-secondary">
-                                                <input type="file" />
-                                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 align-items-center mt-1">
-                                    <div class="col-12">
+                                    <div class="">
                                         <label for="ploDescription" class="col-form-label"
                                                style="font-size: 16px;">Description</label>
-                                    </div>
-                                    <div class="col-12" style="width: 751px; margin-top: 8px;">
                                         <textarea id="ploDescription" class="form-control" name="ploDescription"
-                                                  placeholder="Mastering professional skills and soft skills of 21st century citizens (thinking skills, work skills, skills in using work tools, life skills in a global society.)"></textarea>
+                                                  ></textarea>
+                                    </div>
+                                    <div style="margin-top: 16px;">
+                                        <button type="button" id="btn-add-plo" class="btn btn-primary" name="op"
+                                                value="add_plo">Add
+                                        </button>
+                                        <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
                                     </div>
                                 </div>
-                                <div style="margin-top: 16px;">
-                                    <button type="submit" class="btn btn-primary" name="op" value="add_plo">Add</button>
-                                    <button type="submit" class="btn btn-secondary" value="">Cancel</button>
-                                </div>
-                                <div class="alert alert-danger" role="alert" style="margin-top: 20px; margin-right: 4px;">
-                                    PLO_ERROR_MESSAGE
-                                </div>
-                                <!-- Subject -->
-                                <span
-                                    style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
-                                <div class="fixed-footer">
-                                    <div class="btn-group">
-                                        <input type="hidden" id="${cur.id}"/>
-                                        <button type="submit" class="btn btn-primary">Save</button>  
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </main>
-                </div>
-            </div>
-        </div>
+                            </div>
 
+                            <div class="alert alert-danger" id="plo-error" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--PLO_ERROR_MESSAGE-->
+                            </div>
+
+                            <!-- Subject -->
+                            <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
+                            <br/>
+
+                            <table id="subTbl" style="width: 96%; margin-bottom: 60px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 12%;">ID</th>
+                                        <th style="width: 12%;">Slug</th>
+                                        <th style="width: 32%;">Name</th>
+                                        <th style="width: 32%;">Vietnamese Name</th>
+                                        <th style="width: 12%;">Semester</th>
+                                        <th style="text-align: left; width: 12%;">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--TITLE-->
+                                    <c:forEach var="sub" items="<%=subList%>">
+                                        <tr>
+                                            <td>${sub.id}</td>
+                                            <td>${sub.slug}</td>
+                                            <td>${sub.name}</td>
+                                            <td>${sub.viName}</td>
+                                            <td>${sub.semester}</td>
+                                            <td><input type="checkbox" name="subCheck" value="${sub.id}"></td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+
+                            <div class="fixed-footer">
+                                <div class="" style="margin-left: auto">
+                                    <input type="hidden" id="${cur.id}"/>
+                                    <button type="submit" class="btn btn-primary">Save</button>  
+                                </div>
+                            </div>
+                            <div class="alert alert-danger" id="upload-error" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--UPLOAD_MESSAGE-->
+                            </div>
+                            <div class="alert alert-danger" id="upload-error-po" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--UPLOAD_PO_MESSAGE-->
+                            </div>
+                            <div class="alert alert-danger" id="upload-error-plo" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--UPLOAD_PLO_MESSAGE-->
+                            </div>
+                            <div class="alert alert-danger" id="submit-error" role="alert"
+                                 style="margin-top: 20px; margin-right: 4px; display: none;">
+                                <!--SUBMIT_MESSAGE-->
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </main>
+        </div>  
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
+        <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <script>
 
             $(document).ready(function () {
-                var oldName;
-                var oldDescription;
+                let oldName;
+                let oldDescription;
 
-//                var basicCode;
-//                var basicSlug;
-//                var basicEngName;
-//                var basicViName;
-//                var basicDescription;
-//                var basicDescriptionNo;
+                $("#btn-submit").click(function () {
+                    handleSubmit();
+                });
 
-//                $("button").click(function () {
-//                    basicCode = $(".basicIn").find("input, textarea").eq(0).val();
-//                    basicSlug = $(".basicIn").find("input, textarea").eq(1).val();
-//                    basicEngName = $(".basicIn").find("input, textarea").eq(2).val();
-//                    basicViName = $(".basicIn").find("input, textarea").eq(3).val();
-//                    basicDescription = $(".basicIn").find("input, textarea").eq(4).val();
-//                    basicDescriptionNo = $(".basicIn").find("input, textarea").eq(5).val();
-//
-//                    $(".basicIn").find("input, texarea").eq(0).val(basicCode);
-//                    $(".basicIn").find("input, texarea").eq(1).attr('value', basicSlug);
-//                    $(".basicIn").find("input, texarea").eq(2).attr('value', basicEngName);
-//                    $(".basicIn").find("input, texarea").eq(3).attr('value', basicViName);
-//                    $(".basicIn").find("input, texarea").eq(4).attr('value', basicDescription);
-//                    $(".basicIn").find("input, texarea").eq(5).attr('value', basicDescriptionNo);
-//                });
+                $('[name="subCheck"]').change(function () {
+                    let indexCheckRow = $(this).closest("tr");
+                    let isChecked = $(this).prop('checked');
+                    handleCheck(indexCheckRow, isChecked);
+                });
+
+                $('#file_upload').click(function () {
+                    $(this).val('');
+                }).change(function () {
+                    let file = $('#file_upload')[0].files[0];
+                    let errorShow = $('#upload-error');
+                    const addPOForm = $('#add-po-form');
+                    const addPLOForm = $('#add-plo-form');
+                    $("#myModal").modal("show");
+                    $('#modal-yes, #modal-no').off('click').on('click', function () {
+                        if (this.id === 'modal-no') {
+                            localStorage.removeItem('curiculum.list_po');
+                            localStorage.removeItem('curiculum.list_plo');
+                        }
+                        $("#myModal").modal("hide");
+
+                        let oldPOList = getListPOFromLocalStorage();
+                        let poFileContent = readXlsxFile(file, {sheet: 'PO'});
+                        let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
+
+                        poFileContent.then(function (data) {
+                            if (data.length > 0) {
+                                handleAddFilePO(data);
+                            }
+                            errorShow.css('display', 'none');
+                        }).then(function () {
+                            ploFileContent.then(function (data) {
+                                if (data.length > 0) {
+                                    handleAddFilePLO(data, oldPOList);
+                                }
+                                errorShow.css('display', 'none');
+                            }).catch(function (error) {
+                                localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                                renderListPO(oldPOList, addPOForm);
+                                errorShow.css('display', 'block');
+                                errorShow.text("Your upload file doesn't have PLO sheet, please try again!");
+                            });
+                        }).catch(function (error) {
+                            errorShow.css('display', 'block');
+                            errorShow.text("Your upload file doesn't have PO sheet, please try again!");
+                        });
+                    });
+                });
 
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                    var tdList = $(this).closest("tr").find("td");
+                    let row = $(this).closest('tr');
+                    let form = $('<tr>');
+                    let tdList = row.find('td');
+                    let input;
+
                     tdList.each(function (index, element) {
                         if (index != tdList.length - 1) {
-                            $(this).attr("contenteditable", "true");
+                            if (index == 0) {
+                                input = $('<td><input class="form-control" type="text" /></td>')
+                                input.find('input').attr('value', oldName);
+                            } else {
+                                input = $('<td><textarea class="form-control"></textarea></td>');
+                                input.find('textarea').text(oldDescription);
+                            }
+
+                            form.append(input);
+                        } else {
+                            input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                                                       <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
+                                                       <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
+                            form.append(input);
                         }
                     });
-                    $(this).eq(0).attr("name", "saveBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-                    $(this).closest("tr").find("a").eq(0).css("display", "none");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                    form.append('</tr>');
+                    row.replaceWith(form);
                 });
 
                 $("#ploTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
-                    var tdList = $(this).closest("tr").find("td:gt(0)");
+
+                    let row = $(this).closest('tr');
+                    let form = $('<tr>');
+                    let tdList = row.find('td');
+                    let input;
+
                     tdList.each(function (index, element) {
                         if (index != tdList.length - 1) {
-                            $(this).attr("contenteditable", "true");
+                            if (index == 0) {
+                                input = $('<td><input class="form-control" type="text" /></td>');
+                                input.find('input').attr('value', oldName);
+                            } else if (index == 1) {
+                                input = $('<td><textarea class="form-control"></textarea></td>');
+                                input.find('textarea').text(oldDescription);
+                            } else {
+                                input = $('<td><select style="color: #495057;" name="mapToPO" id="" class="form-select"></select></td>');
+                                let poList = getListPOFromLocalStorage();
+                                poList.forEach(function (item) {
+                                    input.find('select').append($('<option>', {value: item.name, text: item.name}));
+                                })
+                            }
+
+                            form.append(input);
+                        } else {
+                            let input = $('<td><button name="saveBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-check"></i></button>\n\
+                                                       <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-x"></i></button>\n\
+                                                       <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-trash"></i></button></td>');
+                            form.append(input);
                         }
                     });
-                    $(this).eq(0).attr("name", "saveBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-check");
-                    $(this).closest("tr").find("a").eq(0).css("display", "none");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "block");
+                    form.append('</tr>');
+                    row.replaceWith(form);
                 });
 
                 $("table").on("click", "[name='saveBtn']", function () {
-                    var newName = $(this).closest("tr").find("td").eq(0).text();
-                    var newDescription = $(this).closest("tr").find("td").eq(1).text();
-
-                    $(this).eq(0).attr("name", "editBtn");
-                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("a").eq(0).css("display", "inline");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
-
-                    $(this).closest("tr").find("td:gt(0)").each(function () {
-                        $(this).attr("contenteditable", "false");
-                    });
+                    let newName = $(this).closest("tr").find("td").find('input').val().toUpperCase();
+                    let newDescription = $(this).closest("tr").find("td").find('textarea').val();
+                    let newMapToPO;
+                    let tblIDCheck = $(this).closest('table').attr('id');
 
                     if (newName.includes('PO')) {
-                        $.ajax({
-                            url: '/university-learning-materials/dashboard/curriculums/add?op=edit_po',
-                            data: {
-                                newName: newName,
-                                newDescription: newDescription,
-                                nameToEdit: oldName
-                            },
-                            type: 'GET'
-                        });
+                        handleEditPO(oldName, newName, newDescription);
+                    } else if (newName.includes('PLO')) {
+                        newMapToPO = $(this).closest("tr").find("td").find('select option:selected').text();
+                        handleEditPLO(oldName, newName, newDescription, newMapToPO);
                     } else {
-                        $.ajax({
-                            url: '/university-learning-materials/dashboard/curriculums/add?op=edit_plo',
-                            data: {
-                                newName: newName,
-                                newDescription: newDescription,
-                                nameToEdit: oldName
-                            },
-                            type: 'GET'
-                        });
+                        if (tblIDCheck.includes('plo')) {
+                            let errorShow = $('#plo-error');
+                            if (newName == '') {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PLO name cannot be left blank, please try again!");
+                            } else {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PLO name must follow format PLOxx, please try again!");
+                            }
+                        } else {
+                            let errorShow = $('#po-error');
+                            if (newName == '') {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PO name cannot be left blank, please try again!");
+                            } else {
+                                errorShow.css('display', 'block');
+                                errorShow.text("PO name must follow format POxx, please try again!");
+                            }
+                        }
                     }
-
-
-
                 }
                 );
-
                 $("table").on("click", "[name='cancelBtn']", function () {
-                    $(this).closest("tr").find("td").eq(0).text(oldName);
-                    $(this).closest("tr").find("td").eq(1).text(oldDescription);
-                    $(this).closest("tr").find("td:gt(0)").each(function () {
-                        $(this).attr("contenteditable", "false");
+                    let str = $(this).closest('tr').find('td').find('input').val();
+                    let errorPOShow = $('#po-error');
+                    let errorPLOShow = $('#plo-error');
+                    let listPO = getListPOFromLocalStorage();
+                    let listPLO = getListPLOFromLocalStorage();
+
+                    if (str.includes('PO')) {
+                        errorPOShow.css('display', 'none');
+                        renderListPO(listPO);
+                        updatePLOMapPOOptions(listPO);
+                    } else if (str.includes('PLO')) {
+                        errorPLOShow.css('display', 'none');
+                        renderListPLO(listPLO);
+                    } else {
+                        errorPOShow.css('display', 'none');
+                        errorPLOShow.css('display', 'none');
+                        renderListPO(listPO);
+                        renderListPLO(listPLO);
+                    }
+
+                });
+                $('table').on("click", "#btn-delete-po", function () {
+                    const addPOForm = $('#add-po-form');
+                    const name = $(this).closest("tr").find("td").eq(0).text();
+                    const indexDeleteRow = $(this).closest("tr").data('index');
+                    console.log(indexDeleteRow);
+                    let mappedCheck = 0;
+                    let listPLO = getListPLOFromLocalStorage();
+                    listPLO.forEach(function (item) {
+                        let errorShow = $('#po-error');
+
+                        if (name == item.mapToPO)
+                            mappedCheck = 1;
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PO is mapped to PLOs, please delete these PLO before!");
                     });
-                    $(this).closest("tr").find("[name='saveBtn']").find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("[name='saveBtn']").eq(0).attr("name", "editBtn");
-//                    $(this).find("i").eq(0).attr("class", "fa-solid fa-pencil");
-                    $(this).closest("tr").find("a").eq(0).css("display", "inline");
-                    $(this).closest("tr").find("[name='cancelBtn']").eq(0).css("display", "none");
+                    if (mappedCheck == 0) {
+                        let errorShow = $('#po-error');
+                        errorShow.css('display', 'none');
+                        let listPO = getListPOFromLocalStorage();
+
+                        listPO = listPO.filter((po, index) => index != indexDeleteRow);
+                        renderListPO(listPO, addPOForm);
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                        updatePLOMapPOOptions(listPO);
+                    }
+                });
+                $('table').on("click", "#btn-delete-plo", function () {
+                    const addPLOForm = $('#add-po-form');
+                    let listPLO = getListPLOFromLocalStorage();
+                    let indexDeleteRow = $(this).closest("tr").data("index");
+
+                    listPLO = listPLO.filter((plo, index) => index != indexDeleteRow);
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
+                });
+            });
+
+            window.addEventListener("load", () => {
+                let curId = <%=cur.getId()%>;
+                preLoadEditPage(curId);
+            });
+
+            document.getElementById("btn-add-po").addEventListener("click", handleAddPO);
+            document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
+            document.getElementById("code").addEventListener("change", handleCodeChange);
+
+            function preLoadEditPage(curId) {
+                let listPO = getListPOFromLocalStorage();
+                let listPLO = getListPLOFromLocalStorage();
+                let listSub = getListSubFromLocalStorage();
+
+                let jsonItems = getItems(curId);
+                jsonItems.then(data => {
+                    let poList = data.poList;
+                    let ploList = data.ploList;
+                    let subList = data.subList;
+                    $.each(poList, function (index, value) {
+                        let name = value.name;
+                        let description = value.description;
+                        listPO.push({
+                            name: name,
+                            description: description
+                        });
+                    });
+
+                    $.each(ploList, function (index, value) {
+                        let name = value.name;
+                        let description = value.description;
+                        listPLO.push({
+                            name: name,
+                            description: description
+                        });
+                    });
+
+                    $.each(subList, function (index, value) {
+                        let id = value.id;
+                        listSub.push({
+                            id: id
+                        });
+                    });
+
+                    renderListPO(listPO);
+                    renderListPLO(listPLO);
+                    renderListSub(listSub);
+                    updatePLOMapPOOptions(listPO);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
+                    localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
+
+                }).catch(error => {
+                    console.error(error);
+                });
+            }
+
+            async function getItems(curId) {
+                const promise = fetch('${pageContext.servletContext.contextPath}/dashboard/curriculums/get-items?curId=' + curId);
+                return (await promise).json();
+            }
+
+            function handleCodeChange(e) {
+                const code = e.target.value;
+                const slugInput = document.getElementById("slug").value = slugify(code.toLowerCase().replaceAll('_', '- '));
+            }
+
+            function getListPOFromLocalStorage() {
+                let listPO = JSON.parse(localStorage.getItem("curiculum.list_po"));
+                if (listPO === null) {
+                    listPO = [];
+                }
+
+                return listPO;
+            }
+
+            function getListPLOFromLocalStorage() {
+                let listPLO = JSON.parse(localStorage.getItem("curiculum.list_plo"));
+                if (listPLO === null) {
+                    listPLO = [];
+                }
+
+                return listPLO;
+            }
+
+            function getListSubFromLocalStorage() {
+                let listSub = JSON.parse(localStorage.getItem("curiculum.list_sub"));
+                if (listSub === null) {
+                    listSub = [];
+                }
+
+                return listSub;
+            }
+
+            function handleAddPO() {
+                const addPOForm = document.getElementById('add-po-form');
+                const namePONode = addPOForm.querySelector("#poName");
+                const descriptionPONode = addPOForm.querySelector("#poDescription");
+                const name = namePONode.value.toUpperCase();
+                let listPO = getListPOFromLocalStorage();
+                let errorShow = $('#po-error');
+                if (!namePONode) {
+                    throw new Error("Missing value");
+                }
+
+                if (name == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("PO name cannot be left blank, please try again!");
+                } else if (!name.includes('PO')) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("PO name must follow format POxx, please try again!");
+                } else {
+                    let isExist = listPO.find(po => po.name === name);
+                    if (isExist) {
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PO name was created, please try another!");
+                    } else {
+                        errorShow.css('display', 'none');
+                        const description = descriptionPONode.value;
+                        listPO.push({
+                            name: name,
+                            description: description
+                        });
+                        renderListPO(listPO, addPOForm);
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                        updatePLOMapPOOptions(listPO);
+                        resetAddPOForm(addPOForm);
+                    }
+                }
+            }
+
+            function handleAddFilePO(poListAdd) {
+                const addPOForm = document.getElementById('add-po-form');
+                let listPO = getListPOFromLocalStorage();
+                let errorShow = $('#upload-error-po');
+                let formatErrorIndexStr = '';
+                let repeatErrorIndexStr = '';
+                poListAdd.forEach(function (element, index) {
+                    if (index > 0) {
+                        let nameE = element[0];
+                        let descriptionE = element[1];
+
+                        if (nameE != null && descriptionE != null) {
+                            nameE = nameE.toUpperCase();
+
+                            if (nameE.includes('PO')) {
+                                let isExistedName = listPO.find(po => po.name === nameE);
+
+                                if (isExistedName) {
+                                    repeatErrorIndexStr += (index + 1) + ', ';
+                                } else {
+                                    listPO.push({
+                                        name: nameE,
+                                        description: descriptionE
+                                    });
+                                }
+
+                            } else {
+                                formatErrorIndexStr += (index + 1) + ', ';
+                            }
+                        } else if (descriptionE != null) {
+                            formatErrorIndexStr += (index + 1) + ', ';
+                        }
+                    }
+                });
+                if (formatErrorIndexStr.length != '' && repeatErrorIndexStr != '') {
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text(" There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 1. Make sure the PO name is not blank and in the format POxxx, please check again!\n\
+                           - The PO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else if (formatErrorIndexStr.length != '') {
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 1. Make sure the PO name is not blank and in the format POxxx, please check again!");
+                } else if (repeatErrorIndexStr != '') {
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- The PO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else {
+                    errorShow.css('display', 'none');
+                    renderListPO(listPO, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                    updatePLOMapPOOptions(listPO);
+                }
+
+            }
+
+            function handleAddFilePLO(ploListAdd, oldPOList) {
+                const addPLOForm = document.getElementById('add-plo-form');
+                const addPOForm = document.getElementById('add-po-form');
+                let listPLO = getListPLOFromLocalStorage();
+                let listPO = getListPOFromLocalStorage();
+                let errorShow = $('#upload-error-plo');
+                let formatErrorIndexStr = '';
+                let repeatErrorIndexStr = '';
+                ploListAdd.forEach(function (element, index) {
+                    if (index > 0) {
+                        let nameE = element[0];
+                        let descriptionE = element[1];
+                        let mapToPO = element[2];
+
+                        if (nameE != null && descriptionE != null && mapToPO != null) {
+                            nameE = nameE.toUpperCase();
+                            mapToPO = mapToPO.toUpperCase();
+
+                            if (nameE.includes('PLO')) {
+                                let isExistedName = listPLO.find(plo => plo.name === nameE);
+
+                                if (isExistedName) {
+                                    repeatErrorIndexStr += (index + 1) + ', ';
+                                } else {
+                                    let isExisted = listPO.find(po => po.name === mapToPO);
+
+                                    if (isExisted) {
+                                        listPLO.push({
+                                            name: nameE,
+                                            description: descriptionE,
+                                            mapToPO: mapToPO
+                                        });
+                                    } else {
+                                        formatErrorIndexStr += (index + 1) + ', ';
+                                    }
+                                }
+
+                            } else {
+                                formatErrorIndexStr += (index + 1) + ', ';
+                            }
+                        } else if (descriptionE != null || mapToPO != null) {
+                            formatErrorIndexStr += (index + 1) + ', ';
+                        }
+
+                    }
                 });
 
-            });
+                if (formatErrorIndexStr.length != '' && repeatErrorIndexStr != '') {
+                    renderListPO(oldPOList, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                    updatePLOMapPOOptions(oldPOList);
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 2. Make sure that datas of MapToPO colunms was created, the PLO name is not blank and in the format PLOxxx, please check again!\n\
+                           - The PLO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else if (formatErrorIndexStr.length != '') {
+                    renderListPO(oldPOList, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                    updatePLOMapPOOptions(oldPOList);
+                    formatErrorIndexStr = formatErrorIndexStr.substring(0, formatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- There are some invalid datas on rows " + formatErrorIndexStr + " at sheet 2. Make sure that datas of MapToPO colunms was created, the PLO name is not blank and in the format PLOxxx, please check again!");
+                } else if (repeatErrorIndexStr != '') {
+                    renderListPO(oldPOList, addPOForm);
+                    localStorage.setItem("curiculum.list_po", JSON.stringify(oldPOList));
+                    updatePLOMapPOOptions(oldPOList);
+                    repeatErrorIndexStr = repeatErrorIndexStr.substring(0, repeatErrorIndexStr.length - 2);
+                    errorShow.css('display', 'block');
+                    errorShow.text("- The PLO names are existed on rows " + formatErrorIndexStr + ". Please check again!");
+                } else {
+                    errorShow.css('display', 'none');
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
+                }
+
+            }
+
+            function handleAddPLO() {
+                const addPLOForm = document.getElementById('add-plo-form');
+                const namePLONode = addPLOForm.querySelector("#ploName");
+                const descriptionPLONode = addPLOForm.querySelector("#ploDescription");
+                const mapToPONode = $("#mapToPO option:selected");
+                const name = namePLONode.value.toUpperCase();
+                const description = descriptionPLONode.value;
+                const mapToPO = mapToPONode.text();
+                let listPLO = getListPLOFromLocalStorage();
+                let errorShow = $('#plo-error');
+                if (!namePLONode || !descriptionPLONode || !mapToPONode) {
+                    throw new Error("Missing value");
+                }
+
+                if (name == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("PLO name cannot be left blank, please try again!");
+                } else if (!name.includes('PLO')) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("PLO name must follow format PLOxx, please try again!");
+                } else if (mapToPO == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Please create a new PO before!");
+                } else {
+                    let isExist = listPLO.find(plo => plo.name === name);
+                    if (isExist) {
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PLO name was created, please try another!");
+                    } else {
+                        errorShow.css('display', 'none');
+                        let listPLO = getListPLOFromLocalStorage();
+                        listPLO.push({
+                            name: name,
+                            description: description,
+                            mapToPO: mapToPO
+                        })
+                        renderListPLO(listPLO, addPLOForm);
+                        localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
+                        resetAddPLOForm(addPLOForm);
+                    }
+                }
+            }
+
+            function handleEditPO(oldName, newName, newDescription) {
+                const addPOForm = document.getElementById('add-po-form');
+                let listPO = getListPOFromLocalStorage();
+                let errorShow = $('#po-error');
+                let isExist = listPO.find(po => po.name == newName && po.name != oldName);
+
+                if (isExist) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("This PO name was created, please try another!");
+                    return;
+                } else {
+                    let mappedCheck = 0;
+                    let listPLO = getListPLOFromLocalStorage();
+                    listPLO.forEach(function (item) {
+                        if (oldName == item.mapToPO)
+                            mappedCheck = 1;
+                        let errorShow = $('#po-error');
+                        errorShow.css('display', 'block');
+                        errorShow.text("This PO is mapped to PLOs, please delete these PLO before!");
+                    });
+                    if (mappedCheck == 0) {
+                        errorShow.css('display', 'none');
+                        let poElement = listPO.find(po => po.name === oldName);
+                        poElement.name = newName;
+                        poElement.description = newDescription;
+                        renderListPO(listPO, addPOForm);
+                        localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
+                        updatePLOMapPOOptions(listPO)
+                    }
+                }
+            }
+
+            function handleEditPLO(oldName, newName, newDescription, newMapToPO) {
+                const addPLOForm = document.getElementById('add-plo-form');
+                let errorShow = $('#plo-error');
+                let listPLO = getListPLOFromLocalStorage();
+                let isExist = listPLO.find(plo => plo.name == newName && plo.name != oldName);
+
+                if (isExist) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("This PLO name was created, please try another!");
+                    return;
+                } else {
+                    errorShow.css('display', 'none');
+                    let ploElement = listPLO.find(plo => plo.name === oldName);
+                    ploElement.name = newName;
+                    ploElement.description = newDescription;
+                    ploElement.mapToPO = newMapToPO;
+                    renderListPLO(listPLO, addPLOForm);
+                    localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
+                }
+            }
+
+            function updatePLOMapPOOptions(listPO) {
+                const selectNode = document.getElementById("mapToPO");
+                if (!selectNode || !listPO)
+                    return console.error("Cannot update list PO options");
+                const htmls = listPO.map((po, index) => `
+                            <option value="\${po.name}">\${po.name}</option>
+                       `).join("");
+                selectNode.innerHTML = htmls;
+            }
+
+            function renderListPO(listPO, POFormNode) {
+                if (!listPO)
+                    throw new Error("Cannot render list PO");
+                const POTableBody = document.querySelector("#poTbl tbody");
+                const htmls = listPO.map((po, index) => `
+                            <tr data-index="\${index}">
+                               <td style="color: #495057;">\${po?.name}</td>
+                               <td>\${po?.description}</td>
+                               <td>
+                                   <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                   <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                   <button type="button" id="btn-delete-po" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
+                               </td>
+                           </tr>
+                       `).join("");
+                POTableBody.parentNode.style.display = 'block';
+                POTableBody.innerHTML = htmls;
+            }
+
+            function renderListPLO(listPLO, PLOFormNode) {
+                if (!listPLO)
+                    throw new Error("Cannot render list PLO");
+                const PLOTableBody = document.querySelector("#ploTbl tbody");
+                const htmls = listPLO.map((plo, index) => `
+                            <tr data-index="\${index}">
+                               <td style="color: #495057;">\${plo?.name}</td>
+                               <td>\${plo?.description}</td>
+                               <td style="text-align: right;">\${plo?.mapToPO}</td>
+                               <td>
+                                   <button name="editBtn" type="button" style="margin-left: 96%; border: none; background: none"><i class="fa-solid fa-pencil"></i></button>
+                                   <button name="cancelBtn" type="button" style="margin-left: 96%; border: none; background: none; display: none;"><i class="fa-solid fa-x"></i></button>
+                                   <button type="button" id="btn-delete-plo" type="button" style="margin-left: 96%; border: none; background: none; display: block;"><i class="fa-solid fa-trash"></i></button>
+                               </td>
+                           </tr>
+                       `).join("");
+                PLOTableBody.parentNode.style.display = 'block';
+                PLOTableBody.innerHTML = htmls;
+            }
+
+            function renderListSub(listSub) {
+                $('[name="subCheck"]').each(function () {
+                    let thisVal = $(this).val();
+                    let isChecked = listSub.find(sub => sub.id === thisVal);
+                    if (isChecked) {
+                        $(this).prop("checked", true);
+                    }
+                });
+            }
+
+            function renderBasicInf() {
+                let basicCode = localStorage.getItem("curiculum.basicCode");
+                let basicSlug = localStorage.getItem("curiculum.basicSlug");
+                let basicEnglishName = localStorage.getItem("curiculum.basicEnglishName");
+                let basicVietnameseName = localStorage.getItem("curiculum.basicVietnameseName");
+                let basicDescription = localStorage.getItem("curiculum.basicDescription");
+                let basicDecisionNo = localStorage.getItem("curiculum.basicDecisionNo");
+                if (basicCode == null) {
+                    $('#code').val('');
+                } else {
+                    $('#code').val(JSON.parse(basicCode));
+                }
+                if (basicSlug == null) {
+                    $('#slug').val('');
+                } else {
+                    $('#slug').val(JSON.parse(basicSlug));
+                }
+                if (basicEnglishName == null) {
+                    $('#englishName').val('');
+                } else {
+                    $('#englishName').val(JSON.parse(basicEnglishName));
+                }
+                if (basicVietnameseName == null) {
+                    $('#vietnameseName').val('');
+                } else {
+                    $('#vietnameseName').val(JSON.parse(basicVietnameseName));
+                }
+                if (basicDescription == null) {
+                    $('#description').val('');
+                } else {
+                    $('#description').val(JSON.parse(basicDescription));
+                }
+                if (basicDecisionNo == null) {
+                    $('#decisionNo').val('');
+                } else {
+                    $('#decisionNo').val(JSON.parse(basicDecisionNo));
+                }
+            }
+
+            function resetAddPOForm(POFormNode) {
+                const nameNode = POFormNode.querySelector("#poName");
+                const descriptionNode = POFormNode.querySelector("#poDescription");
+                nameNode.value = "";
+                descriptionNode.value = "";
+            }
+
+            function resetAddPLOForm(PLOFormNode) {
+                const nameNode = PLOFormNode.querySelector("#ploName");
+                const descriptionNode = PLOFormNode.querySelector("#ploDescription");
+                nameNode.value = "";
+                descriptionNode.value = "";
+            }
+
+            function resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo) {
+                localStorage.setItem("curiculum.basicCode", JSON.stringify(basicCode));
+                localStorage.setItem("curiculum.basicEnglishName", JSON.stringify(basicEnglishName));
+                localStorage.setItem("curiculum.basicVietnameseName", JSON.stringify(basicVietnameseName));
+                localStorage.setItem("curiculum.basicDescription", JSON.stringify(basicDescription));
+                localStorage.setItem("curiculum.basicDecisionNo", JSON.stringify(basicDecisionNo));
+                localStorage.setItem("curiculum.basicSlug", JSON.stringify(basicSlug));
+            }
+
+            function handleCheck(indexCheckRow, isChecked) {
+                let listSub = getListSubFromLocalStorage();
+                let id = indexCheckRow.find("td").eq(0).text().trim();
+
+                if (isChecked) {
+                    listSub.push({
+                        id: id
+                    });
+                } else {
+                    listSub = listSub.filter((sub, index) => sub.id != id);
+                }
+
+                localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
+            }
+
+            async function handleSubmit() {
+                let basicCode = $('#code').val();
+                let basicSlug = $('#slug').val();
+                let basicEnglishName = $('#englishName').val();
+                let basicVietnameseName = $('#vietnameseName').val();
+                let basicDescription = $('#description').val();
+                let basicDecisionNo = $('#decisionNo').val();
+                let listPO = getListPOFromLocalStorage();
+                let listPLO = getListPLOFromLocalStorage();
+                let listSub = getListSubFromLocalStorage();
+                let errorShow = $('#basic-error');
+                let errorShowSubmit = $('#submit-error');
+                let invalid = 0;
+                const pattern = /^([[A-Z0-9]{3}-[[A-Z0-9]{2}-[A-Z0-9-]{4,5})$/;
+
+                resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo);
+
+                if (basicCode == '') {
+                    errorShow.css('display', 'block');
+                    errorShow.text("Code cannot be left blank, please try again!");
+                    invalid++;
+                } else if (!pattern.test(basicCode)) {
+                    errorShow.css('display', 'block');
+                    errorShow.text("The Curriculum code must be followed format XXX-XX-XXXX, please try again!");
+                    invalid++;
+                } else {
+                    basicCode = basicCode.toUpperCase();
+                    errorShow.css('display', 'none');
+                }
+
+                if (listPO.length == 0 || listPLO.length == 0) {
+                    errorShowSubmit.css('display', 'block');
+                    errorShowSubmit.text("Please create a new PO and PLO before!");
+                    invalid++;
+                } else {
+                    errorShowSubmit.css('display', 'none');
+                }
+
+                if (invalid == 0) {
+                    const jsonSubmit = JSON.stringify({
+                        code: basicCode,
+                        name: basicEnglishName,
+                        description: basicDescription,
+                        decisionNo: basicDecisionNo,
+                        viName: basicVietnameseName,
+                        poList: listPO,
+                        ploList: listPLO,
+                        subList: listSub
+                    });
+
+                    let currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit';
+
+                    let options = {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8"
+                        },
+                        body: jsonSubmit
+                    }
+                    ;
+
+                    try {
+                        const res = await fetch(currAPI, options);
+                        if (res.ok) {
+                            errorShowSubmit.css('display', 'none');
+//                            localStorage.clear();
+//                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                        } else {
+                            const json = await res.json();
+                            errorShowSubmit.css('display', 'block');
+                            errorShowSubmit.text(json?.message);
+                        }
+                    } catch (error) {
+                        console.log('error when add new cur', error);
+                    }
+                }
+            }
 
         </script>
     </body>

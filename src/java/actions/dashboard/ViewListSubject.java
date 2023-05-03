@@ -27,7 +27,7 @@ public class ViewListSubject implements Action {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                ArrayList<Subject> lsSubject = SubjectDao.getAll();
+                ArrayList<Subject> lsSubject = SubjectDao.readSubjectFullList();
                 request.setAttribute(AppConfig.DASHBOARD_SUBJECT_LIST, lsSubject);
                 request.getRequestDispatcher("/pages/dashboard/viewListSubject.jsp").forward(request, response);
             } catch (Exception e) {

@@ -40,7 +40,7 @@ public class SubjectDao {
         return rows;
     }
 
-    public static ArrayList<Subject> getAll() {
+    public static ArrayList<Subject> readSubjectFullList() {
         ArrayList<Subject> result = new ArrayList<>();
         String query = "select * from Subject ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         try (Connection cn = DBUtils.makeConnection()) {
@@ -81,9 +81,9 @@ public class SubjectDao {
     }
 
     public static List<Subject> getListByCurriculumID(String curId) throws Exception {
-        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], slug from Subject" +
-                " join Curr_to_Subject on id = subjectID where curriculumID = ?" +
-                " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
+        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], [slug], [viName], [active] from Subject"
+                + " join Curr_to_Subject on id = subjectID where curriculumID = ?"
+                + " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         List<Subject> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
@@ -104,7 +104,7 @@ public class SubjectDao {
 
     private static Subject getSubject(ResultSet rs) throws SQLException {
         Subject subject = new Subject();
-        subject.setId(rs.getString("id"));
+        subject.setId(rs.getString("id").trim());
         subject.setName(rs.getString("name"));
         subject.setViName(rs.getNString("viName"));
         subject.setCreatedAt(rs.getDate("createdAt"));
@@ -137,12 +137,13 @@ public class SubjectDao {
 //
 //        return list;
 //    }
-
     public static Integer update(Subject subject) throws Exception {
         String query = "update Subject set name = ?, viName = ?, updatedAt = GETDATE(), semester = ?, slug = ?, active = ? where id = ?";
         Connection cn = null;
         cn = DBUtils.makeConnection();
-        if (cn == null) throw new SubjectException("Cannot connect to Database now");
+        if (cn == null) {
+            throw new SubjectException("Cannot connect to Database now");
+        }
         PreparedStatement ppstm = cn.prepareStatement(query);
         ppstm.setString(1, subject.getName());
         ppstm.setNString(2, subject.getViName());
@@ -163,7 +164,9 @@ public class SubjectDao {
         String query = "update Subject set active = ?, updatedAt = GETDATE() where id = ?";
         Connection cn = null;
         cn = DBUtils.makeConnection();
-        if (cn == null) throw new SubjectException("Cannot connect to Database now");
+        if (cn == null) {
+            throw new SubjectException("Cannot connect to Database now");
+        }
         PreparedStatement ppstm = cn.prepareStatement(query);
         ppstm.setBoolean(1, isActive);
         ppstm.setString(2, subjectId);

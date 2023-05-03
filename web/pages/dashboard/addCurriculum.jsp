@@ -4,6 +4,8 @@
     Author     : Admin
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="java.util.List"%>
 <%@page import="config.AppConfig" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -25,14 +27,14 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
         <title>Add curriculum</title>
     </head>
-
+    <%List subList = (List) request.getAttribute(AppConfig.SUBJECT_LIST);%>
     <body>
         <div class="dashboard-container">
             <%@include file="/components/dashboard/sidebar.jspx" %>
             <main>
                 <%@include file="/components/dashboard/header.jspx" %>
                 <div class="dashboard-content">
-                    <div class="container" style="margin: 0 auto">
+                    <div class="container ml-3" style="margin: 0 2%">
                         <!--Modal-->
                         <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                              aria-hidden="true">
@@ -123,7 +125,7 @@
                             </div>
                             <div class="alert alert-danger" id="basic-error" role="alert"
                                  style="margin-top: 20px; margin-right: 4px; display: none;">
-                                BASIC_INFO_ERROR_MESSAGE
+                                <!--BASIC_INFO_ERROR_MESSAGE-->
                             </div>
 
                             <!-- Objectives -->
@@ -170,7 +172,7 @@
 
                             <div class="alert alert-danger" id="po-error" role="alert"
                                  style="margin-top: 20px; margin-right: 4px; display: none;">
-                                PO_ERROR_MESSAGE
+                                <!--PO_ERROR_MESSAGE-->
                             </div>
 
                             <!-- Objectives / Program Learning Objectives (PLO) -->
@@ -231,6 +233,32 @@
                             <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
                             <br/>
 
+                            <table id="subTbl" style="width: 96%; margin-bottom: 60px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 12%;">ID</th>
+                                        <th style="width: 12%;">Slug</th>
+                                        <th style="width: 32%;">Name</th>
+                                        <th style="width: 32%;">Vietnamese Name</th>
+                                        <th style="width: 12%;">Semester</th>
+                                        <th style="text-align: left; width: 12%;">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!--TITLE-->
+                                    <c:forEach var="sub" items="<%=subList%>">
+                                        <tr>
+                                            <td>${sub.id}</td>
+                                            <td>${sub.slug}</td>
+                                            <td>${sub.name}</td>
+                                            <td>${sub.viName}</td>
+                                            <td>${sub.semester}</td>
+                                            <td><input type="checkbox" name="subCheck" value="${sub.id}"></td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+
                             <div class="fixed-footer">
                                 <div class="" style="margin-left: auto">
                                     <button id="btn-submit" type="button" class="btn btn-primary" name="confirm">Publish
@@ -238,27 +266,23 @@
                                     <button id="btn-save" type="button" class="btn btn-secondary" name="save">Save as
                                         Draft
                                     </button>
-<!--                                    <label id="file_upload_btn" class="btn btn-outline-secondary">
-                                        <input type="file" id="file_upload"/>
-                                        <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
-                                    </label>-->
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="upload-error" role="alert"
                                  style="margin-top: 20px; margin-right: 4px; display: none;">
-                                UPLOAD_MESSAGE
+                                <!--UPLOAD_MESSAGE-->
                             </div>
                             <div class="alert alert-danger" id="upload-error-po" role="alert"
                                  style="margin-top: 20px; margin-right: 4px; display: none;">
-                                UPLOAD_PO_MESSAGE
+                                <!--UPLOAD_PO_MESSAGE-->
                             </div>
                             <div class="alert alert-danger" id="upload-error-plo" role="alert"
                                  style="margin-top: 20px; margin-right: 4px; display: none;">
-                                UPLOAD_PLO_MESSAGE
+                                <!--UPLOAD_PLO_MESSAGE-->
                             </div>
                             <div class="alert alert-danger" id="submit-error" role="alert"
                                  style="margin-top: 20px; margin-right: 4px; display: none;">
-                                SUBMIT_MESSAGE
+                                <!--SUBMIT_MESSAGE-->
                             </div>
                         </form>
                     </div>
@@ -277,6 +301,12 @@
 
                 $("#btn-submit").click(function () {
                     handleSubmit();
+                });
+
+                $('[name="subCheck"]').change(function () {
+                    let indexCheckRow = $(this).closest("tr");
+                    let isChecked = $(this).prop('checked');
+                    handleCheck(indexCheckRow, isChecked);
                 });
 
                 $('#file_upload').click(function () {
@@ -319,9 +349,6 @@
                             errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                         });
                     });
-                }).catch(function (error) {
-                    errorShow.css('display', 'block');
-                    errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                 });
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
@@ -481,16 +508,19 @@
                     renderListPLO(listPLO, addPLOForm);
                     localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
                 });
-            }
-            );
+            });
+
             window.addEventListener("load", () => {
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
+                let listSub = getListSubFromLocalStorage();
                 renderBasicInf();
                 renderListPO(listPO);
                 renderListPLO(listPLO);
                 updatePLOMapPOOptions(listPO);
+                renderListSub(listSub);
             });
+
             document.getElementById("btn-add-po").addEventListener("click", handleAddPO);
             document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
             document.getElementById("code").addEventListener("change", handleCodeChange);
@@ -516,6 +546,15 @@
                 }
 
                 return listPLO;
+            }
+
+            function getListSubFromLocalStorage() {
+                let listSub = JSON.parse(localStorage.getItem("curiculum.list_sub"));
+                if (listSub === null) {
+                    listSub = [];
+                }
+
+                return listSub;
             }
 
             function handleAddPO() {
@@ -835,6 +874,16 @@
                 PLOTableBody.innerHTML = htmls;
             }
 
+            function renderListSub(listSub) {
+                $('[name="subCheck"]').each(function () {
+                    let thisVal = $(this).val();
+                    let isChecked = listSub.find(sub => sub.id === thisVal);
+                    if (isChecked) {
+                        $(this).prop("checked", true);
+                    }
+                });
+            }
+
             function renderBasicInf() {
                 let basicCode = localStorage.getItem("curiculum.basicCode");
                 let basicSlug = localStorage.getItem("curiculum.basicSlug");
@@ -897,6 +946,21 @@
                 localStorage.setItem("curiculum.basicSlug", JSON.stringify(basicSlug));
             }
 
+            function handleCheck(indexCheckRow, isChecked) {
+                let listSub = getListSubFromLocalStorage();
+                let id = indexCheckRow.find("td").eq(0).text().trim();
+
+                if (isChecked) {
+                    listSub.push({
+                        id: id
+                    });
+                } else {
+                    listSub = listSub.filter((sub, index) => sub.id != id);
+                }
+
+                localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
+            }
+
             async function handleSubmit() {
                 let basicCode = $('#code').val();
                 let basicSlug = $('#slug').val();
@@ -906,6 +970,7 @@
                 let basicDecisionNo = $('#decisionNo').val();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
+                let listSub = getListSubFromLocalStorage();
                 let errorShow = $('#basic-error');
                 let errorShowSubmit = $('#submit-error');
                 let invalid = 0;
@@ -942,7 +1007,8 @@
                         decisionNo: basicDecisionNo,
                         viName: basicVietnameseName,
                         poList: listPO,
-                        ploList: listPLO
+                        ploList: listPLO,
+                        subList: listSub
                     });
 
                     let currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/add';
@@ -956,7 +1022,6 @@
                     }
                     ;
 
-                    console.log({jsonSubmit})
                     try {
                         const res = await fetch(currAPI, options);
                         if (res.ok) {
