@@ -7,10 +7,12 @@ package actions.dashboard;
 import actions.Action;
 import config.AppConfig;
 import dao.CurriculumDao;
+import dao.SubjectDao;
 import entities.Curriculum;
 import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
+import entities.Subject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -31,9 +33,10 @@ public class EditCurriculum implements Action {
         try (PrintWriter out = response.getWriter()) {
             try {
                 String curId = request.getParameter("id");
-                //lấy list từ session
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
-//                System.out.println("id " + cur.getId());
+                List<Subject> subjList = SubjectDao.readSubjectFullList();
+                
+                request.setAttribute(AppConfig.SUBJECT_LIST, subjList);
                 request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET, cur);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
@@ -41,7 +44,7 @@ public class EditCurriculum implements Action {
                 request.getRequestDispatcher(AppConfig.NOT_FOUND_PAGE).forward(request, response);
                 return;
             }
-            request.getRequestDispatcher("/pages/dashboard/editCurriculum_1.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/dashboard/editCurriculum.jsp").forward(request, response);
         }
     }
 
@@ -66,7 +69,7 @@ public class EditCurriculum implements Action {
                 cur.setDecisionNo(request.getParameter("decisionNo"));
                 cur.setDescription(request.getParameter("description"));
 //                CurriculumDao.update(cur);
-                response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
+//                response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute(AppConfig.ERROR_MESSAGE, "Cannot update curriculum.");

@@ -5,8 +5,10 @@
 package controllers.dashboard;
 
 import actions.Action;
+import actions.curriculumns.GetCurriculumnByID;
 import actions.dashboard.AddNewCurriculum;
 import actions.dashboard.EditCurriculum;
+import actions.dashboard.GetItemsInCurriculum;
 import actions.dashboard.ViewListCurriculum;
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,7 +32,11 @@ public class CurriculumDashboard extends HttpServlet {
         actionMap.put("/curriculums", new ViewListCurriculum());
         actionMap.put("/curriculums/", new ViewListCurriculum());
         actionMap.put("/curriculums/add", new AddNewCurriculum());
+        actionMap.put("/curriculums/add/", new AddNewCurriculum());
         actionMap.put("/curriculums/edit", new EditCurriculum());
+        actionMap.put("/curriculums/edit/", new EditCurriculum());
+        actionMap.put("/curriculums/get-items", new GetItemsInCurriculum());
+        actionMap.put("/curriculums/get-items/", new GetItemsInCurriculum());
     }
 
     /**
