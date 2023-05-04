@@ -70,8 +70,7 @@
                             >
                         </div>
                     </div>
-
-                    <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                    <div class="row g-3 align-items-center mt-1">
                         <div class="col-2">
                             <label for="username" class="col-form-label" style="font-size: 16px;">Username</label>
                         </div>
@@ -94,8 +93,6 @@
                             >
                         </div>
                     </div>
-
-
                     <div class="row g-3 align-items-center mt-1">
                         <div class="col-2">
                             <label for="roleID" class="col-form-label" style="font-size: 16px;">
@@ -105,7 +102,9 @@
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <select style="color: #495057;" name="roleID" id="roleID"
                                     class="form-select">
-                                <c:set var="roleID" value="<%=account.getRoleID()%>"/>
+                                <c:if test="${account != null}">
+                                    <c:set var="roleID" value="<%= account!= null ? account.getRoleID() : -1 %>"/>
+                                </c:if>
                                 <c:forEach var="role" items="<%=lsRole%>">
                                     <option value="${role.id}" ${role.id.equals(roleID) ? "selected" : ""}>${role.roleName}</option>
                                 </c:forEach>
@@ -121,7 +120,8 @@
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <select name="educationLevel" id="educationLevel"
                                     class="form-select">
-                                <c:set var="educationLevel" value="<%=account.getEducationLevel()   %>"/>
+                                <c:set var="educationLevel"
+                                       value="<%=account!= null ? account.getEducationLevel() : -1 %>"/>
                                 <c:forEach var="edu" items="<%=lsEducationLevel%>">
                                     <option value="${edu}" ${edu.equals(educationLevel) ? "selected" : ""}>${edu}</option>
                                 </c:forEach>
@@ -129,11 +129,11 @@
                         </div>
                     </div>
                     <div style="margin-left: auto; margin-top: 32px;">
-                        <button id="btn-submit" type="submit"
-                                class="btn btn-primary"><%= isEdit ? Label.DASHBOARD_ACCOUNT_EDIT_SUBMIT_BTN : Label.DASHBOARD_ACCOUNT_ADD_TITLE %>
+                        <button id="btn-submit" type="submit" class="btn btn-primary">
+                            <%= isEdit ? Label.DASHBOARD_ACCOUNT_EDIT_SUBMIT_BTN : Label.DASHBOARD_ACCOUNT_ADD_TITLE %>
                         </button>
-                        <button onclick="history.back()" id="btn-save" type="button" class="btn btn-secondary"
-                        >Cancel
+                        <button onclick="history.back()" id="btn-save" type="button" class="btn btn-secondary">
+                            Cancel
                         </button>
                     </div>
                     <div class="alert alert-danger" id="submit-error" role="alert"

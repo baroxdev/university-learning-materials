@@ -99,7 +99,7 @@
                 const subjectId = event.target.dataset.subjectId;
                 const active = event.target.checked
 
-                const isConfirm = confirm(`Are you sure to \${active ? "active" : "in active"} \${subjectId}?`);
+                const isConfirm = confirm(`Are you sure to \${active ? "in active" : "active"} \${subjectId}?`);
 
                 if (!isConfirm) return;
                 const url = "${pageContext.servletContext.contextPath}/dashboard/subjects/update-status";

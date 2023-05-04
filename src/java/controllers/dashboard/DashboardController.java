@@ -63,7 +63,8 @@ public class DashboardController extends HttpServlet {
             throws ServletException, IOException {
         System.out.println("paths " + request.getPathInfo());
         String pathInfo = request.getPathInfo();
-        String path = pathInfo != null ? pathInfo.split("/")[1] : "";
+        String path = pathInfo == null ? "" : (pathInfo.split("/").length > 1 ? pathInfo.split("/")[1] : "");
+
         HttpServlet servlet = controllerMap.get(path);
 
         if (servlet != null) {

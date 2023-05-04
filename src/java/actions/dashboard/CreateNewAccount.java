@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -29,15 +30,17 @@ public class CreateNewAccount implements Action {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("create:view form");
-        try {
-            DAO roleDao = new RoleDao();
-            ArrayList<Role> lsRole = roleDao.getAll();
-            ArrayList<String> lsEducationLevel = new ArrayList<>(Arrays.asList("FU"));
-            request.setAttribute(AppConfig.DASHBOARD_ROLE_LIST, lsRole);
-            request.setAttribute(AppConfig.DASHBOARD_EDUCATION_LEVEL_LIST, lsEducationLevel);
-            request.getRequestDispatcher("/pages/dashboard/formAccount.jsp").forward(request, response);
-        } catch (Exception e) {
-            RequestUtils.notFound(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            try {
+                DAO roleDao = new RoleDao();
+                ArrayList<Role> lsRole = roleDao.getAll();
+                ArrayList<String> lsEducationLevel = new ArrayList<>(Arrays.asList("FU"));
+                request.setAttribute(AppConfig.DASHBOARD_ROLE_LIST, lsRole);
+                request.setAttribute(AppConfig.DASHBOARD_EDUCATION_LEVEL_LIST, lsEducationLevel);
+                request.getRequestDispatcher("/pages/dashboard/formAccount.jsp").forward(request, response);
+            } catch (Exception e) {
+                RequestUtils.notFound(request, response);
+            }
         }
     }
 

@@ -14,6 +14,6 @@ import java.io.IOException;
  */
 public class RequestUtils {
     public static void notFound(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        request.getRequestDispatcher("/pages/not-found.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/404");
     }
 }

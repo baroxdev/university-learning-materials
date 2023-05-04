@@ -63,6 +63,11 @@ public class Login implements Action {
                             ArrayList<String> permittedPaths = PermissionDao.getByRoleId(user.getRoleID());
                             request.getSession().setAttribute(AppConfig.AUTH_PERMITTED_PATHS, permittedPaths);
                             request.getSession().setAttribute(AppConfig.AUTH_USER, user);
+                            if (user.getActive() == false) {
+                                response.sendRedirect("/blocked");
+                                return;
+                            }
+
                             if (user.getRoleID().equals("ADM")) {
                                 jsonResponse.put("redirectUrl", request.getContextPath() + "/dashboard");
                             } else {

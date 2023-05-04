@@ -7,6 +7,7 @@ package dao;
 
 import entities.User;
 import exceptions.RoleException;
+import exceptions.SubjectException;
 import exceptions.WrongPasswordException;
 import utils.DBUtils;
 
@@ -45,7 +46,7 @@ public class UserDao {
     }
 
     public static User getUserById(String id) throws Exception {
-        String query = "select id, username, password, fullname, email, educationlevel, roleid from [User] where id = ?";
+        String query = "select * from [User] where id = ?";
         User user = null;
         Connection con = null;
         try {
@@ -69,7 +70,7 @@ public class UserDao {
     }
 
     public static ArrayList<User> getAll() {
-        String query = "select id, username, password, fullName, email, educationLevel, roleID, createdAt, updatedAt from [User]" +
+        String query = "select * from [User]" +
                 " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         ArrayList<User> lsUsers = null;
         Connection con = null;
@@ -82,7 +83,6 @@ public class UserDao {
                 while (rs.next()) {
                     User user = new User();
                     getUser(rs, user);
-                    System.out.println(user.getFullName());
                     lsUsers.add(user);
                 }
                 con.close();
@@ -105,6 +105,7 @@ public class UserDao {
         user.setRoleID(rs.getString("roleID"));
         user.setCreatedAt(rs.getDate("createdAt"));
         user.setUpdatedAt(rs.getDate("updatedAt"));
+        user.setActive(rs.getBoolean("status"));
     }
 
     public static Integer update(User user) throws AccountException {
@@ -161,6 +162,23 @@ public class UserDao {
                 con.close();
             }
         }
+    }
+
+    public static Integer updateStatus(String id, Boolean status) throws Exception {
+        String query = "update [User] set status = ?, updatedAt = GETDATE() where id = ?";
+        Connection cn = null;
+        cn = DBUtils.makeConnection();
+        if (cn == null) throw new SubjectException("Cannot connect to Database now");
+        PreparedStatement ppstm = cn.prepareStatement(query);
+        ppstm.setBoolean(1, status);
+        ppstm.setString(2, id);
+        Integer rows = ppstm.executeUpdate();
+
+        if (rows == 0) {
+            throw new SubjectException("Failed to update Subject status. Try again.");
+        }
+
+        return rows;
     }
 
     public static Boolean isExit(String id) throws Exception {

@@ -46,6 +46,14 @@ public class AuthFilter implements Filter {
             req.getSession().setAttribute(AppConfig.AUTH_FORCE_UPDATE_PASSWORD, true);
         }
 
+        if (user != null) {
+            if (user.getActive() == false && !pathInfo.equals("/blocked")) {
+                System.out.println("blocked");
+                request.getRequestDispatcher("/pages/blocked-notification.jsp").forward(req, res);
+                return;
+            }
+        }
+
         if (permittedPaths != null) {
             Boolean inRangePermitted = false;
             for (String path : permittedPaths) {
