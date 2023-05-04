@@ -84,7 +84,7 @@
                             </div>
                         </c:when>
                     </c:choose>
-                    <div class="row g-3 align-items-center" style="margin-top: 23px;">
+                    <div class="row g-3 align-items-center">
                         <div class="col-2">
                             <label for="subject.code" class="col-form-label" style="font-size: 16px;">Code</label>
                         </div>

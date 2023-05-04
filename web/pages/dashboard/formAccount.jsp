@@ -121,7 +121,7 @@
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <select name="educationLevel" id="educationLevel"
                                     class="form-select">
-                                <c:set var="educationLevel" value="<%=account.getEducationLevel() %>"/>
+                                <c:set var="educationLevel" value="<%=account.getEducationLevel()   %>"/>
                                 <c:forEach var="edu" items="<%=lsEducationLevel%>">
                                     <option value="${edu}" ${edu.equals(educationLevel) ? "selected" : ""}>${edu}</option>
                                 </c:forEach>

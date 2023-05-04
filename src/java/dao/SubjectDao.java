@@ -42,7 +42,7 @@ public class SubjectDao {
 
     public static ArrayList<Subject> getAll() {
         ArrayList<Subject> result = new ArrayList<>();
-        String query = "select * from Subject ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
+        String query = "select * from Subject ORDER BY  CONVERT(DATE, updatedAt) desc, CONVERT(DATE, createdAt) desc";
         try (Connection cn = DBUtils.makeConnection()) {
             Statement stm = cn.createStatement();
             ResultSet rs = stm.executeQuery(query);
@@ -68,6 +68,7 @@ public class SubjectDao {
         try {
             Connection con = DBUtils.makeConnection();
             PreparedStatement pre = con.prepareStatement(query);
+            pre.setString(1, id);
             ResultSet rs = pre.executeQuery();
             while (rs.next()) {
                 subject = getSubject(rs);
