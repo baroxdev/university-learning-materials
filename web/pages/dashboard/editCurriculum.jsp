@@ -22,6 +22,7 @@
         <style>
             <%@ include file="/css/style.css" %>
         </style>
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -116,8 +117,9 @@
                                     <label for="description" class="col-form-label"
                                            style="font-size: 16px;">Description</label>
                                 </div>
-                                <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                    <textarea class="form-control" id="description" name="description"><%= cur.getDescription()%></textarea>
+                                <div class="col-6" style="margin-left: -40px">
+                                    <input type="hidden" name="description" id="description" value="<%= cur.getDescription()%>"/>
+                                    <div  id="descriptionEditor" style="margin-top: 0; height: 70px;"></div>
                                 </div>
                             </div>
 
@@ -139,7 +141,7 @@
                             <!-- Objectives -->
                             <span style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span>
                             <label id="file_upload_btn" class="btn btn-outline-secondary">
-                                <input type="file" id="file_upload"/>
+                                <input type="file" id="file_obj_upload"/>
                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                             </label>
                             <br>
@@ -239,6 +241,11 @@
 
                             <!-- Subject -->
                             <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
+                            <span style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span>
+                            <label class="btn btn-outline-secondary">
+                                <input type="file" id="file_sub_upload" accept=".xlsx,.xls"/>
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                            </label>
                             <br/>
 
                             <table id="subTbl" style="width: 96%; margin-bottom: 60px;">
@@ -270,7 +277,7 @@
                             <div class="fixed-footer">
                                 <div class="" style="margin-left: auto">
                                     <input type="hidden" id="${cur.id}"/>
-                                    <button id="btn-save" type="submit" class="btn btn-primary">Save</button>  
+                                    <button id="btn-save" type="button" class="btn btn-primary">Save</button>  
                                 </div>
                             </div>
                             <div class="alert alert-danger" id="upload-error" role="alert"
@@ -297,6 +304,7 @@
             </main>
         </div>  
 
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
@@ -317,10 +325,10 @@
                     handleCheck(indexCheckRow, isChecked);
                 });
 
-                $('#file_upload').click(function () {
+                $('#file_obj_upload').click(function () {
                     $(this).val('');
                 }).change(function () {
-                    let file = $('#file_upload')[0].files[0];
+                    let file = $('#file_obj_upload')[0].files[0];
                     let errorShow = $('#upload-error');
                     const addPOForm = $('#add-po-form');
                     const addPLOForm = $('#add-plo-form');
@@ -335,7 +343,6 @@
                         let oldPOList = getListPOFromLocalStorage();
                         let poFileContent = readXlsxFile(file, {sheet: 'PO'});
                         let ploFileContent = readXlsxFile(file, {sheet: 'PLO'});
-
                         poFileContent.then(function (data) {
                             if (data.length > 0) {
                                 handleAddFilePO(data);
@@ -357,6 +364,45 @@
                             errorShow.css('display', 'block');
                             errorShow.text("Your upload file doesn't have PO sheet, please try again!");
                         });
+                    });
+                });
+
+                $('#file_sub_upload').click(function () {
+                    $(this).val('');
+                }).change(function () {
+                    $("#myModal").modal("show");
+                    $('#modal-yes, #modal-no').off('click').on('click', function () {
+                        if (this.id === 'modal-no') {
+                            localStorage.removeItem('curiculum.list_sub');
+                        }
+                        $("#myModal").modal("hide");
+                        const inputFile = document.getElementById("file_sub_upload").files[0];
+                        const formData = new FormData();
+                        formData.append("file", inputFile);
+                        fetch("${pageContext.request.servletContext.contextPath}/dashboard/curriculums/get-excel-datas", {
+                            method: "POST",
+                            body: formData,
+                        })
+                                .then((response) => response.json())
+                                .then(function (data) {
+                                    let listSubStored = getListSubFromLocalStorage();
+                                    let listSubExcel = data.subList;
+
+                                    $.each(listSubExcel, function (index, value) {
+                                        if (value.active) {
+                                            let isExist = listSubStored.find(sub => sub.id == value.id);
+                                            if (!isExist) {
+                                                listSubStored.push({
+                                                    id: value.id
+                                                });
+                                            }
+                                        }
+                                    });
+
+                                    localStorage.setItem("curiculum.list_sub", JSON.stringify(listSubStored));
+                                    renderListSub(listSubStored);
+                                })
+                                .catch((error) => console.error(error));
                     });
                 });
 
@@ -529,11 +575,15 @@
             document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
             document.getElementById("code").addEventListener("change", handleCodeChange);
 
+            const descriptionEditor = new Quill('#descriptionEditor', {
+                theme: 'snow'
+            });
+
             function preLoadEditPage(curId) {
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
                 let listSub = getListSubFromLocalStorage();
-                
+
                 let curCode = $('#code').val();
                 let curSlug = slugify(curCode.toLowerCase().replaceAll('_', '- '));
                 $('#slug').val(curSlug);
@@ -555,9 +605,11 @@
                     $.each(ploList, function (index, value) {
                         let name = value.name;
                         let description = value.description;
+                        let mapToPO = value.mapToPO;
                         listPLO.push({
                             name: name,
-                            description: description
+                            description: description,
+                            mapToPO: mapToPO
                         });
                     });
 
@@ -567,6 +619,8 @@
                             id: id
                         });
                     });
+
+                    descriptionEditor.root.querySelector('p').innerHTML = '<%= cur.getDescription()%>';
 
                     renderListPO(listPO);
                     renderListPLO(listPLO);
@@ -941,6 +995,8 @@
                     let isChecked = listSub.find(sub => sub.id === thisVal);
                     if (isChecked) {
                         $(this).prop("checked", true);
+                    } else {
+                        $(this).prop("checked", false);
                     }
                 });
             }
@@ -973,8 +1029,10 @@
                     $('#vietnameseName').val(JSON.parse(basicVietnameseName));
                 }
                 if (basicDescription == null) {
-                    $('#description').val('');
+                    descriptionEditor.root.querySelector('p').innerHTML = '';
+                    $('#decision').val('');
                 } else {
+                    descriptionEditor.root.querySelector('p').innerHTML = JSON.parse(basicDescription);
                     $('#description').val(JSON.parse(basicDescription));
                 }
                 if (basicDecisionNo == null) {
@@ -1024,11 +1082,12 @@
 
             async function handleSave() {
                 let basicActive = $('#active-switch').prop('checked');
-                let basicCode = $('#code').val();
+                let oldBasicCode = '<%= cur.getCode()%>';
+                let newBasicCode = $('#code').val();
                 let basicSlug = $('#slug').val();
                 let basicEnglishName = $('#englishName').val();
                 let basicVietnameseName = $('#vietnameseName').val();
-                let basicDescription = $('#description').val();
+                let basicDescription;
                 let basicDecisionNo = $('#decisionNo').val();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
@@ -1036,20 +1095,26 @@
                 let errorShow = $('#basic-error');
                 let errorShowSubmit = $('#submit-error');
                 let invalid = 0;
+                let descriptionEditorContent = descriptionEditor.root.querySelector('p').innerHTML;
+                if (descriptionEditorContent == '<br>') {
+                    basicDescription = $('#description').val();
+                } else {
+                    basicDescription = descriptionEditorContent;
+                }
                 const pattern = /^([[A-Z0-9]{3}-[[A-Z0-9]{2}-[A-Z0-9-]{4,5})$/;
 
-                resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo);
+                resetBasicInfo(newBasicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo);
 
-                if (basicCode == '') {
+                if (newBasicCode == '') {
                     errorShow.css('display', 'block');
                     errorShow.text("Code cannot be left blank, please try again!");
                     invalid++;
-                } else if (!pattern.test(basicCode)) {
+                } else if (!pattern.test(newBasicCode)) {
                     errorShow.css('display', 'block');
                     errorShow.text("The Curriculum code must be followed format XXX-XX-XXXX, please try again!");
                     invalid++;
                 } else {
-                    basicCode = basicCode.toUpperCase();
+                    newBasicCode = newBasicCode.toUpperCase();
                     errorShow.css('display', 'none');
                 }
 
@@ -1064,7 +1129,8 @@
                 if (invalid == 0) {
                     const jsonSubmit = JSON.stringify({
                         active: basicActive,
-                        code: basicCode,
+                        oldCode: oldBasicCode,
+                        code: newBasicCode,
                         name: basicEnglishName,
                         description: basicDescription,
                         decisionNo: basicDecisionNo,
@@ -1073,7 +1139,7 @@
                         ploList: listPLO,
                         subList: listSub
                     });
-
+                    console.log(jsonSubmit);
                     let currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit';
 
                     let options = {
@@ -1089,8 +1155,9 @@
                         const res = await fetch(currAPI, options);
                         if (res.ok) {
                             errorShowSubmit.css('display', 'none');
-                            localStorage.clear();
-                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                            alert('Update function is comming soon!');
+//                            localStorage.clear();
+//                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
                         } else {
                             const json = await res.json();
                             errorShowSubmit.css('display', 'block');

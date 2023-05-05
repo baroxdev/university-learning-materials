@@ -9,11 +9,12 @@ import config.AppConfig;
 import dao.CurriculumDao;
 import dao.PLODao;
 import dao.PODao;
+import dao.SubjectDao;
 import entities.Curriculum;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
+import entities.Subject;
 import exceptions.NotFoundException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,11 +43,11 @@ public class GetCurriculumnByID implements Action {
                 List<ProgramObjective> poList = PODao.readPOList(curId);
                 List<ProgramLearningObjective> ploList = PLODao.readPLOList(curId);
                 System.out.println("PLO " + ploList);
-//                List<Subject> subjectList = SubjectDao.getByCurriculumID(curId);
+                List<Subject> subjectList = SubjectDao.getListByCurriculumID(curId);
 
                 request.setAttribute(AppConfig.PO_LIST, poList);
                 request.setAttribute(AppConfig.PLO_LIST, ploList);
-//                request.setAttribute(AppConfig.SUBJECT_LIST, subjectList);
+                request.setAttribute(AppConfig.SUBJECT_LIST, subjectList);
                 request.setAttribute(AppConfig.CURRICULUM_ITEM, cur);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());

@@ -25,6 +25,11 @@ public class PLODao {
     //lấy plo theo id (ko chắc có dùng ko :v)
     public static ProgramLearningObjective getPLOById(String id) throws Exception {
         String query = "select * from Program_Learning_Objective where id = ?";
+        String subQuery = "select PLO.id, [PO.name] "
+                + "from Program_Learning_Objective as PLO "
+                + "join PO_to_PLO on PLO.id = PLO_ID "
+                + "join Program_Objective as PO on PO.id = PO_ID "
+                + "where PLO.id = ?";
         ProgramLearningObjective plo = null;
         try {
             Connection con = DBUtils.makeConnection();
@@ -38,6 +43,12 @@ public class PLODao {
                 plo.setDescription(rs.getString("description"));
                 plo.setCreatedAt(rs.getString("createdAt"));
                 plo.setUpdatedAt(rs.getString("updatedAt"));
+                PreparedStatement pre2 = con.prepareStatement(subQuery);
+                pre2.setInt(1, plo.getId());
+                ResultSet srs = pre2.executeQuery();
+                while (srs.next()) {
+                    plo.setMapToPO(srs.getString("name"));
+                }
             }
             con.close();
         } catch (Exception e) {
@@ -48,7 +59,15 @@ public class PLODao {
 
     //lấy list plo theo curriculumID
     public static List<ProgramLearningObjective> readPLOList(String curId) throws Exception {
-        String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] from Program_Learning_Objective join Curr_to_PLO on id = PLO_ID where curriculumID = ?";
+        String query = "select distinct [id], [name], [description], [createdAt], [updatedAt] "
+                + "from Program_Learning_Objective "
+                + "join Curr_to_PLO on id = PLO_ID "
+                + "where curriculumID = ?";
+        String subQuery = "select PLO.id, PO.name "
+                + "from Program_Learning_Objective as PLO "
+                + "join PO_to_PLO on PLO.id = PLO_ID "
+                + "join Program_Objective as PO on PO.id = PO_ID "
+                + "where PLO.id = ?";
         List<ProgramLearningObjective> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
@@ -62,10 +81,17 @@ public class PLODao {
                 plo.setDescription(rs.getString("description"));
                 plo.setCreatedAt(rs.getString("createdAt"));
                 plo.setUpdatedAt(rs.getString("updatedAt"));
+                PreparedStatement pre2 = con.prepareStatement(subQuery);
+                pre2.setInt(1, plo.getId());
+                ResultSet srs = pre2.executeQuery();
+                while (srs.next()) {
+                    plo.setMapToPO(srs.getString("name"));
+                }
                 list.add(plo);
             }
             con.close();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new PLOException("Something went wrong in read plo progress.");
         }
         return list;
@@ -93,7 +119,7 @@ public class PLODao {
 
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
-            throw new SQLException("Link curriculum to PLO failed, no rows affected.");
+            throw new SQLException("Link PO to PLO failed, no rows affected.");
         }
     }
 
@@ -117,5 +143,55 @@ public class PLODao {
             throw new SQLException("Inserting PLO failed, no ID obtained.");
         }
         return id;
+    }
+
+    //Update existing plo in db
+    public static void update(Connection con, ProgramLearningObjective plo) throws Exception {
+        String query = "update Program_Learning_Objective set name = ?, description = ?, updatedAt = cast(GETDATE() as date) where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, plo.getName());
+        pre.setString(2, plo.getDescription());
+        pre.setInt(3, plo.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Update PO failed, no rows affected.");
+        }
+    }
+
+    //Delete plo
+    public static void delete(Connection con, ProgramLearningObjective plo) throws Exception {
+        String query = "delete from Program_Learning_Objective where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, plo.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete PLO failed, no rows affected.");
+        }
+    }
+
+    //Delete existing link in db
+    public static void deleteLink(Connection con, ProgramLearningObjective plo) throws Exception {
+        String query = "delete from Curr_to_PLO where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, plo.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete PLO link failed, no rows affected.");
+        }
+    }
+
+    //Delete existing link in db
+    public static void deleteLinkToPO(Connection con, ProgramLearningObjective plo) throws Exception {
+        String query = "delete from PO_to_PLO where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, plo.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete PLO link failed, no rows affected.");
+        }
     }
 }

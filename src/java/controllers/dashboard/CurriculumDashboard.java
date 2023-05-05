@@ -8,6 +8,7 @@ import actions.Action;
 import actions.curriculumns.GetCurriculumnByID;
 import actions.dashboard.AddNewCurriculum;
 import actions.dashboard.EditCurriculum;
+import actions.dashboard.GetDataFromExFile;
 import actions.dashboard.GetItemsInCurriculum;
 import actions.dashboard.ViewListCurriculum;
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class CurriculumDashboard extends HttpServlet {
         actionMap.put("/curriculums/", new ViewListCurriculum());
         actionMap.put("/curriculums/add", new AddNewCurriculum());
         actionMap.put("/curriculums/add/", new AddNewCurriculum());
+        actionMap.put("/curriculums/get-excel-datas", new GetDataFromExFile());
+        actionMap.put("/curriculums/get-excel-datas/", new GetDataFromExFile());
         actionMap.put("/curriculums/edit", new EditCurriculum());
         actionMap.put("/curriculums/edit/", new EditCurriculum());
         actionMap.put("/curriculums/get-items", new GetItemsInCurriculum());

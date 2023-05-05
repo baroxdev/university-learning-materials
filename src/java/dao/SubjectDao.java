@@ -40,7 +40,7 @@ public class SubjectDao {
         return rows;
     }
 
-    public static ArrayList<Subject> readSubjectFullList() {
+    public static ArrayList<Subject> getAll() {
         ArrayList<Subject> result = new ArrayList<>();
         String query = "select * from Subject ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         try (Connection cn = DBUtils.makeConnection()) {

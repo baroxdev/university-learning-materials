@@ -43,7 +43,7 @@ public class AddNewCurriculum implements Action {
         response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                List<Subject> subjList = SubjectDao.readSubjectFullList();
+                List<Subject> subjList = SubjectDao.getAll();
                 request.setAttribute(AppConfig.SUBJECT_LIST, subjList);
             } catch (Exception e) {
                 request.setAttribute(AppConfig.ERROR_MESSAGE, e.getMessage());
@@ -90,10 +90,8 @@ public class AddNewCurriculum implements Action {
                 cur.setViName(curViName);
                 //convert jsonArray to list
                 List<ProgramObjective> poList = jsonArrayToList("po", poArray);
-
-                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
-                
-                List<Subject> subjList = jsonArrayToList("subject", subjArray);
+                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);        
+                List<Subject> subjList = jsonArrayToList("subject", subjArray);   
                 //tạo liên kết với po, plo...
                 //thêm vào db
                 CurriculumDao.add(cur, poList, ploList, subjList);
