@@ -567,6 +567,7 @@
             });
 
             window.addEventListener("load", () => {
+                localStorage.clear();
                 let curId = <%=cur.getId()%>;
                 preLoadEditPage(curId);
             });
@@ -593,20 +594,25 @@
                     let poList = data.poList;
                     let ploList = data.ploList;
                     let subList = data.subList;
+
                     $.each(poList, function (index, value) {
+                        let id = value.id;
                         let name = value.name;
                         let description = value.description;
                         listPO.push({
+                            id: id,
                             name: name,
                             description: description
                         });
                     });
 
                     $.each(ploList, function (index, value) {
+                        let id = value.id;
                         let name = value.name;
                         let description = value.description;
                         let mapToPO = value.mapToPO;
                         listPLO.push({
+                            id: value.id,
                             name: name,
                             description: description,
                             mapToPO: mapToPO
@@ -616,7 +622,7 @@
                     $.each(subList, function (index, value) {
                         let id = value.id;
                         listSub.push({
-                            id: id
+                            id: id.trim()
                         });
                     });
 
@@ -626,6 +632,9 @@
                     renderListPLO(listPLO);
                     renderListSub(listSub);
                     updatePLOMapPOOptions(listPO);
+                    localStorage.setItem("curiculum.list_old_po", JSON.stringify(listPO));
+                    localStorage.setItem("curiculum.list_old_plo", JSON.stringify(listPLO));
+                    localStorage.setItem("curiculum.list_old_sub", JSON.stringify(listSub));
                     localStorage.setItem("curiculum.list_po", JSON.stringify(listPO));
                     localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
                     localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
@@ -676,6 +685,7 @@
                 const addPOForm = document.getElementById('add-po-form');
                 const namePONode = addPOForm.querySelector("#poName");
                 const descriptionPONode = addPOForm.querySelector("#poDescription");
+                const id = 0;
                 const name = namePONode.value.toUpperCase();
                 let listPO = getListPOFromLocalStorage();
                 let errorShow = $('#po-error');
@@ -698,6 +708,7 @@
                         errorShow.css('display', 'none');
                         const description = descriptionPONode.value;
                         listPO.push({
+                            id: id,
                             name: name,
                             description: description
                         });
@@ -717,6 +728,7 @@
                 let repeatErrorIndexStr = '';
                 poListAdd.forEach(function (element, index) {
                     if (index > 0) {
+                        let id = 0;
                         let nameE = element[0];
                         let descriptionE = element[1];
 
@@ -730,6 +742,7 @@
                                     repeatErrorIndexStr += (index + 1) + ', ';
                                 } else {
                                     listPO.push({
+                                        id: id,
                                         name: nameE,
                                         description: descriptionE
                                     });
@@ -776,6 +789,7 @@
                 let repeatErrorIndexStr = '';
                 ploListAdd.forEach(function (element, index) {
                     if (index > 0) {
+                        let id = 0;
                         let nameE = element[0];
                         let descriptionE = element[1];
                         let mapToPO = element[2];
@@ -794,6 +808,7 @@
 
                                     if (isExisted) {
                                         listPLO.push({
+                                            id: id,
                                             name: nameE,
                                             description: descriptionE,
                                             mapToPO: mapToPO
@@ -841,7 +856,6 @@
                     renderListPLO(listPLO, addPLOForm);
                     localStorage.setItem("curiculum.list_plo", JSON.stringify(listPLO));
                 }
-
             }
 
             function handleAddPLO() {
@@ -849,6 +863,7 @@
                 const namePLONode = addPLOForm.querySelector("#ploName");
                 const descriptionPLONode = addPLOForm.querySelector("#ploDescription");
                 const mapToPONode = $("#mapToPO option:selected");
+                const id = 0;
                 const name = namePLONode.value.toUpperCase();
                 const description = descriptionPLONode.value;
                 const mapToPO = mapToPONode.text();
@@ -876,6 +891,7 @@
                         errorShow.css('display', 'none');
                         let listPLO = getListPLOFromLocalStorage();
                         listPLO.push({
+                            id: id,
                             name: name,
                             description: description,
                             mapToPO: mapToPO
@@ -992,7 +1008,7 @@
             function renderListSub(listSub) {
                 $('[name="subCheck"]').each(function () {
                     let thisVal = $(this).val();
-                    let isChecked = listSub.find(sub => sub.id === thisVal);
+                    let isChecked = listSub.find(sub => sub.id.trim() === thisVal.trim());
                     if (isChecked) {
                         $(this).prop("checked", true);
                     } else {
@@ -1081,6 +1097,10 @@
             }
 
             async function handleSave() {
+                let id = '<%= cur.getId()%>';
+                let oldPOList = JSON.parse(localStorage.getItem("curiculum.list_old_po"));
+                let oldPLOList = JSON.parse(localStorage.getItem("curiculum.list_old_plo"));
+                let oldSubList = JSON.parse(localStorage.getItem("curiculum.list_old_sub"));
                 let basicActive = $('#active-switch').prop('checked');
                 let oldBasicCode = '<%= cur.getCode()%>';
                 let newBasicCode = $('#code').val();
@@ -1092,10 +1112,15 @@
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
                 let listSub = getListSubFromLocalStorage();
+
                 let errorShow = $('#basic-error');
                 let errorShowSubmit = $('#submit-error');
                 let invalid = 0;
-                let descriptionEditorContent = descriptionEditor.root.querySelector('p').innerHTML;
+                let pTags = descriptionEditor.root.querySelectorAll('p');
+                let descriptionEditorContent = '';
+                for (let i = 0; i < pTags.length; i++) {
+                    descriptionEditorContent += pTags[i].innerHTML;
+                }
                 if (descriptionEditorContent == '<br>') {
                     basicDescription = $('#description').val();
                 } else {
@@ -1128,6 +1153,7 @@
 
                 if (invalid == 0) {
                     const jsonSubmit = JSON.stringify({
+                        id: id,
                         active: basicActive,
                         oldCode: oldBasicCode,
                         code: newBasicCode,
@@ -1137,11 +1163,14 @@
                         viName: basicVietnameseName,
                         poList: listPO,
                         ploList: listPLO,
-                        subList: listSub
-                    });
-                    console.log(jsonSubmit);
-                    let currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit';
+                        subList: listSub,
+                        oldPOList: oldPOList,
+                        oldPLOList: oldPLOList,
+                        oldSubList: oldSubList
 
+                    });
+
+                    let currAPI = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums/edit';
                     let options = {
                         method: "POST",
                         headers: {
@@ -1155,9 +1184,8 @@
                         const res = await fetch(currAPI, options);
                         if (res.ok) {
                             errorShowSubmit.css('display', 'none');
-                            alert('Update function is comming soon!');
-//                            localStorage.clear();
-//                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
+                            localStorage.clear();
+                            window.location.href = '${pageContext.request.servletContext.contextPath}/dashboard/curriculums';
                         } else {
                             const json = await res.json();
                             errorShowSubmit.css('display', 'block');

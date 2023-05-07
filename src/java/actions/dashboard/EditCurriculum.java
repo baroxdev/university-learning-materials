@@ -43,7 +43,7 @@ public class EditCurriculum implements Action {
                 String curId = request.getParameter("id");
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
                 List<Subject> subjList = SubjectDao.getAll();
-
+                
                 request.setAttribute(AppConfig.SUBJECT_LIST, subjList);
                 request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET, cur);
             } catch (Exception e) {
@@ -62,36 +62,47 @@ public class EditCurriculum implements Action {
             try {
                 request.setCharacterEncoding("UTF-8");
                 JSONObject json = JsonUtils.getRequestJson(request);
+                //nhận data từ form 
+                int curId = json.getInt("id");
                 String oldCode = json.getString("oldCode");
                 String curCode = json.getString("code");
                 String curName = json.getString("name");
                 String curDescription = json.getString("description");
                 String curDecisionNo = json.getString("decisionNo");
                 String curViName = json.getString("viName");
+                Boolean curActive = json.getBoolean("active");
 
                 JSONArray poArray = json.getJSONArray("poList");
                 JSONArray ploArray = json.getJSONArray("ploList");
                 JSONArray subjArray = json.getJSONArray("subList");
+                JSONArray oldPoArray = json.getJSONArray("oldPOList");
+                JSONArray oldPloArray = json.getJSONArray("oldPLOList");
+                JSONArray oldSubArray = json.getJSONArray("oldSubList");
 
                 //check curCode exist
-                if (CurriculumDao.isExist(curCode) && curCode != oldCode) {
+                if (CurriculumDao.isExist(curCode) && !curCode.equalsIgnoreCase(oldCode)) {
                     throw new CurriculumException("Curriculum Code already exist");
                 }
                 Curriculum cur = new Curriculum();
+                cur.setId(curId);
                 cur.setCode(curCode);
                 cur.setName(curName);
                 cur.setDescription(curDescription);
                 cur.setDecisionNo(curDecisionNo);
                 cur.setViName(curViName);
-                
+                cur.setActive(curActive);
+
                 //convert jsonArray to list
                 List<ProgramObjective> poList = jsonArrayToList("po", poArray);
-
+                List<ProgramObjective> oldPoList = jsonArrayToList("po", oldPoArray);
+                
                 List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
-
+                List<ProgramLearningObjective> oldpPloList = jsonArrayToList("plo", oldPloArray);
+                
                 List<Subject> subjList = jsonArrayToList("subject", subjArray);
-
-//                CurriculumDao.update(cur, poList, ploList, subjList); //Bo sung
+                List<Subject> oldSubjList = jsonArrayToList("subject", oldSubArray);
+                
+                CurriculumDao.update(cur, oldPoList, poList, oldpPloList, ploList, oldSubjList, subjList);
 
             } catch (CurriculumException | POException | PLOException | SubjectException ex) {
                 ex.printStackTrace();
@@ -107,10 +118,10 @@ public class EditCurriculum implements Action {
         }
     }
 
-    public <T> List<T> jsonArrayToList(String id, JSONArray jsonArray) throws Exception {
+    public <T> List<T> jsonArrayToList(String str, JSONArray jsonArray) throws Exception {
         List<T> list = new ArrayList<T>();
         if (jsonArray != null) {
-            if (id.equals("subject")) {
+            if (str.equals("subject")) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject json = jsonArray.getJSONObject(i);
                     Subject obj = new Subject();
@@ -122,16 +133,19 @@ public class EditCurriculum implements Action {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
+                int id = json.getInt("id");
                 String name = json.getString("name");
                 String description = json.getString("description");
-                if (id.equals("po")) {
+                if (str.equals("po")) {
                     ProgramObjective obj = new ProgramObjective();
+                    obj.setId(id);
                     obj.setName(name);
                     obj.setDescription(description);
                     list.add((T) obj);
-                } else if (id.equals("plo")) {
+                } else if (str.equals("plo")) {
                     ProgramLearningObjective obj = new ProgramLearningObjective();
                     obj.setMapToPO(json.getString("mapToPO"));
+                    obj.setId(id);
                     obj.setName(name);
                     obj.setDescription(description);
                     list.add((T) obj);

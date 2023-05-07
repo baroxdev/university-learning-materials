@@ -9,12 +9,11 @@ import config.AppConfig;
 import entities.*;
 import exceptions.CurriculumException;
 import utils.DBUtils;
-import utils.DataUtils;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author giahu
@@ -41,7 +40,6 @@ public class CurriculumDao {
                 curriculum.setViName(rs.getString("viName"));
                 curriculum.setCreatedAt(rs.getString("createdAt"));
                 curriculum.setUpdatedAt(rs.getString("updatedAt"));
-                System.out.println("AFter convert " + DataUtils.getBoolean(rs.getInt("active")));
                 curriculum.setActive(rs.getBoolean("active"));
             }
 
@@ -151,7 +149,6 @@ public class CurriculumDao {
             while (rs.next()) {
                 SearchResult searchResult = new SearchResult();
                 searchResult.setId(rs.getInt("id"));
-                System.out.println("id " + rs.getInt("id"));
                 searchResult.setName(rs.getString("name"));
                 searchResult.setSlug(String.valueOf(rs.getInt("id")));
                 searchResult.setRoot_slug(AppConfig.CURRICULUM_ROOT_SLUG);
@@ -172,7 +169,6 @@ public class CurriculumDao {
             PreparedStatement pre = con.prepareStatement(query);
             pre.setString(1, "%" + code + "%");
             ResultSet rs = pre.executeQuery();
-            System.out.println("search");
             while (rs.next()) {
                 SearchResult searchResult = new SearchResult();
                 searchResult.setId(rs.getInt("id"));
@@ -277,75 +273,99 @@ public class CurriculumDao {
     }
 
     //Update curriculum(+po,plo) to db
-//    public static void update(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramObjective> poListOld,
-//            List<ProgramLearningObjective> ploList, List<ProgramLearningObjective> ploListOld) throws Exception {
-//        Connection con = null;
-//        Integer curId = curriculum.getId();
-//        Integer poId = null;
-//        Integer ploId = null;
-//        List<ProgramObjective> poAddList = poList.stream().filter(po -> (Integer) po.getId() == null).collect(Collectors.toList());
-//        List<ProgramObjective> poRemoveList = poListOld.stream().filter(po -> !poList.contains(po)).collect(Collectors.toList());
-//        List<ProgramObjective> poUpdateList = poList.stream().filter(poListOld::contains).collect(Collectors.toList());
-//        List<ProgramLearningObjective> ploAddList = ploList.stream().filter(plo -> (Integer) plo.getId() == null).collect(Collectors.toList());
-//        List<ProgramLearningObjective> ploRemoveList = ploListOld.stream().filter(plo -> !ploList.contains(plo)).collect(Collectors.toList());
-//        List<ProgramLearningObjective> ploUpdateList = ploList.stream().filter(ploListOld::contains).collect(Collectors.toList());
-//        try {
-//            con = DBUtils.makeConnection();
-//            con.setAutoCommit(false);
-//
-//            if (poList.isEmpty()) {
-//                throw new IllegalArgumentException("Atleast one PO must be add.");
-//            }
-//            if (ploList.isEmpty()) {
-//                throw new IllegalArgumentException("Atleast one PLO must be add.");
-//            }
-//
-//            update(con, curriculum);
-//
-//            for (ProgramObjective po : poAddList) {
-//                poId = PODao.add(con, po);
-//                PODao.link(con, curId, poId);
-//            }
-//            for (ProgramObjective po : poRemoveList) {
-//                PODao.delete(con, po);
-//                PODao.deleteLink(con, po);
-//            }
-//            for (ProgramObjective po : poUpdateList) {
-//                PODao.update(con, po);
-//            }
-//
-//            for (ProgramLearningObjective plo : ploAddList) {
-//                ploId = PLODao.add(con, plo);
-//                PLODao.link(con, curId, ploId);
-//            }
-//            for (ProgramLearningObjective plo : ploRemoveList) {
-//                PLODao.delete(con, plo);
-//                PLODao.deleteLink(con, plo);
-//            }
-//            for (ProgramLearningObjective plo : ploUpdateList) {
-//                PLODao.update(con, plo);
-//            }
-//
-//            con.commit();
-//        } catch (Exception e) {
-//            if (con != null) {
-//                try {
-//                    con.rollback();
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//            throw e;
-//        } finally {
-//            try {
-//                if (con != null) {
-//                    con.close();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public static void update(Curriculum curriculum, List<ProgramObjective> poList, List<ProgramObjective> poListNew,
+            List<ProgramLearningObjective> ploList, List<ProgramLearningObjective> ploListNew,
+            List<Subject> subjList, List<Subject> subjListNew) throws Exception {
+        Connection con = null;
+        Integer curId = curriculum.getId();
+        Integer poId = null;
+        Integer ploId = null;
+
+        List<ProgramObjective> poToInsert = poListNew.stream()
+                .filter(po -> (Integer) po.getId() == 0).collect(Collectors.toList());
+        List<ProgramObjective> poToUpdate = poListNew.stream()
+                .filter(po -> (Integer) po.getId() != 0).collect(Collectors.toList());
+        List<ProgramObjective> poToDelete = poList.stream()
+                .filter(po -> poListNew.stream().noneMatch(poNew -> po.getId() == poNew.getId())).collect(Collectors.toList());
+
+        List<ProgramLearningObjective> ploToInsert = ploListNew.stream()
+                .filter(plo -> (Integer) plo.getId() == 0).collect(Collectors.toList());
+        List<ProgramLearningObjective> ploToUpdate = ploListNew.stream()
+                .filter(plo -> (Integer) plo.getId() != 0).collect(Collectors.toList());
+        List<ProgramLearningObjective> ploToDelete = ploList.stream()
+                .filter(plo -> ploListNew.stream().noneMatch(ploNew -> plo.getId() == ploNew.getId())).collect(Collectors.toList());
+
+        List<Subject> subjToInsert = subjListNew.stream()
+                .filter(subjNew -> subjList.stream().noneMatch(subj -> subjNew.getId() == subj.getId())).collect(Collectors.toList());
+        List<Subject> subjToDelete = subjList.stream()
+                .filter(subj -> subjListNew.stream().noneMatch(subjNew -> subj.getId() == subjNew.getId())).collect(Collectors.toList());
+        
+        try {
+            con = DBUtils.makeConnection();
+            con.setAutoCommit(false);
+
+            if (poList.isEmpty()) {
+                throw new IllegalArgumentException("Atleast one PO must be add.");
+            }
+            if (ploList.isEmpty()) {
+                throw new IllegalArgumentException("Atleast one PLO must be add.");
+            }
+
+            update(con, curriculum);
+
+            for (ProgramLearningObjective plo : ploToInsert) {
+                ploId = PLODao.add(con, plo);
+                PLODao.link(con, curId, ploId);
+            }
+            for (ProgramLearningObjective plo : ploToDelete) {
+                PLODao.deleteLinkToPO(con, plo);
+                PLODao.deleteLink(con, plo);
+                PLODao.delete(con, plo);
+            }
+            for (ProgramLearningObjective plo : ploToUpdate) {
+                PLODao.update(con, plo);
+            }
+
+            for (ProgramObjective po : poToInsert) {
+                poId = PODao.add(con, po);
+                PODao.link(con, curId, poId);
+            }
+            for (ProgramObjective po : poToDelete) {
+                PODao.deleteLink(con, po);
+                PODao.delete(con, po);
+            }
+            for (ProgramObjective po : poToUpdate) {
+                PODao.update(con, po);
+            }
+
+            for (Subject subj : subjToInsert) {
+                SubjectDao.linkWithCurriculum(con, curId, subj.getId());
+            }
+            for (Subject subj : subjToDelete) {
+                SubjectDao.deleteLink(con, subj);
+            }
+
+            con.commit();
+        } catch (Exception e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            throw e;
+        } finally {
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     //Update existing curiculum in db
     public static void update(Connection con, Curriculum curriculum) throws Exception {
         String query = "update Curriculum set code = ?, viName = ?, name = ?, description = ?, decisionNo = ?, active = ?, updatedAt = cast(GETDATE() as date) where id = ?";
@@ -353,11 +373,10 @@ public class CurriculumDao {
         pre.setString(1, curriculum.getCode());
         pre.setNString(2, curriculum.getViName());
         pre.setString(3, curriculum.getName());
-        pre.setString(4, curriculum.getDescription());
+        pre.setNString(4, curriculum.getDescription());
         pre.setNString(5, curriculum.getDecisionNo());
         pre.setBoolean(6, curriculum.getActive());
         pre.setInt(7, curriculum.getId());
-
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
             throw new SQLException("Update curriculum failed, no rows affected.");

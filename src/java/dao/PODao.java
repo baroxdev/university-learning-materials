@@ -81,4 +81,42 @@ public class PODao {
         }
         return id;
     }
+
+    //Update existing po in db
+    public static void update(Connection con, ProgramObjective po) throws Exception {
+        String query = "update Program_Objective set name = ?, description = ?, updatedAt = cast(GETDATE() as date) where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, po.getName());
+        pre.setString(2, po.getDescription());
+        pre.setInt(3, po.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Update PO failed, no rows affected.");
+        }
+    }
+
+    //Delete po
+    public static void delete(Connection con, ProgramObjective po) throws Exception {
+        String query = "delete from Program_Objective where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, po.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete PO failed, no rows affected.");
+        }
+    }
+
+    //Delete existing link in db
+    public static void deleteLink(Connection con, ProgramObjective po) throws Exception {
+        String query = "delete from Curr_to_PO where PO_ID = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setInt(1, po.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete PO link failed, no rows affected.");
+        }
+    }
 }

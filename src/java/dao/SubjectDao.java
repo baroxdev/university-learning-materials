@@ -80,10 +80,11 @@ public class SubjectDao {
         return subject;
     }
 
+
     public static List<Subject> getListByCurriculumID(String curId) throws Exception {
-        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], [slug], [viName], [active] from Subject"
-                + " join Curr_to_Subject on id = subjectID where curriculumID = ?"
-                + " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
+        String query = "select distinct [id], [name], [createdAt], [updatedAt], [semester], [slug], [viName], [active] from Subject" +
+                " join Curr_to_Subject on id = subjectID where curriculumID = ?" +
+                " ORDER BY CONVERT(DATE, createdAt) desc, CONVERT(DATE, updatedAt) desc";
         List<Subject> list = new ArrayList<>();
         try {
             Connection con = DBUtils.makeConnection();
@@ -104,11 +105,11 @@ public class SubjectDao {
 
     private static Subject getSubject(ResultSet rs) throws SQLException {
         Subject subject = new Subject();
-        subject.setId(rs.getString("id").trim());
+        subject.setId(rs.getString("id"));
         subject.setName(rs.getString("name"));
         subject.setViName(rs.getNString("viName"));
         subject.setCreatedAt(rs.getDate("createdAt"));
-        subject.setUpdatedAt(rs.getDate("updatedAt") != null ? rs.getDate("updatedAt") : null);
+        subject.setUpdatedAt(rs.getDate("updatedAt"));
         subject.setSemester(rs.getInt("semester"));
         subject.setSlug(rs.getString("slug"));
         subject.setActive(rs.getBoolean("active"));
@@ -137,13 +138,12 @@ public class SubjectDao {
 //
 //        return list;
 //    }
+
     public static Integer update(Subject subject) throws Exception {
         String query = "update Subject set name = ?, viName = ?, updatedAt = GETDATE(), semester = ?, slug = ?, active = ? where id = ?";
         Connection cn = null;
         cn = DBUtils.makeConnection();
-        if (cn == null) {
-            throw new SubjectException("Cannot connect to Database now");
-        }
+        if (cn == null) throw new SubjectException("Cannot connect to Database now");
         PreparedStatement ppstm = cn.prepareStatement(query);
         ppstm.setString(1, subject.getName());
         ppstm.setNString(2, subject.getViName());
@@ -164,9 +164,7 @@ public class SubjectDao {
         String query = "update Subject set active = ?, updatedAt = GETDATE() where id = ?";
         Connection cn = null;
         cn = DBUtils.makeConnection();
-        if (cn == null) {
-            throw new SubjectException("Cannot connect to Database now");
-        }
+        if (cn == null) throw new SubjectException("Cannot connect to Database now");
         PreparedStatement ppstm = cn.prepareStatement(query);
         ppstm.setBoolean(1, isActive);
         ppstm.setString(2, subjectId);
@@ -188,6 +186,71 @@ public class SubjectDao {
         int affectedRows = pre.executeUpdate();
         if (affectedRows == 0) {
             throw new SQLException("Link curriculum to Subject failed, no rows affected.");
+        }
+    }
+
+    //Add new subject to db
+    public static Integer add(Connection con, Subject subject) throws Exception {
+        Integer id = -1;
+        String query = "insert Subject values(?,?,GETDATE(),?,?,?,?)";
+        PreparedStatement pre = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        pre.setString(1, subject.getId());
+        pre.setString(2, subject.getName());
+        pre.setString(3, null);
+        pre.setInt(4, subject.getSemester());
+        pre.setString(5, subject.getSlug());
+        pre.setNString(6, subject.getViName());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Add Subject failed, no rows affected.");
+        }
+        ResultSet generatedId = pre.getGeneratedKeys();
+        if (generatedId.next()) {
+            id = generatedId.getInt(1);
+        } else {
+            throw new SQLException("Inserting Subject failed, no ID obtained.");
+        }
+        return id;
+    }
+
+    //Update existing subject in db
+    public static void update(Connection con, Subject subject) throws Exception {
+        String query = "update Subject set name = ?, updatedAt = cast(GETDATE() as date), semester = ?, slug = ?, viName = ? where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, subject.getName());
+        pre.setInt(2, subject.getSemester());
+        pre.setString(3, subject.getSlug());
+        pre.setNString(4, subject.getViName());
+        pre.setString(5, subject.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Update Subject failed, no rows affected.");
+        }
+    }
+
+    //Delete subject
+    public static void delete(Connection con, Subject subject) throws Exception {
+        String query = "delete from Subject where id = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, subject.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete Subject failed, no rows affected.");
+        }
+    }
+
+    //Delete existing link in db
+    public static void deleteLink(Connection con, Subject subject) throws Exception {
+        String query = "delete from Curr_to_Subject where subjectId = ?";
+        PreparedStatement pre = con.prepareStatement(query);
+        pre.setString(1, subject.getId());
+
+        int affectedRows = pre.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Delete Subject link failed, no rows affected.");
         }
     }
 

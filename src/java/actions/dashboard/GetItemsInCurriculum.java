@@ -42,7 +42,7 @@ public class GetItemsInCurriculum implements Action {
                 JSONArray listPoJson = new JSONArray(poList);
                 JSONArray listPloJson = new JSONArray(ploList);
                 JSONArray listSubJson = new JSONArray(subList);
-
+                
                 resJson.put("poList", listPoJson);
                 resJson.put("ploList", listPloJson);
                 resJson.put("subList", listSubJson);

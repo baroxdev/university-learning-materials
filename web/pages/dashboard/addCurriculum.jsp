@@ -373,7 +373,7 @@
                         formData.append("file", inputFile);
                         fetch("${pageContext.request.servletContext.contextPath}/dashboard/curriculums/get-excel-datas", {
                             method: "POST",
-                            body: formData,
+                            body: formData
                         })
                                 .then((response) => response.json())
                                 .then(function (data) {
@@ -390,7 +390,7 @@
                                             }
                                         }
                                     });
-
+                                    console.log(listSubStored);
                                     localStorage.setItem("curiculum.list_sub", JSON.stringify(listSubStored));
                                     renderListSub(listSubStored);
                                 })
@@ -559,6 +559,7 @@
             });
 
             window.addEventListener("load", () => {
+                localStorage.clear();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
                 let listSub = getListSubFromLocalStorage();
@@ -929,7 +930,7 @@
             function renderListSub(listSub) {
                 $('[name="subCheck"]').each(function () {
                     let thisVal = $(this).val();
-                    let isChecked = listSub.find(sub => sub.id === thisVal);
+                    let isChecked = listSub.find(sub => sub.id.trim() === thisVal.trim());
                     if (isChecked) {
                         $(this).prop("checked", true);
                     } else {
@@ -1015,6 +1016,7 @@
                 }
 
                 localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
+
             }
 
             async function handleSubmit() {
@@ -1030,7 +1032,11 @@
                 let errorShow = $('#basic-error');
                 let errorShowSubmit = $('#submit-error');
                 let invalid = 0;
-                let descriptionEditorContent = descriptionEditor.root.querySelector('p').innerHTML;
+                let pTags = descriptionEditor.root.querySelectorAll('p');
+                let descriptionEditorContent = '';
+                for (let i = 0; i < pTags.length; i++) {
+                    descriptionEditorContent += pTags[i].innerHTML;
+                }
                 if (descriptionEditorContent == '<br>') {
                     basicDescription = '';
                 } else {

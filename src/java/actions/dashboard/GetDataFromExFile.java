@@ -80,7 +80,7 @@ public class GetDataFromExFile implements Action {
         List<Subject> subList = new ArrayList<>();
         List<String> temp = null;
         int count = 0;
-
+        
         for (Row row : SubSheet) {
             temp = new ArrayList();
             for (Cell cell : row) {
@@ -92,7 +92,7 @@ public class GetDataFromExFile implements Action {
             }
             if (count > 0) {
                 Subject sub = new Subject();
-                sub.setId(temp.get(0).trim());
+                sub.setId(temp.get(0));
                 sub.setSlug(temp.get(1));
                 sub.setName(temp.get(2));
                 sub.setViName(temp.get(3));

@@ -80,7 +80,11 @@ public class PLODao {
                 plo.setName(rs.getString("name"));
                 plo.setDescription(rs.getString("description"));
                 plo.setCreatedAt(rs.getString("createdAt"));
-                plo.setUpdatedAt(rs.getString("updatedAt"));
+                if (rs.getString("updatedAt") != null) {
+                    plo.setUpdatedAt(rs.getString("updatedAt"));
+                } else {
+                    plo.setUpdatedAt("");
+                }
                 PreparedStatement pre2 = con.prepareStatement(subQuery);
                 pre2.setInt(1, plo.getId());
                 ResultSet srs = pre2.executeQuery();
@@ -173,7 +177,7 @@ public class PLODao {
 
     //Delete existing link in db
     public static void deleteLink(Connection con, ProgramLearningObjective plo) throws Exception {
-        String query = "delete from Curr_to_PLO where id = ?";
+        String query = "delete from Curr_to_PLO where PLO_ID = ?";
         PreparedStatement pre = con.prepareStatement(query);
         pre.setInt(1, plo.getId());
 
@@ -185,7 +189,7 @@ public class PLODao {
 
     //Delete existing link in db
     public static void deleteLinkToPO(Connection con, ProgramLearningObjective plo) throws Exception {
-        String query = "delete from PO_to_PLO where id = ?";
+        String query = "delete from PO_to_PLO where PLO_ID = ?";
         PreparedStatement pre = con.prepareStatement(query);
         pre.setInt(1, plo.getId());
 
