@@ -1634,7 +1634,7 @@
                     const activeCheckbox = document.getElementById("edit-active");
                     const sessionNoSelect = document.getElementById("edit-no-select");
                     sessionNoSelect.innerHTML = "";
-                    const listSessions = JSON.parse(localStorage.getItem(app.localStorage.syllabus.sessions)).join(',');
+                    const listSessions = JSON.parse(localStorage.getItem(app.localStorage.syllabus.sessions));
                     for (let i = 0; i < listSessions.length; i++) {
                     const option = document.createElement("option");
                     option.text = listSessions[i].no;
