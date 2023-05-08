@@ -13,6 +13,10 @@ import entities.Objective;
 import entities.ProgramLearningObjective;
 import entities.ProgramObjective;
 import entities.Subject;
+import exceptions.CurriculumException;
+import exceptions.PLOException;
+import exceptions.POException;
+import exceptions.SubjectException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -20,6 +24,10 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import utils.JsonUtils;
+import utils.ResponseUtils;
 
 /**
  *
@@ -34,7 +42,7 @@ public class EditCurriculum implements Action {
             try {
                 String curId = request.getParameter("id");
                 Curriculum cur = CurriculumDao.getCurriculumById(curId);
-                List<Subject> subjList = SubjectDao.readSubjectFullList();
+                List<Subject> subjList = SubjectDao.getAll();
                 
                 request.setAttribute(AppConfig.SUBJECT_LIST, subjList);
                 request.setAttribute(AppConfig.DASHBOARD_CURRICULUM_TARGET, cur);
@@ -50,111 +58,101 @@ public class EditCurriculum implements Action {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             try {
-                Curriculum cur = new Curriculum();
-                cur.setId(Integer.parseInt(request.getParameter("id")));
-                cur.setName(request.getParameter("englishName"));
-                System.out.println("en " + request.getParameter("englishName"));
-                System.out.println("vi " + request.getParameter("vietnameseName"));
-                cur.setViName(request.getParameter("vietnameseName"));
-                Boolean active = false;
-                String strActive = request.getParameter("active");
-                if (strActive != null && strActive.equals("on")) {
-                    active = true;
+                request.setCharacterEncoding("UTF-8");
+                JSONObject json = JsonUtils.getRequestJson(request);
+                //nhận data từ form 
+                int curId = json.getInt("id");
+                String oldCode = json.getString("oldCode");
+                String curCode = json.getString("code");
+                String curName = json.getString("name");
+                String curDescription = json.getString("description");
+                String curDecisionNo = json.getString("decisionNo");
+                String curViName = json.getString("viName");
+                Boolean curActive = json.getBoolean("active");
+
+                JSONArray poArray = json.getJSONArray("poList");
+                JSONArray ploArray = json.getJSONArray("ploList");
+                JSONArray subjArray = json.getJSONArray("subList");
+                JSONArray oldPoArray = json.getJSONArray("oldPOList");
+                JSONArray oldPloArray = json.getJSONArray("oldPLOList");
+                JSONArray oldSubArray = json.getJSONArray("oldSubList");
+
+                //check curCode exist
+                if (CurriculumDao.isExist(curCode) && !curCode.equalsIgnoreCase(oldCode)) {
+                    throw new CurriculumException("Curriculum Code already exist");
                 }
-                cur.setActive(active);
-                cur.setCode(request.getParameter("code"));
-                cur.setDecisionNo(request.getParameter("decisionNo"));
-                cur.setDescription(request.getParameter("description"));
-//                CurriculumDao.update(cur);
-//                response.sendRedirect(request.getContextPath() + "/dashboard/curriculums");
+                Curriculum cur = new Curriculum();
+                cur.setId(curId);
+                cur.setCode(curCode);
+                cur.setName(curName);
+                cur.setDescription(curDescription);
+                cur.setDecisionNo(curDecisionNo);
+                cur.setViName(curViName);
+                cur.setActive(curActive);
+
+                //convert jsonArray to list
+                List<ProgramObjective> poList = jsonArrayToList("po", poArray);
+                List<ProgramObjective> oldPoList = jsonArrayToList("po", oldPoArray);
+                
+                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);
+                List<ProgramLearningObjective> oldpPloList = jsonArrayToList("plo", oldPloArray);
+                
+                List<Subject> subjList = jsonArrayToList("subject", subjArray);
+                List<Subject> oldSubjList = jsonArrayToList("subject", oldSubArray);
+                
+                CurriculumDao.update(cur, oldPoList, poList, oldpPloList, ploList, oldSubjList, subjList);
+
+            } catch (CurriculumException | POException | PLOException | SubjectException ex) {
+                ex.printStackTrace();
+                JSONObject json = new JSONObject();
+                json.put("message", ex.getMessage());
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, json);
             } catch (Exception e) {
                 e.printStackTrace();
-                request.setAttribute(AppConfig.ERROR_MESSAGE, "Cannot update curriculum.");
+                JSONObject json = new JSONObject();
+                json.put("message", e.getMessage());
+                ResponseUtils.sendJson(response, HttpServletResponse.SC_BAD_REQUEST, json);
             }
         }
     }
 
-    public <T extends Objective> T readObjInput(T obj, String objName, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String name = request.getParameter(objName + "Name");
-        String description = request.getParameter(objName + "Description");
-        if (!name.matches(objName.toUpperCase() + "[\\d]+")) {
-            throw new Exception(objName.toUpperCase() + " Name must follow format "
-                    + objName.toUpperCase() + "(number)");
-        }
-        obj.setName(name);
-        obj.setDescription(description);
-        return obj;
-    }
+    public <T> List<T> jsonArrayToList(String str, JSONArray jsonArray) throws Exception {
+        List<T> list = new ArrayList<T>();
+        if (jsonArray != null) {
+            if (str.equals("subject")) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    Subject obj = new Subject();
+                    obj.setId(json.getString("id"));
+                    list.add((T) obj);
+                }
+                return list;
+            }
 
-    public <T extends Objective> List<T> addObjInput(List<T> list, T obj, String objName, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        obj = readObjInput(obj, objName, request, response);
-        for (Objective o : list) {
-            if (o.getName().equals(obj.getName())) {
-                throw new Exception(objName.toUpperCase() + " already exist.");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = jsonArray.getJSONObject(i);
+                int id = json.getInt("id");
+                String name = json.getString("name");
+                String description = json.getString("description");
+                if (str.equals("po")) {
+                    ProgramObjective obj = new ProgramObjective();
+                    obj.setId(id);
+                    obj.setName(name);
+                    obj.setDescription(description);
+                    list.add((T) obj);
+                } else if (str.equals("plo")) {
+                    ProgramLearningObjective obj = new ProgramLearningObjective();
+                    obj.setMapToPO(json.getString("mapToPO"));
+                    obj.setId(id);
+                    obj.setName(name);
+                    obj.setDescription(description);
+                    list.add((T) obj);
+                }
             }
         }
-
-        list.add(obj);
         return list;
-    }
-
-    public boolean isMapped(String poName, List<ProgramLearningObjective> ploList) {
-        return ploList.stream().anyMatch(e -> e.getMapToPO().equals(poName));
-    }
-
-    public void addToList(String id, List poList, List ploList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Objective> list = null;
-        if (id.equals("po")) {
-            ProgramObjective obj = new ProgramObjective();
-            list = new ArrayList(poList);
-            list = addObjInput(list, obj, id, request, response);
-        } else {
-            ProgramLearningObjective obj = new ProgramLearningObjective();
-            obj.setMapToPO(request.getParameter("mapToPO"));
-            list = new ArrayList(ploList);
-            list = addObjInput(list, obj, id, request, response);
-        }
-        request.getSession().setAttribute(id + "List", list);
-    }
-
-    public void removeFromList(String id, List poList, List ploList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Objective> list = null;
-        if (id.equals("po")) {
-            list = new ArrayList(poList);
-            if (isMapped(request.getParameter("nameToDelete"), ploList)) {
-                throw new IllegalArgumentException("Can't remove already mapped PO.");
-            }
-        } else if (id.equals("plo")) {
-            list = new ArrayList(ploList);
-        }
-        list.removeIf(e -> e.getName().equals(request.getParameter("nameToDelete")));
-        request.getSession().setAttribute(id + "List", list);
-    }
-
-    public void editFromList(String id, List poList, List ploList, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Objective> list = null;
-        String newName = request.getParameter("newName");
-        String newDescription = request.getParameter("newDescription");
-        if (id.equals("po")) {
-            list = new ArrayList(poList);
-            if (isMapped(request.getParameter("nameToEdit"), ploList)) {
-                throw new IllegalArgumentException("Can't modify already mapped PO name.");
-            }
-        } else if (id.equals("plo")) {
-            list = new ArrayList(ploList);
-        }
-
-        list.replaceAll(e -> {
-            if (e.getName().equals(request.getParameter("nameToEdit"))) {
-                e.setName(newName);
-                e.setDescription(newDescription);
-            }
-            return e;
-        });
-        request.getSession().setAttribute(id + "List", list);
     }
 
 }

@@ -20,6 +20,7 @@
         <style>
             <%@ include file="/css/style.css" %>
         </style>
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -59,7 +60,7 @@
 
 
                         <legend>Add Curriculum</legend>
-                        <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST">
+                        <form class="mt-4" action="<c:url value="/dashboard/curriculums/add" />" method="POST" enctype="multipart/form-data">
 
                             <!-- Basic Infomation -->
                             <span>Basic Infomation</span>
@@ -108,8 +109,9 @@
                                     <label for="description" class="col-form-label"
                                            style="font-size: 16px;">Description</label>
                                 </div>
-                                <div class="col-5 basicIn" style="width: 751px; margin-left: -40px;">
-                                    <textarea class="form-control" id="description" name="description"></textarea>
+                                <div class="col-6" style="margin-left: -40px">
+                                    <input type="hidden" name="description" id="description"/>
+                                    <div  id="descriptionEditor" style="margin-top: 0; height: 70px;"></div>
                                 </div>
                             </div>
 
@@ -130,8 +132,8 @@
 
                             <!-- Objectives -->
                             <span style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span>
-                            <label id="file_upload_btn" class="btn btn-outline-secondary">
-                                <input type="file" id="file_upload"/>
+                            <label class="btn btn-outline-secondary">
+                                <input type="file" id="file_obj_upload"/>
                                 <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
                             </label>
                             <br/>
@@ -231,6 +233,11 @@
 
                             <!-- Subject -->
                             <span style="font-size: 18px; margin-bottom: 32px; margin-top: 55px; display: inline-block;">Subject</span>
+                            <span style="margin-top: 68px; margin-bottom: 23px; display: inline-block;">Objectives</span>
+                            <label class="btn btn-outline-secondary">
+                                <input type="file" id="file_sub_upload" accept=".xlsx,.xls"/>
+                                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                            </label>
                             <br/>
 
                             <table id="subTbl" style="width: 96%; margin-bottom: 60px;">
@@ -290,6 +297,7 @@
             </main>
         </div>
 
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
@@ -309,10 +317,10 @@
                     handleCheck(indexCheckRow, isChecked);
                 });
 
-                $('#file_upload').click(function () {
+                $('#file_obj_upload').click(function () {
                     $(this).val('');
                 }).change(function () {
-                    let file = $('#file_upload')[0].files[0];
+                    let file = $('#file_obj_upload')[0].files[0];
                     let errorShow = $('#upload-error');
                     const addPOForm = $('#add-po-form');
                     const addPLOForm = $('#add-plo-form');
@@ -350,6 +358,53 @@
                         });
                     });
                 });
+
+                $('#file_sub_upload').click(function () {
+                    $(this).val('');
+                }).change(function () {
+                    $("#myModal").modal("show");
+                    $('#modal-yes, #modal-no').off('click').on('click', function () {
+                        if (this.id === 'modal-no') {
+                            localStorage.removeItem('curiculum.list_sub');
+                        }
+                        $("#myModal").modal("hide");
+                        const inputFile = document.getElementById("file_sub_upload").files[0];
+                        const formData = new FormData();
+                        let errorShow = $('#upload-error');
+                        
+                        formData.append("file", inputFile);
+                        fetch("${pageContext.request.servletContext.contextPath}/dashboard/curriculums/get-excel-datas", {
+                            method: "POST",
+                            body: formData
+                        })
+                                .then((response) => response.json())
+                                .then(function (data) {
+                                    let listSubStored = getListSubFromLocalStorage();
+                                    let listSubExcel = data.subList;
+
+                                    $.each(listSubExcel, function (index, value) {
+                                        if (value.active) {
+                                            let isExist = listSubStored.find(sub => sub.id == value.id);
+                                            if (!isExist) {
+                                                listSubStored.push({
+                                                    id: value.id
+                                                });
+                                            }
+                                        }
+                                    });
+                                    console.log(listSubStored);
+                                    localStorage.setItem("curiculum.list_sub", JSON.stringify(listSubStored));
+                                    renderListSub(listSubStored);
+                                    errorShow.css('display', 'none');
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                    errorShow.css('display', 'block');
+                                    errorShow.text("Your upload file is invalid, please try again!");
+                                });
+                    });
+                });
+
                 $("#poTbl").on("click", "[name='editBtn']", function () {
                     oldName = $(this).closest("tr").find("td").eq(0).text();
                     oldDescription = $(this).closest("tr").find("td").eq(1).text();
@@ -511,6 +566,7 @@
             });
 
             window.addEventListener("load", () => {
+                localStorage.clear();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
                 let listSub = getListSubFromLocalStorage();
@@ -524,6 +580,10 @@
             document.getElementById("btn-add-po").addEventListener("click", handleAddPO);
             document.getElementById("btn-add-plo").addEventListener("click", handleAddPLO);
             document.getElementById("code").addEventListener("change", handleCodeChange);
+
+            const descriptionEditor = new Quill('#descriptionEditor', {
+                theme: 'snow'
+            });
 
             function handleCodeChange(e) {
                 const code = e.target.value;
@@ -603,7 +663,7 @@
                 poListAdd.forEach(function (element, index) {
                     if (index > 0) {
                         let nameE = element[0];
-                        let descriptionE = element[1];
+                        let descriptionE = element[1].toString();
 
                         if (nameE != null && descriptionE != null) {
                             nameE = nameE.toUpperCase();
@@ -662,7 +722,7 @@
                 ploListAdd.forEach(function (element, index) {
                     if (index > 0) {
                         let nameE = element[0];
-                        let descriptionE = element[1];
+                        let descriptionE = element[1].toString();
                         let mapToPO = element[2];
 
                         if (nameE != null && descriptionE != null && mapToPO != null) {
@@ -877,9 +937,11 @@
             function renderListSub(listSub) {
                 $('[name="subCheck"]').each(function () {
                     let thisVal = $(this).val();
-                    let isChecked = listSub.find(sub => sub.id === thisVal);
+                    let isChecked = listSub.find(sub => sub.id.trim() === thisVal.trim());
                     if (isChecked) {
                         $(this).prop("checked", true);
+                    } else {
+                        $(this).prop("checked", false);
                     }
                 });
             }
@@ -912,8 +974,10 @@
                     $('#vietnameseName').val(JSON.parse(basicVietnameseName));
                 }
                 if (basicDescription == null) {
-                    $('#description').val('');
+                    descriptionEditor.root.querySelector('p').innerHTML = '';
+                    $('#decision').val('');
                 } else {
+                    descriptionEditor.root.querySelector('p').innerHTML = JSON.parse(basicDescription);
                     $('#description').val(JSON.parse(basicDescription));
                 }
                 if (basicDecisionNo == null) {
@@ -959,6 +1023,7 @@
                 }
 
                 localStorage.setItem("curiculum.list_sub", JSON.stringify(listSub));
+
             }
 
             async function handleSubmit() {
@@ -966,7 +1031,7 @@
                 let basicSlug = $('#slug').val();
                 let basicEnglishName = $('#englishName').val();
                 let basicVietnameseName = $('#vietnameseName').val();
-                let basicDescription = $('#description').val();
+                let basicDescription;
                 let basicDecisionNo = $('#decisionNo').val();
                 let listPO = getListPOFromLocalStorage();
                 let listPLO = getListPLOFromLocalStorage();
@@ -974,6 +1039,16 @@
                 let errorShow = $('#basic-error');
                 let errorShowSubmit = $('#submit-error');
                 let invalid = 0;
+                let pTags = descriptionEditor.root.querySelectorAll('p');
+                let descriptionEditorContent = '';
+                for (let i = 0; i < pTags.length; i++) {
+                    descriptionEditorContent += pTags[i].innerHTML;
+                }
+                if (descriptionEditorContent == '<br>') {
+                    basicDescription = '';
+                } else {
+                    basicDescription = descriptionEditorContent;
+                }
                 const pattern = /^([[A-Z0-9]{3}-[[A-Z0-9]{2}-[A-Z0-9-]{4,5})$/;
 
                 resetBasicInfo(basicCode, basicSlug, basicEnglishName, basicVietnameseName, basicDescription, basicDecisionNo);

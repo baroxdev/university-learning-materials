@@ -18,6 +18,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.poi.util.LocaleID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.ResponseUtils;
@@ -41,7 +42,7 @@ public class GetItemsInCurriculum implements Action {
                 JSONArray listPoJson = new JSONArray(poList);
                 JSONArray listPloJson = new JSONArray(ploList);
                 JSONArray listSubJson = new JSONArray(subList);
-
+                
                 resJson.put("poList", listPoJson);
                 resJson.put("ploList", listPloJson);
                 resJson.put("subList", listSubJson);

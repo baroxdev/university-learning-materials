@@ -52,6 +52,7 @@ public class AppConfig {
     //    SUBJECT
     public final static String SUBJECT_ITEM = "SUBJECT";
     public final static String SUBJECT_LIST = "SUBJECT_LIST";
+    public final static String SUBJECT_OLD_LIST = "SUBJECT_OLD_LIST";
 
     //    EXPLORE
     public final static String EXPLORE_LIST = "EXPLORE_LIST";

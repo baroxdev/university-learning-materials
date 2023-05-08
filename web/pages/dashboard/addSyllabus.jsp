@@ -14,61 +14,41 @@
         <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
         <title>Add Syllabus</title>
     </head>
+    <%
+        ArrayList<Curriculum> lsCur = (ArrayList<Curriculum>) request.getAttribute(AppConfig.DASHBOARD_CURRICULUM_LIST);
+    %>
     <body>
-        <div class="container-fluid h-100">
-            <div class="row h-100">
-                <div class="left col-md-2" style="background-color: rgba(5, 44, 101, 1);">
-                    <h2 style="color: #FFFFFF; font-family: 'Inter'; font-size: 20px;">
-                        ULM Dashboard
-                    </h2>
-                </div>
-                <div class="right col-md-10">
-                    <header>
-                        <div class="d-flex align-items-center justify-content-between container">
-                            <a href="#">
-                                <h3></h3>
-                            </a>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="dropdown">
-                                    <div class="dropdown-toggle" type="button" id="menu1" data-bs-toggle="dropdown"
-                                         aria-expanded="false" style="margin: 0!important">
-                                        <img class="rounded-circle" style="width:40px"
-                                             src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp">
-                                        <span class="caret"></span>
-                                    </div>
-                                    <ul class="dropdown-menu  dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="#">Setting</a></li>
-                                        <li><a class="dropdown-item" href="#">Logout</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    <%
-                        ArrayList<Curriculum> lsCur = (ArrayList<Curriculum>) request.getAttribute(AppConfig.DASHBOARD_CURRICULUM_LIST);
-                    %>
-                    <main class="col-form-label" style="margin-bottom: 100px;">
+        <div class="dashboard-container">
+            <%@include file="/components/dashboard/sidebar.jspx" %>
+            <main>
+                <%@include file="/components/dashboard/header.jspx" %>
+                <div class="dashboard-content">
+                    <div class="col-form-label" style="margin-bottom: 100px;">
                         <div class="container-lg" style="margin: 0 auto">
                             <legend>Add Syllabus</legend>
                             <form class="mt-3" id="addSyllabusForm" action="./add" method="POST" style="position: relative">
                                 <div class="accordion" id="accordionExample">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseOne" aria-expanded="true"
+                                                    aria-controls="collapseOne">
                                                 Basic Information
                                             </button>
                                         </h2>
-
-                                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                        <div id="collapseOne" class="accordion-collapse collapse show"
+                                             data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <div id="basic-information-form">
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group mb-3">
-                                                                <label for="curriculum" class="col-form-label" style="font-size: 16px;">
+                                                                <label for="curriculum" class="col-form-label"
+                                                                       style="font-size: 16px;">
                                                                     Curriculum
                                                                 </label>
-                                                                <select style="color: #495057;" name="curriculum" id="curriculum" class="form-select" required>
+                                                                <select style="color: #495057;" name="curriculum"
+                                                                        id="curriculum" class="form-select" required>
                                                                     <option value="null" selected>Select Curriculum</option>
                                                                     <c:forEach var="cur" items="<%= lsCur%>">
                                                                         <option value="${cur.id}">${cur.code}</option>
@@ -76,10 +56,12 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group mb-3">
-                                                                <label for="subject" class="col-form-label" style="font-size: 16px;">
+                                                                <label for="subject" class="col-form-label"
+                                                                       style="font-size: 16px;">
                                                                     Subject
                                                                 </label>
-                                                                <select style="color: #495057;" name="subject" id="subject" class="form-select" disabled>
+                                                                <select style="color: #495057;" name="subject" id="subject"
+                                                                        class="form-select" disabled>
                                                                     <option selected>Select Subject</option>
                                                                 </select>
                                                                 <div id="mapToPLO" class="form-text">
@@ -87,11 +69,13 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group mb-3">
-                                                                <label for="degreeLevel" class="col-form-label" style="font-size: 16px;">
+                                                                <label for="degreeLevel" class="col-form-label"
+                                                                       style="font-size: 16px;">
                                                                     Degree Level
                                                                 </label>
-                                                                <select style="color: #495057;" name="degreeLevel" id="degreeLevel" class="form-select">
-                                                                    <option value="1" selected>Bachelor</option>
+                                                                <select style="color: #495057;" name="degreeLevel"
+                                                                        id="degreeLevel" class="form-select">
+                                                                    <option selected>Bachelor</option>
                                                                     Bachelor
                                                                 </select>
                                                             </div>
@@ -109,8 +93,6 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
-
-
                                                             <div class="form-group mb-3">
                                                                 <label for="credit" class="col-form-label" style="font-size: 16px;">
                                                                     Number of Credit
@@ -163,26 +145,33 @@
                                     </div>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseTwo" aria-expanded="false"
+                                                    aria-controls="collapseTwo">
                                                 Materials
                                             </button>
                                         </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div id="collapseTwo" class="accordion-collapse collapse"
+                                             data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <div class="input-group mb-3">
                                                     <label class="input-group-text" for="inputGroupFile01">Upload</label>
-                                                    <input type="file" style="display: block;" class="form-control" id="material-input-file">
+                                                    <input type="file" style="display: block;" class="form-control"
+                                                           id="material-input-file">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseThree" aria-expanded="false"
+                                                    aria-controls="collapseThree">
                                                 Objectives
                                             </button>
                                         </h2>
-                                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div id="collapseThree" class="accordion-collapse collapse"
+                                             data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <span style="font-size: 18px; margin-bottom: 32px; display: inline-block;">
                                                     Course Learning Objectives (CLO)
@@ -203,13 +192,17 @@
                                                     <div class="row col-6" id="add-clo-form">
                                                         <div class="row" style="padding-right: 0">
                                                             <div class="col-6">
-                                                                <label for="cloName" class="col-form-label" style="font-size: 16px;">Name</label>
-                                                                <input type="text" id="cloName" name="cloName" class="form-control" placeholder="CLOxx...">
+                                                                <label for="cloName" class="col-form-label"
+                                                                       style="font-size: 16px;">Name</label>
+                                                                <input type="text" id="cloName" name="cloName"
+                                                                       class="form-control" placeholder="CLOxx...">
                                                             </div>
                                                             <div class="col-6" style="padding-right: 0">
-                                                                <label for="mapToPLO" class="col-form-label" style="font-size: 16px;">Map to
+                                                                <label for="mapToPLO" class="col-form-label"
+                                                                       style="font-size: 16px;">Map to
                                                                     PLO</label>
-                                                                <select style="color: #495057;" name="mapToPLO" id="mapToPLO" class="form-select" disabled>
+                                                                <select style="color: #495057;" name="mapToPLO" id="mapToPLO"
+                                                                        class="form-select" disabled>
                                                                     <option value="none">None</option>
                                                                 </select>
                                                                 <div id="mapToPLO" class="form-text">
@@ -220,12 +213,17 @@
                                                         <div class="">
                                                             <label for="ploDescription" class="col-form-label"
                                                                    style="font-size: 16px;">Description</label>
-                                                            <textarea id="cloDescription" class="form-control" name="cloDescription"
+                                                            <textarea id="cloDescription" class="form-control"
+                                                                      name="cloDescription"
                                                                       ></textarea>
                                                         </div>
                                                         <div style="margin-top: 16px;">
-                                                            <button type="button" id="btn-add-plo" class="btn btn-primary" name="op" value="add_plo">Add</button>
-                                                            <button type="submit" class="btn btn-outline-secondary" value="">Cancel</button>
+                                                            <button type="button" id="btn-add-plo" class="btn btn-primary"
+                                                                    name="op" value="add_plo">Add
+                                                            </button>
+                                                            <button type="submit" class="btn btn-outline-secondary" value="">
+                                                                Cancel
+                                                            </button>
                                                         </div>
                                                     </div>
 
@@ -242,8 +240,8 @@
                                                                                                                 </div>-->
                                                     </div>
                                                 </div>
-
-                                                <div class="alert alert-danger" id="clo-error" role="alert" style="margin-top: 20px; margin-right: 4px; display: none;"> 
+                                                <div class="alert alert-danger" id="clo-error" role="alert"
+                                                     style="margin-top: 20px; margin-right: 4px; display: none;">
                                                     CLO_ERROR_MESSAGE
                                                 </div>
                                             </div>
@@ -251,11 +249,14 @@
                                     </div>
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseFour" aria-expanded="false"
+                                                    aria-controls="collapseFour">
                                                 Sessions, Questions & Assessments
                                             </button>
                                         </h2>
-                                        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                        <div id="collapseFour" class="accordion-collapse collapse"
+                                             data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
                                                 <div>
                                                     <div style="margin-top: 16px;">
@@ -310,10 +311,8 @@
                                                         <tbody id="excel-table-questions">
                                                         </tbody>
                                                         <div id="question-table-error">
-
                                                         </div>
                                                         <div id="question-table-error2">
-
                                                         </div>
                                                         <button type="button"  style="float: right;" class="btn btn-outline-danger"  onclick="deleteQuestion()">Delete</button>
                                                     </table>
@@ -341,12 +340,8 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody id="excel-table-assessments">
-
                                                         </tbody>
-
-
                                                         <div id="assessment-table-error">
-
                                                         </div>
                                                         <button type="button"  style="float: right;" class="btn btn-outline-danger" onclick="deleteAssessment()">Delete</button>
                                                     </table>
@@ -373,7 +368,6 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="container-x1">
-                                                                                        
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -397,16 +391,12 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="container-x1">
-                                                                                       
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>-->
                                 </div>
-
-
                                 <div id="messageSyl"></div>
-
                                 <!--Send to preview-->
                                 <div class="fixed-footer">
                                     <div style="margin-left:auto;">
@@ -788,7 +778,6 @@
                     });
                     const responseData = await res.json();
                     console.log({res})
-
                             if (!res.ok) {
                     throw new Error(responseData.message)
                     }
