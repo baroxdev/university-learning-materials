@@ -378,6 +378,8 @@
                         $("#myModal").modal("hide");
                         const inputFile = document.getElementById("file_sub_upload").files[0];
                         const formData = new FormData();
+                        let errorShow = $('#upload-error');
+                        
                         formData.append("file", inputFile);
                         fetch("${pageContext.request.servletContext.contextPath}/dashboard/curriculums/get-excel-datas", {
                             method: "POST",
@@ -398,11 +400,16 @@
                                             }
                                         }
                                     });
-
+                                    console.log(listSubStored);
                                     localStorage.setItem("curiculum.list_sub", JSON.stringify(listSubStored));
                                     renderListSub(listSubStored);
+                                    errorShow.css('display', 'none');
                                 })
-                                .catch((error) => console.error(error));
+                                .catch(function (error) {
+                                    console.log(error);
+                                    errorShow.css('display', 'block');
+                                    errorShow.text("Your upload file is invalid, please try again!");
+                                });
                     });
                 });
 
