@@ -11,6 +11,7 @@ package entities;
 public class CourseLearningObjective extends Objective {
 
     private int syllabusID;
+    private int mapToPLO;
 
     public CourseLearningObjective() {
     }
@@ -27,5 +28,15 @@ public class CourseLearningObjective extends Objective {
     public void setSyllabusID(int syllabusID) {
         this.syllabusID = syllabusID;
     }
+
+    public int getMapToPLO() {
+        return mapToPLO;
+    }
+
+    public void setMapToPLO(int mapToPLO) {
+        this.mapToPLO = mapToPLO;
+    }
+    
+    
 
 }

@@ -6,14 +6,24 @@
 package dao;
 
 import config.AppConfig;
+import entities.Assessment;
+import entities.CourseLearningObjective;
+import entities.Material;
+import entities.Question;
 import entities.SearchResult;
+import entities.Session;
 import entities.Syllabus;
 import exceptions.AddNewSyllabusException;
+import exceptions.AssessmentException;
+import exceptions.CLOException;
+import exceptions.QuestionExceptions;
+import exceptions.SessionException;
 import exceptions.SyllabusException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -24,19 +34,98 @@ import utils.DBUtils;
  */
 public class SyllabusDao {
 
-    public static void create(Syllabus syllabus) throws AddNewSyllabusException, SQLException, Exception {
-        String query = "INSERT INTO Syllabus "
-                + "(subjectID, credit, [description], tasks, scoringScale, [status], minScore, isApproved, createdAt) "
-                + "values(?, ?, ?, ?, ?, 1, ?, 0, GETDATE())";
-        Connection con = DBUtils.makeConnection();
-        PreparedStatement ppstm = con.prepareCall(query);
-        ppstm.setString(1, syllabus.getSubjectID());
-        ppstm.setInt(2, syllabus.getCredit());
-        ppstm.setString(3, syllabus.getDescription());
-        ppstm.setString(4, syllabus.getTasks());
-        ppstm.setInt(5, syllabus.getScoringScale());
-        ppstm.setInt(6, syllabus.getMinScore());
-        int affectedRows = ppstm.executeUpdate();
+    public static void create(Syllabus syllabus, List<CourseLearningObjective> listCLO,
+            List<Question> listQuestion, List<Session> listSession, List<Assessment> listAssessment, Material material)
+            throws AddNewSyllabusException, SQLException, Exception {
+
+        PreparedStatement ppstm = null;
+        Connection con = null;
+        try {
+            con = DBUtils.makeConnection();
+            con.setAutoCommit(false);
+
+            if (listCLO.isEmpty()) {
+                throw new CLOException("Atleast one CLO should be added");
+            }
+            if (listSession.isEmpty()) {
+                throw new SessionException("Atleast one Session should be added");
+            }
+            if (listQuestion.isEmpty()) {
+                throw new QuestionExceptions("Atleast one Question should be added");
+            }
+            if (listAssessment.isEmpty()) {
+                throw new AssessmentException("Atleast one Assessment should be added");
+            }
+
+            // Insert syllabus
+            String query = "INSERT INTO Syllabus "
+                    + "(subjectID, credit, [description], tasks, scoringScale, [status], minScore, isApproved, createdAt, decisionNo, note, timeAllocation, tools, degreeLevelID) "
+                    + "values(?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?, ?, ?, ?, ?)";
+
+            ppstm = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ppstm.setString(1, syllabus.getSubjectID());
+            ppstm.setInt(2, syllabus.getCredit());
+            ppstm.setString(3, syllabus.getDescription());
+            ppstm.setString(4, syllabus.getTasks());
+            ppstm.setInt(5, syllabus.getScoringScale());
+            ppstm.setBoolean(6, syllabus.isStatus());
+            ppstm.setInt(7, syllabus.getMinScore());
+            ppstm.setBoolean(8, syllabus.isIsApproved());
+            ppstm.setString(9, syllabus.getDecisionNo());
+            ppstm.setString(10, syllabus.getNote());
+            ppstm.setString(11, syllabus.getTimeAllocation());
+            ppstm.setString(12, syllabus.getTool());
+            ppstm.setInt(13, syllabus.getDegreeLevelID());
+
+            int affectedRows = ppstm.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating syllabus failed, no rows affected.");
+            }
+
+            // Get the id of the inserted syllabus
+            ResultSet generatedKeys = ppstm.getGeneratedKeys();
+            generatedKeys.next();
+            int syllabusId = generatedKeys.getInt(1);
+
+            // Insert clo and mapting to plo form syl
+            for (CourseLearningObjective clo : listCLO) {
+                int ploID = clo.getMapToPLO();
+                int cloId = CLODao.create(syllabusId, clo, con);
+                CLOToPLOFromSylDAO.create(syllabusId, cloId, ploID, con);
+            }
+
+            // Insert session and maping to question
+            for (Session session : listSession) {
+                int no = session.getIndexTable();
+                int sessionID = SessionDao.create(syllabusId, session, con);
+                for (Question question : listQuestion) {
+                    if (no == question.getSessionIndexTable()) {
+                        QuestionDAO.create(sessionID, question, con);
+                    }
+                }
+            }
+
+            for (Assessment assessment : listAssessment) {
+
+                AssessmentDao.create(syllabusId, assessment, con);
+
+            }
+
+            if (material != null) {
+                MaterialDao.create(syllabusId, material, con);
+            }
+
+            con.commit();
+        } catch (Exception e) {
+            con.rollback();
+            throw e;
+        } finally {
+            if (ppstm != null || con != null) {
+                ppstm.close();
+                con.close();
+            }
+//            con.setAutoCommit(true);
+        }
 
     }
 

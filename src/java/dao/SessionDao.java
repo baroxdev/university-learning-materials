@@ -10,6 +10,8 @@ import exceptions.SessionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -45,5 +47,47 @@ public class SessionDao {
             throw new SessionException("Something went wrong in get session progress.");
         }
         return list;
+    }
+
+//    
+//          ,[topic]
+//      ,[learningType]
+//      ,[LO_ID]
+//      ,[materials]
+//      ,[studentTasks]
+//      ,[syllabusID]
+//      ,[status]
+//      ,[itu]
+    public static int create(int sylId, Session session, Connection con) throws Exception {
+        String query = "insert into Session ([topic]\n"
+                + "      ,[learningType]\n"
+                + "      ,[LO_ID]\n"
+                + "      ,[materials]\n"
+                + "      ,[studentTasks]\n"
+                + "      ,[syllabusID]\n"
+                + "      ,[status]\n"
+                + "      ,[itu]) values(?,?,?,?,?,?,?,?)";
+        PreparedStatement stm = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        stm.setString(1, session.getTopic());
+        stm.setString(2, session.getLearningType());
+        stm.setString(3, session.getLO_ID());
+        stm.setString(4, session.getMaterials());
+        stm.setString(5, session.getStudentTasks());
+        stm.setInt(6, sylId);
+        stm.setBoolean(7, session.isActive());
+        stm.setString(8, session.getItu());
+
+        int affectedRows = stm.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Faild to create session");
+        }
+
+        ResultSet rs = stm.getGeneratedKeys();
+        if (rs.next()) {
+            int sessionID = rs.getInt(1);
+            return sessionID;
+        } else {
+            throw new SQLException("Creating Session failed, no ID obtained.");
+        }
     }
 }

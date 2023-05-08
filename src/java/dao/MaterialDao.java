@@ -10,6 +10,7 @@ import exceptions.MaterialException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -42,5 +43,19 @@ public class MaterialDao {
             throw new MaterialException("Something went wrong in get material progress.");
         }
         return list;
+    }
+
+    public static void create(int sylID, Material material, Connection con) throws Exception {
+        String query = "insert into Material ([name]\n"
+                + "      ,[materialUrl]\n"
+                + "      ,[syllabusID]) values(?,?,?)";
+        PreparedStatement stm = con.prepareStatement(query);
+        stm.setString(1, material.getName());
+        stm.setString(2, material.getMaterialUri());
+        stm.setInt(3, sylID);
+        int affectedRows = stm.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Faild to create Material");
+        }
     }
 }

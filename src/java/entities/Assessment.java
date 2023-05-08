@@ -12,32 +12,32 @@ package entities;
 public class Assessment {
 
     private int id;
-    private String name;
+    private String category;
     private String type;
     private int part;
     private double weight;
     private String completionCriteria;
     private String duration;
-    private int CLO_ID;
     private String questionType;
     private String numberOfQuestion;
     private String knowledgeScope;
     private String gradingGuide;
     private String note;
     private int syllabusID;
+    private boolean active;
+    private String mapToCLO;
 
     public Assessment() {
     }
 
-    public Assessment(int id, String name, String type, int part, double weight, String completionCriteria, String duration, int CLO_ID, String questionType, String numberOfQuestion, String knowledgeScope, String gradingGuide, String note, int syllabusID) {
+    public Assessment(int id, String categoy, String type, int part, double weight, String completionCriteria, String duration, String questionType, String numberOfQuestion, String knowledgeScope, String gradingGuide, String note, int syllabusID) {
         this.id = id;
-        this.name = name;
+        this.category = categoy;
         this.type = type;
         this.part = part;
         this.weight = weight;
         this.completionCriteria = completionCriteria;
         this.duration = duration;
-        this.CLO_ID = CLO_ID;
         this.questionType = questionType;
         this.numberOfQuestion = numberOfQuestion;
         this.knowledgeScope = knowledgeScope;
@@ -54,13 +54,23 @@ public class Assessment {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCategory() {
+        return category;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategory(String category) {
+        this.category = category;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    
 
     public String getType() {
         return type;
@@ -102,13 +112,6 @@ public class Assessment {
         this.duration = duration;
     }
 
-    public int getCLO_ID() {
-        return CLO_ID;
-    }
-
-    public void setCLO_ID(int CLO_ID) {
-        this.CLO_ID = CLO_ID;
-    }
 
     public String getQuestionType() {
         return questionType;
@@ -156,6 +159,14 @@ public class Assessment {
 
     public void setSyllabusID(int syllabusID) {
         this.syllabusID = syllabusID;
+    }
+
+    public void setMapToCLO(String mapToCLO) {
+        this.mapToCLO = mapToCLO;
+    }
+
+    public String getMapToCLO() {
+        return mapToCLO;
     }
 
 }
