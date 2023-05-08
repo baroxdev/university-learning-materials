@@ -18,9 +18,24 @@ public class Session {
     private String materials;
     private String studentTasks;
     private int syllabusID;
+    private boolean active;
+    private String itu;
+    private int indexTable;
 
     public Session() {
     }
+
+    public Session(String topic, String learningType, String LO_ID, String materials, String studentTasks, boolean active, String itu) {
+        this.topic = topic;
+        this.learningType = learningType;
+        this.LO_ID = LO_ID;
+        this.materials = materials;
+        this.studentTasks = studentTasks;
+        this.active = active;
+        this.itu = itu;
+    }
+    
+    
 
     public Session(int id, String topic, String learningType, String LO_ID, String materials, String studentTasks, int syllabusID) {
         this.id = id;
@@ -86,6 +101,30 @@ public class Session {
 
     public void setSyllabusID(int syllabusID) {
         this.syllabusID = syllabusID;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getItu() {
+        return itu;
+    }
+
+    public void setItu(String itu) {
+        this.itu = itu;
+    }
+
+    public int getIndexTable() {
+        return indexTable;
+    }
+
+    public void setIndexTable(int indexTable) {
+        this.indexTable = indexTable;
     }
 
 }
