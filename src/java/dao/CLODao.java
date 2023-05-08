@@ -10,6 +10,8 @@ import exceptions.CLOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import utils.DBUtils;
@@ -44,5 +46,32 @@ public class CLODao {
             throw new CLOException("Something went wrong in get clo progress.");
         }
         return list;
+    }
+
+//    SELECT TOP (1000) [id]
+//      ,[name]
+//      ,[description]
+//      ,[syllabusID]
+//      ,[createdAt]
+//      ,[updatedAt]
+//  FROM [dbo].[Course_Learning_Objective]
+    public static int create(int sylID, CourseLearningObjective clo, Connection con) throws Exception {
+        String query = "INSERT INTO Course_Learning_Objective (name, description, syllabusID, createdAt) VALUES (?, ?, ?, GETDATE())";
+        PreparedStatement stm = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        stm.setString(1, clo.getName());
+        stm.setString(2, clo.getDescription());
+        stm.setInt(3, sylID);
+        int affectedRows = stm.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Faild to create CLO");
+        }
+        ResultSet rs = stm.getGeneratedKeys();
+        if (rs.next()) {
+            int cloId = rs.getInt(1);
+            return cloId;
+        }
+        else{
+            throw new SQLException("Creating CLO failed, no ID obtained.");
+        }
     }
 }

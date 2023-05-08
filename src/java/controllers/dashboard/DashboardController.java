@@ -15,10 +15,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.annotation.MultipartConfig;
 
 /**
  * @author quocb
  */
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 100, maxRequestSize = 1024 * 1024 * 200)
 @WebServlet(name = "DashboardController", urlPatterns = {"/dashboard/*"})
 public class DashboardController extends HttpServlet {
 

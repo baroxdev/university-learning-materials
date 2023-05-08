@@ -6,6 +6,7 @@
 package controllers.dashboard;
 
 import actions.Action;
+import actions.common.UploadMaterial;
 import actions.dashboard.AddNewSyllabus;
 import actions.dashboard.GetListSubjectInSyllabus;
 import actions.dashboard.ViewListSyllabus;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 100, maxRequestSize = 1024 * 1024 * 200)
 @WebServlet(name = "SyllabusDashboard", urlPatterns = {"/syllabus"})
 public class SyllabusDashboard extends HttpServlet {
 
@@ -35,6 +38,7 @@ public class SyllabusDashboard extends HttpServlet {
         actionMap.put("/syllabus/add/", new AddNewSyllabus());
         actionMap.put("/syllabus/get-subjects", new GetListSubjectInSyllabus());
         actionMap.put("/syllabus/get-subjects/", new GetListSubjectInSyllabus());
+        actionMap.put("/syllabus/uploadMaterial", new UploadMaterial());
     }
 
     /**
@@ -64,6 +68,7 @@ public class SyllabusDashboard extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Action action = actionMap.get(request.getPathInfo().trim());
+        System.out.println("day la action" + action);
         if (action != null) {
             action.doGet(request, response);
         } else {

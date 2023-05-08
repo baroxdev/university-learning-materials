@@ -25,6 +25,11 @@ public class Syllabus {
     private String updatedAt;
     private boolean isApproved;
     private String subjectID;
+    private String decisionNo;
+    private String note;
+    private String timeAllocation;
+    private String tool;
+    private int degreeLevelID;
     private boolean active;
 
     public Syllabus() {
@@ -38,6 +43,26 @@ public class Syllabus {
         this.scoringScale = scoringScale;
         this.minScore = minScore;
     }
+
+    public Syllabus( int credit, String description, String tasks, int scoringScale, boolean status, int minScore, boolean isApproved, String subjectID, String decisionNo, String note, String timeAllocation, String tool, int degreeLevelID, boolean active) {
+        this.credit = credit;
+        this.description = description;
+        this.tasks = tasks;
+        this.scoringScale = scoringScale;
+        this.status = status;
+        this.minScore = minScore;
+        this.isApproved = isApproved;
+        this.subjectID = subjectID;
+        this.decisionNo = decisionNo;
+        this.note = note;
+        this.timeAllocation = timeAllocation;
+        this.tool = tool;
+        this.degreeLevelID = degreeLevelID;
+        this.active = active;
+    }
+
+    
+    
 
     public Syllabus(int id, String name, int credit, String description, String tasks, int scoringScale, boolean status, int minScore, String createdAt, String updatedAt, boolean isApproved, String subjectID) {
         this.id = id;
@@ -166,12 +191,54 @@ public class Syllabus {
         this.subjectID = subjectID;
     }
 
-    public boolean getActive() {
+    public String getDecisionNo() {
+        return decisionNo;
+    }
+
+    public void setDecisionNo(String decisionNo) {
+        this.decisionNo = decisionNo;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getTimeAllocation() {
+        return timeAllocation;
+    }
+
+    public void setTimeAllocation(String timeAllocation) {
+        this.timeAllocation = timeAllocation;
+    }
+
+    public String getTool() {
+        return tool;
+    }
+
+    public void setTool(String tool) {
+        this.tool = tool;
+    }
+
+    public int getDegreeLevelID() {
+        return degreeLevelID;
+    }
+
+    public void setDegreeLevelID(int degreeLevelID) {
+        this.degreeLevelID = degreeLevelID;
+    }
+
+    public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
     }
+
+  
 
 }
