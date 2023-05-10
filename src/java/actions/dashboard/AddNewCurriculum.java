@@ -62,13 +62,6 @@ public class AddNewCurriculum implements Action {
                 request.setCharacterEncoding("UTF-8");
                 JSONObject json = JsonUtils.getRequestJson(request);
 
-                //nhận file excel upload và xử lí
-//                if (json.getString("op").equalsIgnoreCase("upload")) {
-//                    Part filePart = request.getPart("file");
-//                    JSONObject jsono = readExcelFile(filePart);
-//                    ResponseUtils.sendJson(response, HttpServletResponse.SC_CREATED, jsono);
-//                } else if (json.getString("op").equalsIgnoreCase("submit")) {
-                //nhận data từ form 
                 String curCode = json.getString("code");
                 String curName = json.getString("name");
                 String curDescription = json.getString("description");
@@ -77,7 +70,7 @@ public class AddNewCurriculum implements Action {
                 JSONArray poArray = json.getJSONArray("poList");
                 JSONArray ploArray = json.getJSONArray("ploList");
                 JSONArray subjArray = json.getJSONArray("subList");
-                
+
                 //check curCode exist
                 if (CurriculumDao.isExist(curCode)) {
                     throw new CurriculumException("Curriculum Code already exist");
@@ -89,9 +82,9 @@ public class AddNewCurriculum implements Action {
                 cur.setDecisionNo(curDecisionNo);
                 cur.setViName(curViName);
                 //convert jsonArray to list
-                List<ProgramObjective> poList = jsonArrayToList("po", poArray);
-                List<ProgramLearningObjective> ploList = jsonArrayToList("plo", ploArray);        
-                List<Subject> subjList = jsonArrayToList("subject", subjArray);   
+                List<ProgramObjective> poList = jsonArrayToList(poArray, ProgramObjective.class);
+                List<ProgramLearningObjective> ploList = jsonArrayToList(ploArray, ProgramLearningObjective.class);
+                List<Subject> subjList = jsonArrayToList(subjArray, Subject.class);
                 //tạo liên kết với po, plo...
                 //thêm vào db
                 CurriculumDao.add(cur, poList, ploList, subjList);
@@ -110,75 +103,58 @@ public class AddNewCurriculum implements Action {
         }
     }
 
-    public <T> List<T> jsonArrayToList(String id, JSONArray jsonArray) throws Exception {
+//    public <T> List<T> jsonArrayToList(String id, JSONArray jsonArray) throws Exception {
+//        List<T> list = new ArrayList<T>();
+//        if (jsonArray != null) {
+//            if (id.equals("subject")) {
+//                for (int i = 0; i < jsonArray.length(); i++) {
+//                    JSONObject json = jsonArray.getJSONObject(i);
+//                    Subject obj = new Subject();
+//                    obj.setId(json.getString("id"));
+//                    list.add((T) obj);
+//                }
+//                return list;
+//            }
+//
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject json = jsonArray.getJSONObject(i);
+//                String name = json.getString("name");
+//                String description = json.getString("description");
+//                if (id.equals("po")) {
+//                    ProgramObjective obj = new ProgramObjective();
+//                    obj.setName(name);
+//                    obj.setDescription(description);
+//                    list.add((T) obj);
+//                } else if (id.equals("plo")) {
+//                    ProgramLearningObjective obj = new ProgramLearningObjective();
+//                    obj.setMapToPO(json.getString("mapToPO"));
+//                    obj.setName(name);
+//                    obj.setDescription(description);
+//                    list.add((T) obj);
+//                }
+//            }
+//        }
+//        return list;
+//    }
+    public <T> List<T> jsonArrayToList(JSONArray jsonArray, Class<T> clazz) throws InstantiationException, IllegalAccessException {
         List<T> list = new ArrayList<T>();
         if (jsonArray != null) {
-            if (id.equals("subject")) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject json = jsonArray.getJSONObject(i);
-                    Subject obj = new Subject();
-                    obj.setId(json.getString("id"));
-                    list.add((T) obj);
-                }
-                return list;
-            }
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject json = jsonArray.getJSONObject(i);
-                String name = json.getString("name");
-                String description = json.getString("description");
-                if (id.equals("po")) {
-                    ProgramObjective obj = new ProgramObjective();
-                    obj.setName(name);
-                    obj.setDescription(description);
-                    list.add((T) obj);
-                } else if (id.equals("plo")) {
-                    ProgramLearningObjective obj = new ProgramLearningObjective();
-                    obj.setMapToPO(json.getString("mapToPO"));
-                    obj.setName(name);
-                    obj.setDescription(description);
-                    list.add((T) obj);
+                T obj = clazz.newInstance();
+                if (obj instanceof Subject) {
+                    ((Subject) obj).setId(json.getString("id"));
+                } else if (obj instanceof ProgramObjective) {
+                    ((ProgramObjective) obj).setName(json.getString("name"));
+                    ((ProgramObjective) obj).setDescription(json.getString("description"));
+                } else if (obj instanceof ProgramLearningObjective) {
+                    ((ProgramLearningObjective) obj).setMapToPO(json.getString("mapToPO"));
+                    ((ProgramLearningObjective) obj).setName(json.getString("name"));
+                    ((ProgramLearningObjective) obj).setDescription(json.getString("description"));
                 }
+                list.add(obj);
             }
         }
         return list;
     }
-
-//    public JSONObject readExcelFile(Part filePart) throws Exception {
-//        InputStream inp = filePart.getInputStream();
-//        Workbook wb = WorkbookFactory.create(inp);
-//        Sheet POSheet = wb.getSheetAt(wb.getSheetIndex("PO"));
-//        Sheet PLOSheet = wb.getSheetAt(wb.getSheetIndex("PLO"));
-//        JSONObject json = new JSONObject();
-//        List<ProgramObjective> poList = new ArrayList<>();
-//        List<ProgramLearningObjective> ploList = new ArrayList<>();
-//        List<String> temp = null;
-//
-//        for (Row row : POSheet) {
-//            temp = new ArrayList();
-//            for (Cell cell : row) {
-//                temp.add(cell.getStringCellValue());
-//            }
-//            ProgramObjective po = new ProgramObjective();
-//            po.setName(temp.get(0));
-//            po.setDescription(temp.get(1));
-//            poList.add(po);
-//        }
-//        json.put("poList", poList);
-//
-//        for (Row row : PLOSheet) {
-//            temp = new ArrayList();
-//            for (Cell cell : row) {
-//                temp.add(cell.getStringCellValue());
-//            }
-//            ProgramLearningObjective plo = new ProgramLearningObjective();
-//            plo.setName(temp.get(0));
-//            plo.setDescription(temp.get(1));
-//            plo.setMapToPO(temp.get(2));
-//            ploList.add(plo);
-//        }
-//        json.put("ploList", ploList);
-//
-//        return json;
-//    }
 }
