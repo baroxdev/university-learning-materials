@@ -650,3 +650,20 @@ table td a {
     border: 1px solid hsl(0deg 0% 64.57% / 10%);
     width: fit-content;
 }
+
+#filter {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+#filter-section {
+    flex: 1;
+}
+
+#filter-section .filter-item {
+    width: calc(100% / 4);
+}

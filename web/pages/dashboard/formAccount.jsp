@@ -29,6 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <%
+        User currentUser = (User) request.getSession().getAttribute(AppConfig.AUTH_USER);
         User account = (User) request.getAttribute(AppConfig.DASHBOARD_ACCOUNT);
         ArrayList<Role> lsRole = (ArrayList<Role>) request.getAttribute(AppConfig.DASHBOARD_ROLE_LIST);
         ArrayList<String> lsEducationLevel = (ArrayList<String>) request.getAttribute(AppConfig.DASHBOARD_EDUCATION_LEVEL_LIST);
@@ -49,6 +50,37 @@
                 </legend>
                 <form class="mt-4" method="POST"
                       id="account-form" style="margin: 0 auto;">
+
+                    <div class="row g-3 align-items-center mt-1">
+                        <div class="col-2">
+                            <label for="status" class="col-form-label" style="font-size: 16px;">Status</label>
+                        </div>
+                        <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;" id="status">
+                            <c:choose>
+                                <c:when test="<%=account.getActive()%>">
+                                    <span class="badge rounded-pill text-bg-success">active</span>
+                                </c:when>
+                                <c:when test="<%=account.getActive() == null%>">
+                                    <span class="badge rounded-pill text-bg-secondary">in-active</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge rounded-pill text-bg-danger">blocked</span>
+                                </c:otherwise>
+                            </c:choose>
+                            <%
+                                if (currentUser != null && currentUser.getRoleID().equals("ADM") && !account.getRoleID().equals("ADM")) {
+                            %>
+                            <button type="button" id="btn-update-status"
+                                    class="btn btn-block btn-outline-primary btn-sm"
+                                    data-id="<%=account.getId()%>"
+                                    data-active="<%=account.getActive() ? "active" : "in-active"%>">
+                                <%=account.getActive() ? "Block" : "Unblock"%>
+                            </button>
+                            <%
+                                }
+                            %>
+                        </div>
+                    </div>
                     <div class="row g-3 align-items-center mt-1">
                         <div class="col-2">
                             <label for="fullName" class="col-form-label" style="font-size: 16px;">Full
@@ -102,9 +134,7 @@
                         <div class="col-5 basicIn" style="width: 356px; margin-left: -40px;">
                             <select style="color: #495057;" name="roleID" id="roleID"
                                     class="form-select">
-                                <c:if test="${account != null}">
-                                    <c:set var="roleID" value="<%= account!= null ? account.getRoleID() : -1 %>"/>
-                                </c:if>
+                                <c:set var="roleID" value="<%= account!= null ? account.getRoleID() : -1 %>"/>
                                 <c:forEach var="role" items="<%=lsRole%>">
                                     <option value="${role.id}" ${role.id.equals(roleID) ? "selected" : ""}>${role.roleName}</option>
                                 </c:forEach>
@@ -151,6 +181,8 @@
 <script src="https://cdn.jsdelivr.net/npm/slugify@1.6.6/slugify.min.js"></script>
 <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
 <script>
+    <%@ include file="/js/main.js" %>
+    <%@ include file="/js/account.js" %>
 
     $(document).ready(function () {
             // renderBasicInf();
@@ -158,6 +190,11 @@
                 $(':disabled').each(function (e) {
                     $(this).removeAttr('disabled');
                 })
+            });
+
+            const btn = document.querySelector("#btn-update-status");
+            btn.addEventListener('click', async (event) => {
+                await handleEditStatus(event)
             });
         }
     );
